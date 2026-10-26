@@ -1,0 +1,370 @@
+/* =============================================================================
+   MI LISTA (ventana #cd, en todas las páginas)
+   -----------------------------------------------------------------------------
+   Panel que sale por la derecha: líneas con − / +, total, regalo y los
+   botones para mandar la lista. También el aviso grande de regalo (#nt).
+   ============================================================================= */
+
+#cd {
+  margin: 0 0 0 auto;
+  height: 100dvh;
+  max-height: 100dvh;
+  width: min(420px, 100%);
+  flex-direction: column;
+  animation: sl 0.3s both;
+}
+#cd[open] {
+  display: flex;
+}
+@keyframes sl {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+} /* entrar desde la derecha */
+#cd h3 {
+  margin: 0;
+  padding: 22px 24px 16px;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Líneas */
+#ci {
+  flex: 1;
+  overflow: auto;
+  padding: 8px 24px;
+}
+.ln {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+}
+.ln b {
+  font-weight: 600;
+}
+.ln span {
+  color: var(--mut);
+  font-size: 14px;
+}
+.ln .pr {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.qt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+.qt button {
+  width: 28px;
+  height: 28px;
+  border-radius: 99px;
+  background: var(--surf);
+  line-height: 28px;
+}
+.qt i {
+  font-style: normal;
+  min-width: 16px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+#em {
+  color: var(--mut);
+  padding: 32px 0;
+  text-align: center;
+} /* lista vacía */
+
+/* Parte de abajo: total, ahorro, regalo y botones de envío */
+#cf {
+  padding: 18px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+#cf small {
+  color: var(--mut);
+  font-size: 13px;
+  line-height: 1.4;
+}
+#cf .tt {
+  display: flex;
+  justify-content: space-between;
+  font-size: 19px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+#cf .sl {
+  margin: 2px 0 -4px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--acc);
+}
+#cf .sn {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+#cf .sn.two {
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+}
+#cf .sn .btn {
+  padding: 12px 4px;
+  font-size: 15px;
+}
+#cf [aria-disabled="true"] {
+  opacity: 0.35;
+  pointer-events: none;
+}
+#sv:empty {
+  display: none;
+}
+
+/* Texto de la lista para copiar a mano (si el navegador no deja copiar) */
+#mn {
+  width: 100%;
+  resize: none;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surf);
+  color: var(--fg);
+  font: inherit;
+  font-size: 14px;
+}
+
+/* ── Envolver para regalo ── */
+.gf {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: var(--surf);
+  border: 1px solid var(--line);
+}
+.gf[hidden] {
+  display: none;
+}
+.gt {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  cursor: pointer;
+}
+.gi svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.gx b {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.gx small {
+  display: block;
+  margin-top: 2px;
+  color: var(--mut);
+  font-size: 13px;
+  line-height: 1.3;
+}
+/* Interruptor tipo iPhone */
+#gk {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  flex: none;
+  margin: 0;
+  width: 51px;
+  height: 31px;
+  border-radius: 99px;
+  background: var(--surf2);
+  cursor: pointer;
+  transition: background 0.25s;
+}
+#gk::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s cubic-bezier(0.3, 0.9, 0.3, 1.2);
+}
+#gk:checked {
+  background: var(--acc);
+}
+#gk:checked::after {
+  transform: translateX(20px);
+}
+.gf.off .gt {
+  opacity: 0.6;
+} /* regalo apagado en los AJUSTES */
+.gf.off #gk {
+  background: var(--surf2);
+}
+#gx {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--acc) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--acc) 40%, transparent);
+  font-size: 14px;
+  line-height: 1.4;
+}
+#gx.pop {
+  animation: up 0.35s;
+}
+#gm {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  font-size: 16px;
+}
+#gm::placeholder {
+  color: var(--mut);
+}
+
+/* ── Aviso grande "Envolver para regalo: por ahora no disponible" (#nt) ── */
+#nt {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+#nt[open] {
+  display: grid;
+  place-items: center;
+}
+#nt::backdrop {
+  background: transparent;
+}
+#nt .x {
+  position: fixed;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  right: calc(16px + env(safe-area-inset-right, 0px));
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  font-size: 24px;
+  background: var(--surf2);
+}
+.ntb {
+  max-width: 400px;
+  padding: 30px 26px 26px;
+  border-radius: 24px;
+  background: var(--surf);
+  border: 1px solid var(--line);
+  text-align: center;
+  animation: up 0.35s both;
+}
+.ntb svg {
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 0 auto;
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ntb h3 {
+  margin: 14px 0 10px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.ntb p {
+  margin: 0 0 8px;
+  color: var(--mut);
+  font-size: 16px;
+  line-height: 1.45;
+}
+.ntb p:last-child {
+  margin: 0;
+}
+
+/* Respaldo para navegadores sin <dialog> */
+.nodlg #nt[open] {
+  height: 100%;
+  box-shadow: none;
+}
+.nodlg #cd[open] {
+  margin: 0 0 0 auto;
+  height: 100%;
+}
+
+/* Pantallas bajitas: todo el panel se desliza junto (si no, la lista queda en una franja chiquita) */
+@media (max-height: 820px) {
+  html #cd[open] {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  html #cd[open] #ci {
+    flex: none;
+    overflow: visible;
+  }
+  html #cd[open] #cf {
+    max-height: none;
+    overflow: visible;
+  }
+}
+@media (pointer: coarse) {
+  .qt button {
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
+  }
+}
+@media (max-width: 359px) {
+  #cf .sn {
+    grid-template-columns: 1fr;
+  }
+  #cd {
+    width: 100%;
+  }
+}
+@media (max-height: 520px) {
+  #cd h3 {
+    padding: 14px 20px 10px;
+    font-size: 20px;
+  }
+  #cf {
+    padding-top: 12px;
+    gap: 10px;
+    max-height: 62dvh;
+    overflow: auto;
+  }
+}

@@ -1,0 +1,640 @@
+/* =============================================================================
+   COMPARADOR (comparar.html)
+   -----------------------------------------------------------------------------
+   · #cb   la barrita flotante "Eros vs Scandal · Comparar ×" (todas las páginas)
+   · #cm   el comparador: una columna por perfume (.cg / .col) y secciones (.sec)
+   · #pk   el selector "Cambiar perfume", con efecto de vidrio
+   Lo dibuja js/vistas/comparador.js. Las reglas "#cm" sirven si se usa como
+   ventana; las "div#cm" son las de la página.
+   ============================================================================= */
+
+/* ── Barrita flotante ── */
+#cb {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100% - 32px);
+  padding: 8px 8px 8px 20px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  backdrop-filter: saturate(180%) blur(18px);
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.16);
+  font-size: 14px;
+  animation: up 0.3s both;
+}
+#cbt {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#cb .btn {
+  padding: 9px 18px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+#cb .xx {
+  width: 28px;
+  height: 28px;
+  border-radius: 99px;
+  background: var(--surf);
+  color: var(--mut);
+  font-size: 17px;
+  line-height: 28px;
+  flex: none;
+}
+
+/* ── Comparador como ventana ── */
+#cm {
+  --pd: 32px;
+  width: min(1040px, calc(100% - 24px));
+  height: min(94dvh, 1100px);
+  max-height: 94dvh;
+  border-radius: 26px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 0;
+  animation: up 0.35s;
+}
+#cm .cb {
+  padding: 0 var(--pd) 48px;
+}
+
+/* Nombres fijos arriba al bajar */
+.cb-top {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  margin: 0 calc(var(--pd) * -1);
+  padding: env(safe-area-inset-top, 0px) var(--pd) 0;
+  background: color-mix(in srgb, var(--bg) 84%, transparent);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+.cb-bar {
+  display: grid;
+  grid-template-columns: 34px 1fr 34px;
+  align-items: center;
+  height: 54px;
+}
+.cb-bar b {
+  grid-column: 2;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 600;
+}
+.cb-bar .cx,
+.pk-h .cx {
+  grid-column: 3;
+  width: 34px;
+  height: 34px;
+  border-radius: 99px;
+  background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.07));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  font-size: 20px;
+  line-height: 32px;
+}
+
+/* Columnas (--n = cuántos perfumes) */
+.cg {
+  display: grid;
+  grid-template-columns: repeat(var(--n, 2), minmax(0, 1fr));
+}
+.cg > .col {
+  min-width: 0;
+  padding: 0 14px;
+  text-align: center;
+}
+.cg > .col + .col {
+  border-left: 1px solid var(--line);
+}
+
+/* Nombre y botón "Cambiar perfume" (.lg texto largo, .sh texto corto en celular) */
+.nm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-block: 4px 12px;
+}
+.nm h4 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.sw {
+  position: relative;
+  display: inline-block;
+  padding: 7px 16px;
+  border-radius: 99px;
+  font-size: 14px;
+  white-space: nowrap;
+  background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.07));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    0 4px 14px rgba(0, 0, 0, 0.35);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.sw:hover {
+  background: linear-gradient(rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.12));
+}
+.sw:active {
+  transform: scale(0.95);
+}
+.sw .sh {
+  display: none;
+}
+.lead {
+  margin: 22px 0 0;
+  text-align: center;
+  color: var(--mut);
+  font-size: 15px;
+}
+
+/* Frasco, precio y botones de cada columna */
+.ct {
+  position: relative;
+}
+.ct .dc {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.cg .ct {
+  height: 250px;
+  margin: 14px 0 6px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(ellipse 70% 62% at 50% 56%, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 72%);
+}
+.cg .ct .ph {
+  height: 210px;
+}
+.pz {
+  margin: 12px 0 0;
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.pz s,
+.big s {
+  color: var(--mut);
+  font-weight: 400;
+  font-size: 0.8em;
+}
+.cg .btn {
+  margin-top: 14px;
+  padding: 11px 20px;
+  font-size: 16px;
+}
+.cg .btn .sh {
+  display: none;
+}
+.rm {
+  display: block;
+  margin: 10px auto 0;
+  color: var(--mut);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Secciones: Estilo, Notas de salida/corazón/fondo, Tamaños y precios */
+.sec {
+  border-top: 1px solid var(--line);
+  margin-top: 52px;
+  padding-top: 40px;
+}
+.sec > h3 {
+  margin: 0 0 26px;
+  font-size: clamp(26px, 5.4vw, 44px);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  text-align: left;
+  padding: 0;
+}
+.sec > h3.cen {
+  text-align: center;
+}
+.ic {
+  display: block;
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 18px;
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.big {
+  margin: 0 0 8px;
+  font-size: clamp(19px, 3.4vw, 30px);
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.cg .col p {
+  margin: 0 0 14px;
+  font-size: 17px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.cg .col p::first-letter {
+  text-transform: uppercase;
+}
+.cg .col p.mu {
+  color: var(--mut);
+  font-size: 14px;
+}
+.cg .col p.sa {
+  color: var(--acc);
+  font-size: 14px;
+} /* "Ahorras $…" */
+.cg .col p.sh2 {
+  color: var(--acc);
+} /* nota que se repite */
+
+/* "Notas en común", centrado al final */
+.mid {
+  margin: 0 auto;
+  max-width: 38em;
+  padding: 18px 20px 8px;
+  border-radius: 20px;
+  text-align: center;
+  background: color-mix(in srgb, var(--acc) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--acc) 42%, transparent);
+}
+.cr {
+  margin-bottom: 16px;
+}
+.mid small {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--acc);
+}
+.mid span {
+  font-size: 18px;
+  line-height: 1.5;
+}
+.mid span.mu {
+  color: var(--mut);
+  font-size: 15px;
+}
+.mid i {
+  font-style: normal;
+  color: var(--mut);
+  font-size: 13px;
+}
+.ad {
+  margin: 40px 0 0;
+  text-align: center;
+} /* "+ Agregar otro perfume" */
+
+/* ── Selector "Cambiar perfume" (efecto vidrio) ── */
+#pk {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 30;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 12px calc(12px + env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px))
+    calc(12px + env(safe-area-inset-left, 0px));
+}
+#pk[hidden] {
+  display: none;
+}
+.pk-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.45);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.pk {
+  position: relative;
+  width: min(440px, 100%);
+  max-height: min(78dvh, 640px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 30px;
+  overflow: hidden;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0.07) 55%,
+    rgba(255, 255, 255, 0.12)
+  );
+  -webkit-backdrop-filter: blur(34px) saturate(190%);
+  backdrop-filter: blur(34px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.1),
+    0 24px 70px rgba(0, 0, 0, 0.65);
+  transform: translateY(36px) scale(0.95);
+  opacity: 0;
+  transition:
+    transform 0.5s cubic-bezier(0.2, 0.9, 0.25, 1.12),
+    opacity 0.3s;
+}
+#pk.on .pk {
+  transform: none;
+  opacity: 1;
+}
+#pk.on .pk-bg {
+  opacity: 1;
+}
+.pk-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 18px 8px 24px;
+}
+.pk-h b {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.pk-l {
+  overflow: auto;
+  padding: 6px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* Cada fila. content-visibility: el navegador solo dibuja las que se ven */
+.pk-r {
+  display: grid;
+  grid-template-columns: 56px 1fr 24px;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px 10px 10px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition:
+    background 0.2s,
+    transform 0.2s;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 78px;
+}
+.pk-r:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+}
+.pk-r:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.pk-r[aria-pressed="true"] {
+  background: rgba(212, 173, 110, 0.2);
+  border-color: rgba(212, 173, 110, 0.6);
+}
+.pk-r:disabled {
+  opacity: 0.42;
+  cursor: default;
+}
+.pk-i {
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.07);
+}
+.pk-i .ph {
+  height: 46px;
+  filter: none;
+}
+.pk-t {
+  display: block;
+  min-width: 0;
+}
+.pk-t small {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+.pk-t b {
+  display: block;
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+.pk-t i {
+  font-style: normal;
+  font-size: 14px;
+  color: var(--mut);
+}
+.pk-t i s {
+  font-size: 0.9em;
+}
+.pk-t i strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+.pk-c {
+  color: var(--acc);
+  font-size: 18px;
+  text-align: center;
+}
+
+/* ── Comparador como página ── */
+div#cm {
+  --pd: 24px;
+  width: min(1040px, 100%);
+  height: auto;
+  max-height: none;
+  margin: 0 auto;
+  overflow: visible;
+  border-radius: 0;
+  animation: none;
+  background: none;
+}
+div#cm .cb-top {
+  top: calc(52px + env(safe-area-inset-top, 0px));
+  padding-top: 12px;
+} /* debajo de la cabecera */
+
+@media (min-width: 701px) {
+  #pk {
+    align-items: center;
+  }
+}
+@media (max-width: 700px) {
+  #cm {
+    --pd: 12px;
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    margin: 0;
+  }
+  .cg > .col {
+    padding: 0 8px;
+  }
+  .nm h4 {
+    font-size: 15px;
+  }
+  .sw {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+  .sw .lg {
+    display: none;
+  }
+  .sw .sh {
+    display: inline;
+  }
+  .cg .ct {
+    height: 170px;
+  }
+  .cg .ct .ph {
+    height: 140px;
+  }
+  .cg .col p {
+    font-size: 15px;
+  }
+  .mid span {
+    font-size: 16px;
+  }
+  .pz {
+    font-size: 17px;
+  }
+  .cg .btn {
+    padding: 10px 8px;
+    font-size: 14px;
+  }
+  .cg .btn .lg {
+    display: none;
+  }
+  .cg .btn .sh {
+    display: inline;
+  }
+  div#cm {
+    --pd: 12px;
+  }
+}
+@media (pointer: coarse) {
+  .sw {
+    min-height: 38px;
+  }
+  .cb-bar .cx,
+  .pk-h .cx {
+    width: 40px;
+    height: 40px;
+    line-height: 38px;
+  }
+}
+@media (min-width: 701px) and (max-width: 1100px) {
+  #cm {
+    width: calc(100% - 24px);
+  }
+  .cg .ct {
+    height: 220px;
+  }
+  .cg .ct .ph {
+    height: 180px;
+  }
+}
+@media (max-width: 359px) {
+  .cg > .col {
+    padding: 0 5px;
+  }
+  .cg .col p {
+    font-size: 13px;
+  }
+  .nm h4 {
+    font-size: 13px;
+  }
+  .sw {
+    font-size: 12px;
+    padding: 5px 9px;
+  }
+  .pz {
+    font-size: 15px;
+  }
+  .big {
+    font-size: 17px;
+  }
+}
+@media (max-height: 520px) {
+  #cm {
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    width: 100%;
+    border-radius: 0;
+    margin: 0;
+    --pd: 16px;
+  }
+  .cb-bar {
+    height: 36px;
+  }
+  .cb-bar b {
+    display: none;
+  }
+  .cb-bar .cx {
+    width: 30px;
+    height: 30px;
+    line-height: 28px;
+    font-size: 18px;
+  }
+  .cg .ct {
+    height: 150px;
+    margin: 8px 0 4px;
+  }
+  .cg .ct .ph {
+    height: 124px;
+  }
+  .nm {
+    padding-block: 2px 8px;
+  }
+  .sec {
+    margin-top: 34px;
+    padding-top: 28px;
+  }
+  .pk {
+    max-height: 94dvh;
+  }
+  #pk {
+    align-items: center;
+  }
+}

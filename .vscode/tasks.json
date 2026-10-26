@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Generar páginas",
+      "detail": "Arma los .html de la raíz a partir de plantillas/",
+      "type": "shell",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File herramientas/generar-paginas.ps1",
+      "problemMatcher": []
+    }
+  ]
+}

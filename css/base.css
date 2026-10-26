@@ -1,0 +1,122 @@
+/* =============================================================================
+   BASE
+   -----------------------------------------------------------------------------
+   Colores, tipografía y reglas generales que usan todas las páginas.
+   Para cambiar un color en todo el sitio, cámbialo aquí en :root.
+   ============================================================================= */
+
+:root {
+  --bg: #000; /* fondo */
+  --fg: #f5f5f7; /* texto */
+  --mut: #a1a1a6; /* texto secundario */
+  --surf: #1c1c1e; /* tarjetas y cajas */
+  --surf2: #2c2c2e; /* cajas encima de cajas */
+  --line: #2c2c2e; /* líneas divisorias */
+  --acc: #d4ad6e; /* acento bronce (precios, enlaces) */
+  --cap: #d8d8dc; /* tapa del frasco dibujado */
+  color-scheme: dark;
+  --sys: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --script: "Pinyon Script", "Snell Roundhand", "Apple Chancery", cursive; /* letra del logo */
+}
+
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 17px/1.47 var(--sys);
+  -webkit-font-smoothing: antialiased;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+}
+:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+[hidden] {
+  display: none !important;
+}
+
+/* En celulares: sin zoom de texto automático, sin destello al tocar y sin retraso al tocar */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+a,
+label {
+  touch-action: manipulation;
+}
+
+/* Contenedor centrado con márgenes a los lados (respeta la muesca del iPhone) */
+.in {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.script {
+  font-family: var(--script);
+  font-weight: 400;
+}
+svg.b {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+section {
+  padding-block: 72px 0;
+}
+h2 {
+  margin: 0;
+  font-size: clamp(28px, 4.4vw, 44px);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  font-weight: 600;
+}
+
+/* Animaciones compartidas */
+@keyframes up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+} /* aparecer subiendo */
+@keyframes fi {
+  to {
+    opacity: 1;
+  }
+} /* aparecer */
+
+@media (max-width: 700px) {
+  section {
+    padding-top: 56px;
+  }
+}
+@media (min-width: 1500px) {
+  .in {
+    max-width: 1200px;
+  }
+}
+@media (max-height: 520px) {
+  section {
+    padding-top: 40px;
+  }
+}

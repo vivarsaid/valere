@@ -1,0 +1,29 @@
+# valère · catálogo de perfumes
+
+Sitio para descubrir, comparar y guardar perfumes, y mandar la lista por WhatsApp, Instagram o Facebook.
+
+**Cómo está hecho todo (archivos, orden de carga, recetas):** [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md)
+**Cómo colaborar (ramas y pull requests):** [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Lo que se toca seguido
+
+| Quiero… | Archivo |
+|---|---|
+| Agregar, quitar o cambiar perfumes | `data/perfumes.json` |
+| Cambiar WhatsApp, redes, regalo, fechas del tema | `js/config.js` |
+| Cambiar colores | `css/base.css` (`:root`) |
+| Cambiar menú, pie o algo de todas las páginas | `plantillas/` → luego *Generar páginas* |
+
+> Los `.html` de la raíz se generan solos desde `plantillas/`. Edita las plantillas y corre
+> **Terminal → Ejecutar tarea… → Generar páginas** en VS Code.
+
+## Probarla en tu compu
+
+Con doble clic **no carga el catálogo** (el navegador bloquea leer el JSON).
+Abre la carpeta en VS Code, instala **Live Server** y da clic derecho en `index.html` → *Open with Live Server*.
+
+## Extensiones recomendadas de VS Code
+
+Al abrir la carpeta, VS Code sugiere instalarlas:
+- **Live Server**: para ver la página mientras la editas.
+- **Prettier**: acomoda el código solo al guardar.

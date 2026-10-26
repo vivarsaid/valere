@@ -1,0 +1,66 @@
+/* =============================================================================
+   VENTANAS (<dialog>)
+   -----------------------------------------------------------------------------
+   Reglas comunes de todas las ventanas: fondo oscuro detrás, botón × para
+   cerrar y respaldo para iPhone viejos (html.nodlg, ver js/base/compatibilidad.js).
+   Cada ventana tiene además su propio archivo (mi-lista.css, examen.css…).
+   ============================================================================= */
+
+dialog {
+  border: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  max-width: none;
+}
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.42);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+dialog:not([open]) {
+  display: none;
+}
+
+/* Botón × de cerrar */
+.x {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 99px;
+  background: var(--surf);
+  font-size: 20px;
+  line-height: 34px;
+  z-index: 1;
+}
+
+/* Con una ventana abierta, la página de atrás no se desplaza */
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+html.lock {
+  overflow: hidden;
+}
+
+/* Respaldo para navegadores sin <dialog> */
+.nodlg dialog[open] {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 60;
+  height: fit-content;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.55);
+}
+
+@media (pointer: coarse) {
+  .x {
+    width: 40px;
+    height: 40px;
+    line-height: 38px;
+  }
+}

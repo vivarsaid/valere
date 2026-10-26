@@ -1,0 +1,11 @@
+# Todos los archivos de texto se guardan con saltos de línea LF,
+# así no aparecen cambios fantasma entre Windows, Mac y Linux.
+* text=auto eol=lf
+
+# Imágenes y modelos: binarios, nunca se comparan como texto
+*.webp binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.glb binary
+*.gltf binary

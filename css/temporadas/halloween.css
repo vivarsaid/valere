@@ -1,0 +1,657 @@
+/* =============================================================================
+   TEMPORADA: HALLOWEEN + DÍA DE MUERTOS
+   -----------------------------------------------------------------------------
+   Todo aplica solo con <html class="hw"> (ver AJUSTES.TEMPORADA en js/config.js).
+   Las figuras y su comportamiento están en js/temporadas/halloween.js.
+
+   Clases que usa:
+     .hwo  capa de figuras de la portada      .dk  figura flotante (data-k = cuál)
+     .bf   murciélago que cruza la pantalla   .pt  pétalo de cempasúchil
+     .hwl  figuras de fondo en Mi lista       #ld  pantalla de carga al abrir un chat
+     --gl  color del brillo del perfume (rgba)
+   ============================================================================= */
+
+.hwo,
+.hwl,
+.dk,
+#ld {
+  display: none;
+}
+
+/* ── Colores y fondo ── */
+html.hw {
+  --acc: #ff8a1f;
+  --pu: #9b6dff;
+  background: #000;
+}
+html.hw::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 90% 40% at 50% 0, rgba(110, 60, 200, 0.26), transparent 70%),
+    radial-gradient(ellipse 70% 30% at 100% 100%, rgba(255, 120, 20, 0.1), transparent 70%);
+}
+html.hw body {
+  background: transparent;
+}
+html.hw .pk-r[aria-pressed="true"] {
+  background: rgba(255, 138, 31, 0.2);
+  border-color: rgba(255, 138, 31, 0.6);
+}
+
+/* ── Figuras: flotan despacio y reaccionan al toque (.go) ── */
+html.hw .hero {
+  position: relative;
+}
+html.hw .hwo {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: visible;
+}
+html.hw .dk {
+  display: block;
+  position: absolute;
+  width: var(--s, 54px);
+  height: var(--s, 54px);
+  padding: 0;
+  border: 0;
+  background: none;
+  pointer-events: auto;
+  cursor: pointer;
+  animation: hwf var(--d, 6s) ease-in-out var(--dl, 0s) infinite alternate;
+  -webkit-tap-highlight-color: transparent;
+}
+html.hw .dk svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 10px var(--gl, rgba(255, 138, 31, 0.55)));
+  transition: filter 0.3s;
+}
+html.hw .dk:hover svg,
+html.hw .dk.go svg {
+  filter: drop-shadow(0 0 18px var(--gl, rgba(255, 138, 31, 0.9)));
+}
+html.hw .dk.go svg {
+  animation: hwp 0.9s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+html.hw .dk[data-k="bat"].go svg {
+  animation: hwb 1.2s ease-in-out;
+}
+html.hw .dk[data-k="ghost"].go svg {
+  animation: hwg 1.1s ease-in-out;
+}
+html.hw .dk[data-k="flower"].go svg {
+  animation: hws 1s ease-in-out;
+}
+html.hw .dk[data-k="pumpkin"].go svg {
+  animation: hwk 1s ease-in-out;
+}
+html.hw .dk .fl {
+  transform-origin: 50% 55%;
+  animation: hwfl 5s ease-in-out infinite alternate;
+} /* fantasma: parpadea */
+html.hw .dk .wg {
+  transform-origin: 50% 50%;
+  animation: hwwg 2.4s ease-in-out infinite alternate;
+} /* murciélago: aletea */
+html.hw .dk .gl {
+  animation: hwgl 2.6s ease-in-out infinite alternate;
+} /* brillo de ojos y estrellas */
+html.hw .dk.sm {
+  pointer-events: none;
+} /* figuras de las tarjetas: no se tocan */
+html.hw .dk.big svg {
+  filter: drop-shadow(0 0 16px var(--gl)) drop-shadow(0 0 40px var(--gl));
+}
+
+@keyframes hwf {
+  from {
+    transform: translate(0, 0) rotate(var(--r0, -3deg));
+  }
+  to {
+    transform: translate(var(--fx, 4px), var(--fy, -9px)) rotate(var(--r1, 3deg));
+  }
+} /* flotar */
+@keyframes hwp {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.35) rotate(-8deg);
+  }
+  70% {
+    transform: scale(0.92) rotate(5deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+} /* rebote */
+@keyframes hwb {
+  0% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(26px, -34px) scale(1.25) rotate(14deg);
+  }
+  60% {
+    transform: translate(-18px, -18px) rotate(-12deg);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+} /* murciélago */
+@keyframes hwg {
+  0% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-26px) scaleY(1.1);
+  }
+  65% {
+    transform: translateY(-8px) rotate(-8deg);
+  }
+  100% {
+    transform: translateY(0);
+  }
+} /* fantasma */
+@keyframes hws {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+} /* flor gira */
+@keyframes hwk {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1.18, 0.9);
+  }
+  40% {
+    transform: scale(0.94, 1.1);
+  }
+  60% {
+    transform: scale(1.1, 0.96);
+  }
+} /* calabaza */
+@keyframes hwfl {
+  from {
+    opacity: 0.78;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes hwwg {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0.62);
+  }
+}
+@keyframes hwgl {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Murciélagos que cruzan la portada ── */
+html.hw .bf {
+  position: absolute;
+  left: -60px;
+  width: var(--s, 34px);
+  height: var(--s, 34px);
+  animation: hwx var(--d, 22s) linear var(--dl, 0s) infinite;
+  pointer-events: auto;
+}
+html.hw .bf .dk {
+  position: static;
+  width: 100%;
+  height: 100%;
+  animation: none;
+}
+@keyframes hwx {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(28vw, -24px);
+  }
+  50% {
+    transform: translate(56vw, 10px);
+  }
+  75% {
+    transform: translate(84vw, -18px);
+  }
+  100% {
+    transform: translate(112vw, 6px);
+  }
+}
+
+/* ── Pétalos de cempasúchil ── */
+html.hw .pt {
+  position: absolute;
+  top: -20px;
+  width: 11px;
+  height: 16px;
+  border-radius: 60% 60% 60% 60% / 70% 70% 40% 40%;
+  background: linear-gradient(#ffb13b, #ff7a00);
+  opacity: 0;
+  animation: hwpt var(--d, 12s) linear var(--dl, 0s) infinite;
+}
+@keyframes hwpt {
+  0% {
+    transform: translate(0, 0) rotate(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translate(var(--fx, 30px), 520px) rotate(300deg);
+    opacity: 0;
+  }
+}
+
+/* ── Brillo detrás de cada perfume: sutil, y más fuerte al verlo o tocarlo (.lit) ── */
+html.hw .card .bt,
+html.hw .cg .ct,
+html.hw #pd .im,
+html.hw .tile,
+html.hw .qi {
+  --gl: rgba(155, 109, 255, 0.55);
+}
+html.hw .card .bt::before,
+html.hw .cg .ct::before,
+html.hw .tile::before,
+html.hw #pd .im::before {
+  content: "";
+  position: absolute;
+  top: 6%;
+  bottom: 6%;
+  left: 10%;
+  right: 10%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--gl), transparent 72%);
+  opacity: 0.3;
+  filter: blur(16px);
+  transition:
+    opacity 0.5s,
+    transform 0.5s;
+  pointer-events: none;
+  z-index: 0;
+}
+html.hw .card .bt > *,
+html.hw .cg .ct > *,
+html.hw .tile > *,
+html.hw #pd .im > * {
+  position: relative;
+  z-index: 1;
+}
+html.hw .card .bt > .dk,
+html.hw .cg .ct > .dk,
+html.hw #pd .im > .dk,
+html.hw .tile > .dk {
+  position: absolute;
+}
+html.hw .card:hover .bt::before,
+html.hw .card.lit .bt::before,
+html.hw .cg .ct.lit::before {
+  opacity: 0.55;
+}
+html.hw .tile::before,
+html.hw #pd .im::before {
+  opacity: 0.5;
+}
+html.hw #pd .im {
+  position: relative;
+  overflow: hidden;
+}
+html.hw .tile {
+  position: relative;
+}
+html.hw .cg .ct.lit::before,
+html.hw .cg .ct::before {
+  opacity: 0.62;
+}
+html.hw .card:hover {
+  box-shadow: 0 12px 40px -14px var(--gl, rgba(155, 109, 255, 0.5));
+}
+
+/* ── Mi lista: cada perfume trae su ambiente ── */
+html.hw #cd {
+  position: fixed;
+  overflow: hidden;
+}
+html.hw .hwl {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+html.hw #cd > *:not(.hwl) {
+  position: relative;
+  z-index: 1;
+}
+/* el × va encima del título (si no, el título lo tapa y no se puede tocar) */
+html.hw #cd > .x {
+  position: absolute;
+  z-index: 2;
+}
+html.hw .hwl .dk {
+  pointer-events: auto;
+  opacity: 0.34;
+}
+html.hw .dk svg,
+html.hw #pd .im .dk svg,
+html.hw .cg .ct .dk svg,
+html.hw .tile .dk svg {
+  height: 100%;
+  width: 100%;
+  max-height: none;
+}
+html.hw .ln {
+  position: relative;
+  border-radius: 16px;
+  padding-inline: 12px;
+  margin-inline: -12px;
+  background: radial-gradient(ellipse 60% 120% at 100% 50%, var(--gl2, transparent), transparent 70%);
+  border-bottom-color: transparent;
+  box-shadow: inset 0 -1px 0 var(--line);
+}
+html.hw .ln .dk {
+  right: 12px;
+  bottom: 12px;
+  top: auto;
+  --s: 34px;
+  pointer-events: auto;
+}
+html.hw #pd .im .dk,
+html.hw .cg .ct .dk {
+  z-index: 2;
+}
+
+/* ── Pantalla de carga: el logo se vuelve luna mientras se abre el chat ── */
+html.hw #ld {
+  place-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  color: inherit;
+  z-index: 90;
+  background: rgba(0, 0, 0, 0.72);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+html.hw #ld.on {
+  display: grid;
+  pointer-events: auto;
+  animation: fi 0.3s both;
+}
+#ld > div {
+  text-align: center;
+}
+#ld svg {
+  width: 96px;
+  height: 96px;
+  overflow: visible;
+}
+#ld p {
+  margin: 10px 0 0;
+  font-size: 15px;
+  color: #d9c9ff;
+  letter-spacing: 0.04em;
+}
+#ld .lc {
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#ld .lv {
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: ldv 2.4s ease-in-out infinite;
+}
+#ld .la {
+  stroke: var(--acc);
+  stroke-width: 5;
+  stroke-linecap: round;
+  animation: ldv 2.4s ease-in-out infinite;
+}
+#ld .lm2 {
+  opacity: 0;
+  animation: ldm 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(255, 200, 120, 0.8));
+}
+@keyframes ldv {
+  0%,
+  35% {
+    opacity: 1;
+    transform: none;
+  }
+  60%,
+  90% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes ldm {
+  0%,
+  35% {
+    opacity: 0;
+    transform: scale(0.6) rotate(-30deg);
+  }
+  60%,
+  90% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+#ld .lv,
+#ld .la,
+#ld .lm2 {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+/* ── Bienvenida: primero el logo; luego queda solo la V con el acento y se vuelve luna ── */
+html.hw #iv {
+  background: radial-gradient(ellipse 70% 55% at 50% 45%, rgba(110, 60, 200, 0.35), transparent 70%), #000;
+  animation: out 0.7s 5.6s forwards;
+}
+html.hw #iv .t,
+html.hw #iv p,
+html.hw #im circle {
+  animation-fill-mode: forwards;
+}
+html.hw #iv .w {
+  animation: hwhide 0.6s 3.1s forwards;
+}
+html.hw #iv p {
+  animation:
+    fi 0.7s 2.7s forwards,
+    hwhide 0.5s 3.1s forwards;
+}
+html.hw #im circle {
+  animation:
+    dr 1s 0.1s forwards,
+    hwhide 0.6s 3.1s forwards;
+}
+html.hw #im .vv {
+  animation:
+    dr 0.6s 0.85s forwards,
+    hwvout 0.9s 3.6s forwards;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+html.hw #im .ac {
+  animation:
+    dr 0.4s 2.2s forwards,
+    hwvout 0.9s 3.6s forwards;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+#mo .moon {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: hwmoon 1.3s 3.7s cubic-bezier(0.2, 1.1, 0.3, 1) forwards;
+  filter: drop-shadow(0 0 14px rgba(255, 205, 130, 0.85));
+}
+#mo .stars {
+  opacity: 0;
+  animation: fi 0.8s 4.6s forwards;
+}
+html.hw #im {
+  stroke-width: 2.6;
+  margin-bottom: 0;
+}
+@keyframes hwhide {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@keyframes hwvout {
+  to {
+    opacity: 0;
+    transform: scale(1.35) rotate(18deg);
+  }
+}
+@keyframes hwmoon {
+  from {
+    opacity: 0;
+    transform: scale(0.45) rotate(-35deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+#mo {
+  display: none;
+}
+html.hw #iv > div {
+  position: relative;
+}
+html.hw #mo {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: calc(50% - clamp(32px, 7.5vw, 52px));
+  width: clamp(64px, 15vw, 104px);
+  height: auto;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* ── Pausas: con una ventana abierta (html.lock) o con la portada fuera de pantalla (html.hwoff) ── */
+html.lock .hwo .dk,
+html.lock .hwo .bf,
+html.lock .hwo .pt,
+html.lock .hwo .dk * {
+  animation-play-state: paused;
+}
+html.hwoff .hwo .dk,
+html.hwoff .hwo .bf,
+html.hwoff .hwo .pt,
+html.hwoff .hwo .dk * {
+  animation-play-state: paused;
+}
+html.hw .bf,
+html.hw .pt,
+html.hw .hwo .dk {
+  will-change: transform;
+}
+
+/* ── Ajustes por pantalla y preferencias ── */
+@supports not (background: color-mix(in srgb, red, blue)) {
+  #gx {
+    background: rgba(255, 138, 31, 0.14);
+    border-color: rgba(255, 138, 31, 0.4);
+  }
+}
+@media (max-width: 700px) {
+  html.hw .hero .hwo .dk {
+    --s: 44px;
+  }
+}
+@media (max-height: 520px) {
+  html.hw .hwo {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.hw .dk,
+  html.hw .dk *,
+  html.hw .bf,
+  html.hw .pt,
+  html.hw .tile::before,
+  html.hw #pd .im::before {
+    animation: none !important;
+  }
+  html.hw .pt {
+    display: none;
+  }
+  html.hw #im .vv,
+  html.hw #im .ac {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  html.hw #ld {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgba(0, 0, 0, 0.92);
+  }
+}

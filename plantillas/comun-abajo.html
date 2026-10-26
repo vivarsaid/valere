@@ -1,0 +1,38 @@
+
+<!-- Pie. Los links de redes se llenan desde js/config.js -->
+<footer><div class="in">
+  <a class="logo" href="index.html"><svg class="lm" viewBox="0 0 100 100" aria-hidden="true"><use href="#lg"/></svg><span>valère</span></a>
+  <nav class="fn" aria-label="Secciones"><a href="descubrir.html">Descubrir</a><a href="kits.html">Kits</a><a href="comparar.html">Comparar</a><a href="nosotros.html">Nosotros</a><a href="contacto.html">Contacto</a></nav>
+  <span>Casa de venta de perfumes · descubre y compara · © 2026</span>
+  <span class="rs"><a id="fw" href="#" target="_blank" rel="noopener">WhatsApp</a><a id="fi" href="#" target="_blank" rel="noopener">Instagram</a><a id="ff" href="#" target="_blank" rel="noopener">Facebook</a></span>
+</div></footer>
+
+<!-- Mi lista (la llena js/vistas/mi-lista.js) -->
+<dialog id="cd" aria-label="Mi lista">
+  <button class="x" data-accion="cerrar" aria-label="Cerrar">×</button>
+  <h3>Mi lista</h3>
+  <div id="ci"></div>
+  <div id="cf"><div class="tt"><span>Total estimado</span><span id="ct"></span></div>
+    <small id="sv"></small>
+    <div class="gf" id="gf">
+      <label class="gt"><span class="gi"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="12" width="24" height="6" rx="1.5"/><path d="M6 18v9a1.5 1.5 0 0 0 1.5 1.5h17A1.5 1.5 0 0 0 26 27v-9"/><path d="M16 12v16.5"/><path d="M16 12c-1-4-3.5-6.5-6-6.5a3 3 0 0 0 0 6zM16 12c1-4 3.5-6.5 6-6.5a3 3 0 0 1 0 6z"/></svg></span><span class="gx"><b>Envolver para regalo</b><small id="gh">Lo preparamos listo para regalar.</small></span><input type="checkbox" id="gk" role="switch" aria-label="Envolver para regalo"></label>
+      <p id="gx" role="status" hidden>Por ahora el regalo no se puede pedir desde la página. Si lo quieres envuelto para regalo, mándanos tu lista y avísanos en el mismo chat de WhatsApp, Instagram o Facebook: nosotros lo preparamos.</p>
+      <div id="gn" hidden><input id="gm" type="text" maxlength="120" placeholder="Mensaje para la tarjeta (opcional)" aria-label="Mensaje para la tarjeta" autocomplete="off"></div>
+    </div>
+    <p class="sl">Enviar mi lista</p>
+    <div class="sn"><a class="btn" id="sw" target="_blank" rel="noopener">WhatsApp</a><a class="btn l" id="si" data-accion="copiar-y-abrir" target="_blank" rel="noopener">Instagram</a><a class="btn l" id="sf" data-accion="copiar-y-abrir" target="_blank" rel="noopener">Facebook</a></div>
+    <div class="sn two"><button class="btn l" id="sc" data-accion="copiar-lista">Copiar lista</button><button class="btn l" id="sh" data-accion="compartir-lista">Compartir</button></div>
+    <textarea id="mn" readonly hidden rows="5" aria-label="Tu lista, lista para copiar"></textarea>
+    <small>WhatsApp se abre con tu lista ya escrita. En Instagram y Facebook, tu lista se copia y se abre el chat: solo pégala y envíala. El total es estimado; ahí confirmamos disponibilidad, envío y pago.</small></div>
+</dialog>
+
+<!-- Barrita flotante de comparar -->
+<div id="cb" hidden><span id="cbt"></span><a class="btn" href="comparar.html">Comparar</a><button class="xx" data-accion="limpiar-comparacion" aria-label="Quitar selección">×</button></div>
+
+<!-- Aviso: el regalo todavía no se puede pedir desde la página -->
+<dialog id="nt" aria-labelledby="ntt"><button class="x" data-accion="cerrar" aria-label="Cerrar aviso">×</button><div class="ntb"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="12" width="24" height="6" rx="1.5"/><path d="M6 18v9a1.5 1.5 0 0 0 1.5 1.5h17A1.5 1.5 0 0 0 26 27v-9"/><path d="M16 12v16.5"/><path d="M16 12c-1-4-3.5-6.5-6-6.5a3 3 0 0 0 0 6zM16 12c1-4 3.5-6.5 6-6.5a3 3 0 0 1 0 6z"/></svg><h3 id="ntt">Envolver para regalo</h3><p>Por ahora no se puede pedir desde la página.</p><p>Si lo quieres envuelto, mándanos tu lista y avísanos en el mismo chat de WhatsApp, Instagram o Facebook: nosotros lo preparamos.</p></div></dialog>
+
+<!-- Aviso corto ("Guardado en Mi lista") -->
+<div id="ts" role="status" popover="manual"></div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+/* =============================================================================
+   ANTICOPIA
+   -----------------------------------------------------------------------------
+   Va junto con js/base/anticopia.js: no se puede seleccionar texto ni
+   arrastrar imágenes, y al imprimir sale la hoja en blanco.
+   Los campos de texto sí se pueden seleccionar.
+   ============================================================================= */
+
+html {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+img,
+canvas,
+svg {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+canvas.b3 {
+  -webkit-touch-callout: none;
+}
+@media print {
+  html,
+  body {
+    display: none !important;
+  }
+}

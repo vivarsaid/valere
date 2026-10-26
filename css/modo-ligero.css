@@ -1,0 +1,73 @@
+/* =============================================================================
+   MODO LIGERO (html.lite)
+   -----------------------------------------------------------------------------
+   Para equipos modestos, ahorro de datos o batería baja (lo decide
+   js/base/antes-de-pintar.js según AJUSTES.MODO_LIGERO):
+   sin desenfoques, con fondos sólidos y menos animación.
+   ============================================================================= */
+
+/* Sin desenfoque (es lo que más cuesta en celulares modestos) */
+html.lite header,
+html.lite #cb,
+html.lite .cb-top,
+html.lite .pk,
+html.lite .sw,
+html.lite #ld,
+html.lite dialog::backdrop,
+html.lite .pk-bg,
+html.lite #nt {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* Fondos sólidos en su lugar */
+html.lite header {
+  background: rgba(0, 0, 0, 0.94);
+}
+html.lite .cb-top {
+  background: rgba(0, 0, 0, 0.94);
+}
+html.lite #cb {
+  background: #1c1c1e;
+}
+html.lite .pk {
+  background: #1c1c1e;
+}
+html.lite .pk-bg {
+  background: rgba(0, 0, 0, 0.7);
+}
+html.lite #ld {
+  background: rgba(0, 0, 0, 0.9);
+}
+html.lite dialog::backdrop {
+  background: rgba(0, 0, 0, 0.66);
+}
+html.lite #nt {
+  background: rgba(0, 0, 0, 0.92);
+}
+
+/* Menos animación (incluye el tema de temporada) */
+html.lite .card {
+  animation: none;
+}
+html.lite .dk,
+html.lite .dk *,
+html.lite .bf,
+html.lite .pt,
+html.lite .tile::before,
+html.lite #pd .im::before {
+  animation: none !important;
+}
+html.lite .pt,
+html.lite .bf {
+  display: none;
+}
+html.lite .card .bt::before,
+html.lite .cg .ct::before,
+html.lite .tile::before,
+html.lite #pd .im::before {
+  filter: none;
+}
+html.lite .dk svg {
+  filter: none !important;
+}

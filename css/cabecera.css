@@ -1,0 +1,131 @@
+/* =============================================================================
+   CABECERA
+   -----------------------------------------------------------------------------
+   La barra de arriba: logo, menú y el botón "Mi lista" con su contador.
+   Se queda fija al bajar y deja ver el contenido detrás, desenfocado.
+   ============================================================================= */
+
+/* Franja del color del fondo detrás de la muesca/barra de estado del iPhone */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--bg);
+}
+
+header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 9;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  backdrop-filter: saturate(180%) blur(18px);
+  border-bottom: 1px solid var(--line);
+}
+header .in {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 52px;
+}
+
+/* Logo (también se usa en el pie) */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-right: auto;
+  color: inherit;
+  text-decoration: none;
+}
+.logo span {
+  font: 400 30px/1 var(--script);
+}
+.lm {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  color: var(--fg);
+}
+
+/* Menú. La página actual se marca con aria-current="page" */
+nav {
+  display: flex;
+  gap: 22px;
+  font-size: 14px;
+}
+nav a {
+  color: var(--mut);
+  text-decoration: none;
+}
+nav a:hover {
+  color: var(--fg);
+}
+nav a[aria-current="page"] {
+  color: var(--fg);
+}
+
+/* Botón "Mi lista" y su número (gris cuando está en 0) */
+#bag {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  padding: 8px 4px;
+}
+#bag b {
+  min-width: 20px;
+  height: 20px;
+  border-radius: 99px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  padding: 0 6px;
+}
+#bag b[data-n="0"] {
+  background: var(--surf);
+  color: var(--mut);
+}
+
+/* En pantallas chicas se esconden enlaces del menú (siguen en el pie):
+   .hm = Nosotros y Contacto (≤700 px) · .hd = Kits (≤420 px) */
+@media (max-width: 700px) {
+  nav {
+    gap: 16px;
+  }
+  nav .hm {
+    display: none;
+  }
+  header .in {
+    gap: 12px;
+  }
+}
+@media (max-width: 420px) {
+  nav .hd {
+    display: none;
+  }
+}
+@media (pointer: coarse) {
+  #bag {
+    min-height: 44px;
+  }
+}
+@media (max-width: 359px) {
+  nav {
+    gap: 10px;
+    font-size: 13px;
+  }
+  .logo span {
+    font-size: 26px;
+  }
+  header .in {
+    gap: 8px;
+  }
+}

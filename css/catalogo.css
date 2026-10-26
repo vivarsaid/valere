@@ -1,0 +1,200 @@
+/* =============================================================================
+   CATÁLOGO (descubrir.html y kits.html)
+   -----------------------------------------------------------------------------
+   Título, buscador, filtros y la cuadrícula de tarjetas (#g perfumes, #kg kits).
+   Las tarjetas las dibuja js/vistas/catalogo.js.
+   ============================================================================= */
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+#sets .bar {
+  margin-bottom: 24px;
+}
+
+/* Buscador con lupa */
+.tools {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+#q {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 14px 20px 14px 46px;
+  border-radius: 99px;
+  border: 1px solid var(--line);
+  color: var(--fg);
+  font: inherit;
+  font-size: 17px;
+  background: var(--surf)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%238e8e93' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='7.5' cy='7.5' r='5.5'/%3E%3Cpath d='M12 12l4 4'/%3E%3C/svg%3E")
+    no-repeat 18px center;
+}
+#q::placeholder {
+  color: var(--mut);
+}
+
+/* Cuadrícula: tantas columnas de ≥240 px como quepan */
+#g,
+#kg {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 16px;
+}
+
+/* Tarjeta: entra subiendo, una tras otra (--i = su posición) */
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 22px;
+  background: var(--surf);
+  animation: up 0.6s calc(var(--i) * 60ms) both;
+}
+.card .main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  flex: 1;
+  width: 100%;
+}
+a.main {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Caja del frasco, con un resplandor suave detrás */
+.card .bt {
+  position: relative;
+  height: 170px;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  background: radial-gradient(ellipse 70% 60% at 50% 58%, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0) 72%);
+}
+.card .bt svg {
+  height: 100%;
+  width: auto;
+}
+.card .bt .ph {
+  height: 170px;
+}
+.bt .dc {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Textos: marca (small), nombre (b), familia (span) y precio (em) */
+.card small {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+.card b {
+  font-size: 19px;
+  line-height: 1.2;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.card span {
+  font-size: 14px;
+  color: var(--mut);
+  margin-top: 2px;
+}
+.card em {
+  font-style: normal;
+  font-size: 15px;
+  margin-top: auto;
+  padding-top: 12px;
+  color: var(--acc);
+}
+.card em u {
+  display: block;
+  text-decoration: none;
+  color: var(--mut);
+  font-size: 13px;
+}
+.card em s {
+  color: var(--mut);
+  font-size: 14px;
+}
+.card em strong {
+  font-weight: 600;
+}
+
+/* Botones de la tarjeta */
+.act {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.act .cp {
+  margin-top: 0;
+}
+
+/* Sin resultados */
+#none {
+  color: var(--mut);
+  padding: 40px 0;
+}
+#none a {
+  color: var(--acc);
+}
+
+/* "¿No sabes cuál elegir? Examen…" */
+.lk-w {
+  margin-top: 32px;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  #g,
+  #kg {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .card {
+    padding: 14px;
+  }
+  .card .bt {
+    height: 130px;
+  }
+  .card b {
+    font-size: 16px;
+  }
+  .card .bt .ph {
+    height: 130px;
+  }
+}
+@media (min-width: 701px) and (max-width: 1100px) {
+  #g,
+  #kg {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
+  }
+}
+@media (max-width: 359px) {
+  #g,
+  #kg {
+    grid-template-columns: 1fr;
+  }
+  .card .bt {
+    height: 150px;
+  }
+  .card .bt .ph {
+    height: 150px;
+  }
+}

@@ -1,0 +1,164 @@
+/* =============================================================================
+   PANTALLAS Y PREFERENCIAS ESPECIALES
+   -----------------------------------------------------------------------------
+   Va después de todos los componentes, porque ajusta a varios a la vez:
+     · plegables de dos pantallas (nada queda cruzando la bisagra)
+     · navegadores viejos (sin dvh o sin color-mix)
+     · personas que pidieron menos transparencia o menos movimiento
+   ============================================================================= */
+
+/* ── Plegables con la bisagra en medio (dos pantallas lado a lado) ── */
+@media (horizontal-viewport-segments: 2) {
+  .in {
+    max-width: env(viewport-segment-width 0 0, 100%);
+    margin-left: 0;
+    margin-right: 0;
+  }
+  #perfumes .in {
+    max-width: none;
+  }
+  #perfumes .tools,
+  #perfumes .bar,
+  #perfumes .lk-w {
+    max-width: calc(env(viewport-segment-width 0 0, 100%) - 32px);
+  }
+  #g,
+  #kg {
+    grid-template-columns: repeat(2, minmax(0, calc(env(viewport-segment-width 0 0, 100%) - 32px)));
+    column-gap: calc(env(viewport-segment-left 1 0, 0px) - env(viewport-segment-right 0 0, 0px) + 32px);
+  }
+  #pd,
+  #cm,
+  #qz {
+    width: calc(env(viewport-segment-width 0 0, 100%) - 24px);
+    margin-left: 12px;
+    margin-right: auto;
+    --pd: 16px;
+  }
+  #pd[open] {
+    grid-template-columns: 1fr;
+  }
+  .cg .ct {
+    height: 190px;
+  }
+  .cg .ct .ph {
+    height: 150px;
+  }
+  .cg .btn .lg,
+  .sw .lg {
+    display: none;
+  }
+  .cg .btn .sh,
+  .sw .sh {
+    display: inline;
+  }
+  .cg .col p {
+    font-size: 15px;
+  }
+  #pk {
+    right: auto;
+    width: env(viewport-segment-width 0 0, 100%);
+  }
+  #cb,
+  #ts {
+    left: calc(env(viewport-segment-width 0 0, 100vw) / 2);
+  }
+  #iv {
+    right: auto;
+    width: env(viewport-segment-width 0 0, 100%);
+  }
+}
+/* ── Plegables con la bisagra horizontal (una pantalla arriba y otra abajo) ── */
+@media (vertical-viewport-segments: 2) {
+  #pd,
+  #qz {
+    max-height: calc(env(viewport-segment-height 0 0, 100vh) - 24px);
+  }
+  #cm {
+    height: calc(env(viewport-segment-height 0 0, 100vh) - 24px);
+    max-height: calc(env(viewport-segment-height 0 0, 100vh) - 24px);
+  }
+  #pd,
+  #cm,
+  #qz {
+    margin-top: 12px;
+    margin-bottom: auto;
+  }
+  #cd {
+    height: env(viewport-segment-height 0 0, 100vh);
+    max-height: env(viewport-segment-height 0 0, 100vh);
+  }
+  #pk {
+    bottom: auto;
+    height: env(viewport-segment-height 0 0, 100vh);
+  }
+  #cb {
+    bottom: auto;
+    top: calc(env(viewport-segment-bottom 0 0, 100vh) - 70px);
+  }
+  #ts {
+    bottom: auto;
+    top: calc(env(viewport-segment-bottom 0 0, 100vh) - 130px);
+  }
+  #iv {
+    bottom: auto;
+    height: env(viewport-segment-height 0 0, 100vh);
+  }
+}
+
+/* ── Navegadores viejos: valores equivalentes ── */
+@supports not (height: 100dvh) {
+  #cd {
+    height: 100vh;
+    max-height: 100vh;
+  }
+  #cm {
+    max-height: 94vh;
+  }
+  #pd,
+  #qz {
+    max-height: 92vh;
+  }
+}
+@supports not (background: color-mix(in srgb, red, blue)) {
+  header,
+  .cb-top {
+    background: rgba(0, 0, 0, 0.86);
+  }
+  #cb {
+    background: rgba(20, 20, 22, 0.9);
+  }
+  .mid {
+    background: rgba(212, 173, 110, 0.14);
+    border-color: rgba(212, 173, 110, 0.42);
+  }
+}
+
+/* ── Menos transparencia: fondos sólidos en vez de vidrio ── */
+@media (prefers-reduced-transparency: reduce) {
+  .pk,
+  .sw,
+  .cb-top,
+  header,
+  #cb {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: #1c1c1e;
+  }
+  .pk-bg {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* ── Menos movimiento: sin animaciones ── */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    transition: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

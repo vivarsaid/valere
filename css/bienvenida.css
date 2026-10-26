@@ -1,0 +1,141 @@
+/* =============================================================================
+   BIENVENIDA (#iv, solo en la portada)
+   -----------------------------------------------------------------------------
+   El logo se dibuja trazo a trazo, se escribe "valère" y aparece el lema.
+   A los 4 s se desvanece. Lo acomoda js/vistas/bienvenida.js.
+   ============================================================================= */
+
+#iv {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  background: var(--bg);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  animation: out 0.6s 4s forwards;
+}
+html.noiv #iv {
+  display: none;
+} /* ya se vio en esta visita */
+
+/* La palabra "valère" se va descubriendo de izquierda a derecha */
+#iv .w {
+  position: relative;
+  display: inline-block;
+  font: 400 clamp(72px, 22vw, 150px) / 1.2 var(--script);
+}
+#iv .t {
+  display: inline-block;
+  padding: 0.12em 0.22em;
+  white-space: nowrap;
+  -webkit-mask: linear-gradient(90deg, #000 45%, transparent 55%) 100% 0 / 300% 100% no-repeat;
+  mask: linear-gradient(90deg, #000 45%, transparent 55%) 100% 0 / 300% 100% no-repeat;
+  animation: wr 1.8s 0.3s cubic-bezier(0.55, 0, 0.35, 1) forwards;
+}
+#iv i {
+  display: inline-block;
+  width: 0;
+  height: 0;
+}
+
+/* El acento de la "è" (#ia) y el logo (#im): trazos que se dibujan */
+#ia {
+  position: absolute;
+  overflow: visible;
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+#ia path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: dr 0.4s 2.2s forwards;
+}
+#im {
+  display: block;
+  width: clamp(64px, 15vw, 104px);
+  height: auto;
+  margin: 0 auto -0.2em;
+  overflow: visible;
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#im * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+#im circle {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  animation: dr 1s 0.1s forwards;
+}
+#im path {
+  animation: dr 0.6s 0.85s forwards;
+}
+#im .ac {
+  stroke: var(--acc);
+  animation: dr 0.4s 2.2s forwards;
+}
+
+/* Lema y botón "Saltar" */
+#iv p {
+  margin: 0.6em auto 0;
+  max-width: 92vw;
+  text-wrap: balance;
+  font-size: clamp(10px, 2.9vw, 15px);
+  letter-spacing: 0.24em;
+  text-transform: lowercase;
+  color: var(--mut);
+  opacity: 0;
+  animation: fi 0.7s 2.7s forwards;
+}
+#sk {
+  position: absolute;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  color: var(--mut);
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 99px;
+}
+
+@keyframes wr {
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+} /* escribir */
+@keyframes dr {
+  to {
+    stroke-dashoffset: 0;
+  }
+} /* dibujar trazo */
+@keyframes out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+} /* desvanecer */
+@keyframes out2 {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+} /* desvanecer al tocar "Saltar" */
+
+@media (max-height: 520px) {
+  #iv p {
+    margin-top: 0.2em;
+  }
+  #im {
+    width: 56px;
+  }
+}

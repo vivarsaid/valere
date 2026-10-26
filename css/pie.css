@@ -1,0 +1,52 @@
+/* =============================================================================
+   PIE DE PÁGINA
+   -----------------------------------------------------------------------------
+   Logo, enlaces a todas las secciones y redes sociales.
+   ============================================================================= */
+
+footer {
+  margin-top: 96px;
+  border-top: 1px solid var(--line);
+  padding-block: 32px calc(40px + env(safe-area-inset-bottom, 0px));
+  font-size: 13px;
+  color: var(--mut);
+}
+footer .in {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+footer .logo {
+  color: var(--fg);
+  margin: 0;
+}
+footer a {
+  color: var(--mut);
+}
+footer .fn {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 13px;
+}
+footer .rs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+footer .rs a:hover {
+  color: var(--fg);
+}
+
+/* Con la barrita de comparar visible, el pie deja espacio para que no la tape */
+body:has(#cb:not([hidden])) footer {
+  padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Rendimiento: el navegador no dibuja el pie hasta que se acerca a la pantalla */
+footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 280px;
+}

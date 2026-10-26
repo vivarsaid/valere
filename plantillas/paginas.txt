@@ -1,0 +1,9 @@
+# Páginas que genera herramientas/generar-paginas.ps1
+# archivo | página (data-pagina y plantillas/paginas/<página>.html) | título | descripción
+index.html|inicio|valère · casa de venta de perfumes|valère: casa de venta de perfumes. Descubre, compara y guarda tu lista; pídela por WhatsApp, Instagram o Facebook.
+descubrir.html|descubrir|Descubrir · valère|Busca perfumes por nombre, marca o aroma y guarda los que te gusten.
+kits.html|kits|Kits de perfume · valère|Kits de perfume con crema corporal o un frasco más pequeño del mismo aroma.
+comparar.html|comparar|Comparar perfumes · valère|Compara hasta 3 perfumes lado a lado: notas, estilo y precios.
+perfume.html|perfume|Perfume · valère|Notas, tamaños y precio del perfume.
+nosotros.html|nosotros|Nuestra historia · valère|Por qué existe valère: comprar perfume no debería ser una apuesta.
+contacto.html|contacto|Contacto · valère|Escríbenos por WhatsApp, Instagram o Facebook.
