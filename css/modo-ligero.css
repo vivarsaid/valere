@@ -54,7 +54,6 @@ html.lite .dk,
 html.lite .dk *,
 html.lite .bf,
 html.lite .pt,
-html.lite .tile::before,
 html.lite #pd .im::before {
   animation: none !important;
 }
@@ -64,7 +63,6 @@ html.lite .bf {
 }
 html.lite .card .bt::before,
 html.lite .cg .ct::before,
-html.lite .tile::before,
 html.lite #pd .im::before {
   filter: none;
 }

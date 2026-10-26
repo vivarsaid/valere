@@ -1,7 +1,7 @@
 /* =============================================================================
    PIE DE PÁGINA
    -----------------------------------------------------------------------------
-   Logo, enlaces a todas las secciones y redes sociales.
+   Logo, enlaces a todas las secciones, redes sociales y páginas legales.
    ============================================================================= */
 
 footer {
@@ -37,6 +37,18 @@ footer .rs {
   gap: 8px 24px;
 }
 footer .rs a:hover {
+  color: var(--fg);
+}
+/* Aviso de privacidad y Términos */
+footer .lg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+footer .lg a {
+  text-decoration: none;
+}
+footer .lg a:hover {
   color: var(--fg);
 }
 

@@ -59,6 +59,9 @@ const App = (() => {
     // Catálogo
     filtrar: (el) => VistaCatalogo.filtrar(el.dataset.genero),
 
+    // Carrusel de la portada (flechas)
+    "carrusel-mover": (el) => Carrusel.mover(+el.dataset.paso),
+
     // Detalle del perfume
     "elegir-tamano": (el) => VistaProducto.elegirTamano(el.dataset.tam),
     "guardar-perfume": () => {
@@ -233,7 +236,7 @@ const App = (() => {
     });
   }
 
-  /** Links de WhatsApp, Instagram y Facebook del pie y de Contacto (salen de los AJUSTES). */
+  /** Links de WhatsApp, Instagram, Facebook y correo del pie, Contacto y páginas legales (salen de los AJUSTES). */
   function pintarRedes() {
     try {
       const W = Config.whatsapp;
@@ -246,8 +249,9 @@ const App = (() => {
         wa: W ? `https://wa.me/${W}` : "#",
         ig: `https://www.instagram.com/${encodeURIComponent(Config.instagram)}`,
         fb: `https://www.facebook.com/${encodeURIComponent(Config.facebook)}`,
+        correo: Config.correo ? `mailto:${Config.correo}` : "#",
       };
-      const textos = { wa: telefono, ig: "@" + Config.instagram, fb: Config.facebook };
+      const textos = { wa: telefono, ig: "@" + Config.instagram, fb: Config.facebook, correo: Config.correo };
 
       $("#fw").href = enlaces.wa;
       $("#fw").textContent = telefono ? `WhatsApp ${telefono}` : "WhatsApp";
@@ -262,17 +266,6 @@ const App = (() => {
     } catch (e) {
       Registro.recuperar(e, "redes");
     }
-  }
-
-  /** El frasco grande de la portada (el primer perfume del catálogo). */
-  function pintarPortada() {
-    try {
-      const ht = $("#ht");
-      if (!ht) return;
-      const primero = Catalogo.todos()[0];
-      ht.hidden = !primero;
-      if (primero) ht.innerHTML = Formato.frasco(primero);
-    } catch (e) {}
   }
 
   /** Lo propio de cada página: el comparador o el detalle del perfume. */
@@ -324,13 +317,16 @@ const App = (() => {
 
     pintarRedes();
     pintarTodo();
-    pintarPortada();
     pintarPagina();
+    try {
+      Carrusel.iniciar(); // solo hace algo en la portada
+    } catch (e) {
+      Registro.recuperar(e, "carrusel");
+    }
 
     // Cuando terminan de cargar las fotos se vuelven a dibujar los frascos.
     addEventListener("valere:fotos", () => {
       pintarTodo();
-      pintarPortada();
       pintarPagina();
     });
 

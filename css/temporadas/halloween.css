@@ -280,13 +280,11 @@ html.hw .pt {
 html.hw .card .bt,
 html.hw .cg .ct,
 html.hw #pd .im,
-html.hw .tile,
 html.hw .qi {
   --gl: rgba(155, 109, 255, 0.55);
 }
 html.hw .card .bt::before,
 html.hw .cg .ct::before,
-html.hw .tile::before,
 html.hw #pd .im::before {
   content: "";
   position: absolute;
@@ -306,15 +304,13 @@ html.hw #pd .im::before {
 }
 html.hw .card .bt > *,
 html.hw .cg .ct > *,
-html.hw .tile > *,
 html.hw #pd .im > * {
   position: relative;
   z-index: 1;
 }
 html.hw .card .bt > .dk,
 html.hw .cg .ct > .dk,
-html.hw #pd .im > .dk,
-html.hw .tile > .dk {
+html.hw #pd .im > .dk {
   position: absolute;
 }
 html.hw .card:hover .bt::before,
@@ -322,16 +318,12 @@ html.hw .card.lit .bt::before,
 html.hw .cg .ct.lit::before {
   opacity: 0.55;
 }
-html.hw .tile::before,
 html.hw #pd .im::before {
   opacity: 0.5;
 }
 html.hw #pd .im {
   position: relative;
   overflow: hidden;
-}
-html.hw .tile {
-  position: relative;
 }
 html.hw .cg .ct.lit::before,
 html.hw .cg .ct::before {
@@ -372,8 +364,7 @@ html.hw .hwl .dk {
 }
 html.hw .dk svg,
 html.hw #pd .im .dk svg,
-html.hw .cg .ct .dk svg,
-html.hw .tile .dk svg {
+html.hw .cg .ct .dk svg {
   height: 100%;
   width: 100%;
   max-height: none;
@@ -636,7 +627,6 @@ html.hw .hwo .dk {
   html.hw .dk *,
   html.hw .bf,
   html.hw .pt,
-  html.hw .tile::before,
   html.hw #pd .im::before {
     animation: none !important;
   }

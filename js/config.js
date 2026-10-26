@@ -16,6 +16,9 @@ const AJUSTES = {
   INSTAGRAM: "perfumeria_valere",
   // Lo que va después de facebook.com/
   FACEBOOK: "perfumeria-valere",
+  // Correo de contacto. Sale en el Aviso de privacidad y en los Términos
+  // (ahí te escriben para sus datos personales, cambios y aclaraciones).
+  CORREO: "darissparta@gmail.com",
 
   /* ── Mi lista ─────────────────────────────────────────────────────────── */
 
@@ -40,6 +43,10 @@ const AJUSTES = {
   // true  = los frascos se dibujan en 3D (si el aparato lo soporta).
   // false = se ve la foto plana o el frasco dibujado.
   VISTA_3D: false,
+  // true  = el carrusel de la portada se ve en 3D (Three.js).
+  // false = el carrusel funciona igual, pero con el frasco plano.
+  // En modo ligero siempre va plano.
+  CARRUSEL_3D: true,
 
   /* ── Tema de temporada (Halloween + Día de Muertos) ───────────────────── */
 

@@ -5,12 +5,13 @@
    salida/corazón/fondo, tamaños y las notas que comparten.
 
    Partes:
-     · Botones "Comparar" de las tarjetas y la barrita flotante (#cb): en todas
-       las páginas. La selección se guarda (clave "vx") y sigue al cambiar de página.
+     · Botones "Comparar" de las tarjetas: en todas las páginas. La selección se
+       guarda (clave "vx") y sigue al cambiar de página. La barrita flotante
+       (#cb) la dibuja js/vistas/barra.js.
      · El comparador (#cm .cb): solo en comparar.html.
      · El selector "Cambiar perfume" (#pk): lista de todos los perfumes.
 
-   Usa:     $, $$, Almacen, Catalogo, Formato, Texto, Pagina, Avisos, Ventanas
+   Usa:     $, $$, Almacen, Catalogo, Formato, Texto, Pagina, Avisos, Ventanas, Barra
    Expone:  Comparador
    ============================================================================= */
 
@@ -65,12 +66,7 @@ const Comparador = (() => {
       b.textContent = elegido ? "✓ Comparando" : "Comparar";
     });
 
-    const barra = $("#cb");
-    if (!barra) return;
-    barra.hidden = !seleccion.length || Pagina.actual === "comparar";
-    const nombres = perfumes().map((p) => p.nombre);
-    $("#cbt").textContent =
-      nombres.length > 1 ? nombres.join("  vs  ") : nombres.length ? nombres[0] + " · elige otro" : "";
+    Barra.pintar();
   }
 
   /* ── El comparador ───────────────────────────────────────────────────────── */

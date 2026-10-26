@@ -5,7 +5,7 @@
    regalo y los botones para mandarla por WhatsApp, Instagram o Facebook.
    También actualiza el número junto a "Mi lista" en la cabecera (#bn).
 
-   Usa:     $, Lista, Regalo, Config, Formato
+   Usa:     $, Lista, Regalo, Config, Formato, Barra
    Expone:  VistaLista
    ============================================================================= */
 
@@ -92,6 +92,7 @@ const VistaLista = (() => {
 
     pintarRegalo(n > 0);
     pintarBotonesDeEnvio(n > 0);
+    Barra.pintar(); // "Finalizar compra" aparece en cuanto hay algo en la lista
   }
 
   return { pintar };
