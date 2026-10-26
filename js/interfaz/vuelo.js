@@ -57,6 +57,9 @@ const Vuelo = (() => {
    */
   function aMiLista(boton, p) {
     confirmar(boton);
+    // Dentro de una ventana (por ejemplo, "Te puede gustar" en Mi lista) no vuela:
+    // "Mi lista" queda detrás. Ahí la tarjeta nueva entra con un destello.
+    if (boton && boton.closest && boton.closest("dialog[open]")) return;
     const bag = $("#bag");
     if (sinMovimiento || !bag || !p || !document.body.animate) return saltito();
 

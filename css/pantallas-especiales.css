@@ -19,7 +19,7 @@
   }
   #perfumes .tools,
   #perfumes .bar,
-  #perfumes .lk-w {
+  #perfumes .res {
     max-width: calc(env(viewport-segment-width 0 0, 100%) - 32px);
   }
   #g,
