@@ -61,6 +61,7 @@
 <script src="js/interfaz/formato.js" defer></script>
 <script src="js/interfaz/pagina.js" defer></script>
 <script src="js/interfaz/avisos.js" defer></script>
+<script src="js/interfaz/vuelo.js" defer></script>
 <script src="js/interfaz/ventanas.js" defer></script>
 <script src="js/frascos/fotos.js" defer></script>
 <script src="js/frascos/motor3d.js" defer></script>
@@ -94,10 +95,11 @@
 </svg>
 <noscript><style>#iv,#car{display:none!important}.nojs{display:block!important}</style><div class="nojs" style="margin:0;padding:16px 18px;background:#1c1c1e;color:#f5f5f7;text-align:center;font:15px/1.45 -apple-system,system-ui,sans-serif"><b style="display:block;font-size:16px;margin-bottom:4px">Esta vista previa no muestra el catálogo</b>Ábrela en Safari o Chrome para ver los perfumes, o escríbenos por <a href="https://wa.me/525529094378" style="color:#d9a85a">WhatsApp</a>.</div></noscript>
 {{BIENVENIDA}}
-<!-- Cabecera. Kits (.hd), Nosotros y Contacto (.hm) se esconden en pantallas chicas (siguen en el pie) -->
+<!-- Cabecera. En celular el menú (#menu) se abre con el botón ☰ (#mnb) -->
 <header><div class="in">
   <a class="logo" href="index.html" aria-label="valère, inicio"><svg class="lm" viewBox="0 0 100 100" aria-hidden="true"><use href="#lg"/></svg><span>valère</span></a>
-  <nav><a href="descubrir.html"{{ACTUAL_descubrir}}>Descubrir</a><a href="kits.html" class="hd"{{ACTUAL_kits}}>Kits</a><a href="comparar.html"{{ACTUAL_comparar}}>Comparar</a><a href="nosotros.html" class="hm"{{ACTUAL_nosotros}}>Nosotros</a><a href="contacto.html" class="hm"{{ACTUAL_contacto}}>Contacto</a></nav>
+  <nav id="menu" aria-label="Secciones"><a href="descubrir.html"{{ACTUAL_descubrir}}>Descubrir</a><a href="kits.html"{{ACTUAL_kits}}>Kits</a><a href="comparar.html"{{ACTUAL_comparar}}>Comparar</a><a href="nosotros.html"{{ACTUAL_nosotros}}>Nosotros</a><a href="contacto.html"{{ACTUAL_contacto}}>Contacto</a></nav>
   <button id="bag" data-accion="abrir-lista" aria-label="Abrir Mi lista">Mi lista <b data-n="0" id="bn">0</b></button>
+  <button id="mnb" data-accion="menu" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú"><i></i><i></i><i></i></button>
 </div></header>
 

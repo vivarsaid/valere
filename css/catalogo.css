@@ -1,7 +1,8 @@
 /* =============================================================================
    CATÁLOGO (descubrir.html y kits.html)
    -----------------------------------------------------------------------------
-   Título, buscador, filtros y la cuadrícula de tarjetas (#g perfumes, #kg kits).
+   Título, buscador, filtros (para quién y precio), la barra de resultados
+   (cuántos hay y ordenar) y la cuadrícula de tarjetas (#g perfumes, #kg kits).
    Las tarjetas las dibuja js/vistas/catalogo.js.
    ============================================================================= */
 
@@ -41,6 +42,74 @@
 #q::placeholder {
   color: var(--mut);
 }
+#q:focus {
+  outline: none;
+  border-color: var(--acc);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--acc) 18%, transparent);
+}
+#q {
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+/* Filas de filtros: "Para" y "Precio" con sus botones */
+.fl {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.fl-t {
+  flex: none;
+  width: 52px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+
+/* Barra de resultados: "29 perfumes · Quitar filtros ............ Ordenar [▾]" */
+.res {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: -8px 0 20px;
+}
+#nres {
+  margin: 0;
+  color: var(--mut);
+  font-size: 15px;
+}
+#lfl {
+  font-size: 14px;
+}
+.ord {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mut);
+  font-size: 14px;
+}
+#ord {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 9px 36px 9px 16px;
+  border-radius: 99px;
+  border: 1px solid var(--line);
+  background: var(--surf)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23a1a1a6' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E")
+    no-repeat right 14px center;
+  color: var(--fg);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+#ord:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+}
 
 /* Cuadrícula: tantas columnas de ≥240 px como quepan */
 #g,
@@ -57,7 +126,28 @@
   padding: 20px;
   border-radius: 22px;
   background: var(--surf);
-  animation: up 0.6s calc(var(--i) * 60ms) both;
+  border: 1px solid transparent;
+  animation: up 0.6s calc(var(--i) * 60ms) backwards; /* backwards: al terminar, no bloquea el efecto del mouse */
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.3s,
+    box-shadow 0.35s;
+}
+/* Al pasar el mouse: la tarjeta sube y el frasco crece un poco */
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--line);
+    box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.9);
+  }
+  .card .bt > svg,
+  .card .bt > .ph {
+    transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .card:hover .bt > svg,
+  .card:hover .bt > .ph {
+    transform: scale(1.06) translateY(-3px);
+  }
 }
 .card .main {
   display: flex;
@@ -162,6 +252,29 @@ a.main {
 }
 
 @media (max-width: 700px) {
+  /* los filtros se deslizan de lado, sin bajar de renglón */
+  .fl {
+    margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+    padding-inline: max(16px, env(safe-area-inset-left, 0px));
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .fl::-webkit-scrollbar {
+    display: none;
+  }
+  .fl .chips {
+    flex-wrap: nowrap;
+  }
+  .fl-t {
+    width: auto;
+  }
+  .res {
+    flex-wrap: wrap;
+    gap: 10px 14px;
+  }
+  .ord span {
+    display: none;
+  }
   #g,
   #kg {
     grid-template-columns: 1fr 1fr;

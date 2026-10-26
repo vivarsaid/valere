@@ -24,117 +24,280 @@
 } /* entrar desde la derecha */
 #cd h3 {
   margin: 0;
-  padding: 22px 24px 16px;
-  font-size: 24px;
+  padding: 22px 64px 16px 24px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 26px;
   font-weight: 600;
   letter-spacing: -0.02em;
   border-bottom: 1px solid var(--line);
 }
+/* "3 piezas", junto al título */
+#cn {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--mut);
+}
 
-/* Líneas */
+/* ── Las tarjetas de cada perfume ── */
 #ci {
   flex: 1;
   overflow: auto;
-  padding: 8px 24px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .ln {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 2px 12px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--line);
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 18px;
+  background: var(--surf);
   font-size: 15px;
+  animation: up 0.35s both;
 }
-.ln b {
-  font-weight: 600;
+/* el frasquito, sobre un brillo suave */
+.lf {
+  display: grid;
+  place-items: center;
+  height: 64px;
+  border-radius: 14px;
+  background: radial-gradient(circle at 50% 60%, rgba(255, 255, 255, 0.14), transparent 70%);
 }
-.ln span {
+.lf svg {
+  height: 54px;
+  width: auto;
+}
+.lt {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.lt small {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--mut);
-  font-size: 14px;
+}
+.lt b {
+  font-weight: 600;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.lt span {
+  margin-top: 2px;
+  color: var(--mut);
+  font-size: 13px;
+}
+.lr {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
 }
 .ln .pr {
-  text-align: right;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
+/* selector de cantidad: una píldora con − n + */
 .qt {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 6px;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 99px;
+  background: var(--bg);
+  border: 1px solid var(--line);
 }
 .qt button {
+  display: grid;
+  place-items: center;
   width: 28px;
   height: 28px;
   border-radius: 99px;
-  background: var(--surf);
-  line-height: 28px;
+  font-size: 17px;
+  line-height: 1;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.qt button:hover {
+  background: var(--surf2);
+}
+.qt .bo svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.qt .bo:hover {
+  color: #ff6b5e;
 }
 .qt i {
   font-style: normal;
-  min-width: 16px;
+  min-width: 18px;
   text-align: center;
+  font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
-#em {
-  color: var(--mut);
-  padding: 32px 0;
-  text-align: center;
-} /* lista vacía */
 
-/* Parte de abajo: total, ahorro, regalo y botones de envío */
+/* ── Lista vacía ── */
+#em {
+  margin: auto 0;
+  padding: 32px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#em .ev {
+  width: 64px;
+  height: 90px;
+  --c: var(--surf2);
+  --cap: var(--line);
+  opacity: 0.9;
+  animation: flota 3.5s ease-in-out infinite;
+}
+@keyframes flota {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+#em b {
+  margin-top: 18px;
+  font-size: 20px;
+  font-weight: 600;
+}
+#em p {
+  margin: 6px 0 20px;
+  max-width: 26ch;
+  color: var(--mut);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+/* ── Parte de abajo: ahorro, total, regalo y botones de envío ── */
 #cf {
-  padding: 18px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+  padding: 16px 20px calc(20px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--line);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.02));
+}
+#cf[hidden] {
+  display: none;
 }
 #cf small {
   color: var(--mut);
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.4;
 }
 /* "Al enviar tu lista aceptas los Términos…" */
 #cf .lgl {
   margin-top: -6px;
-  font-size: 12px;
 }
 #cf .lgl a {
   color: inherit;
   text-underline-offset: 2px;
 }
+/* Ahorro: una etiqueta bronce */
+#sv {
+  align-self: flex-start;
+  margin: 0;
+  padding: 5px 12px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--acc) 16%, transparent);
+  color: var(--acc);
+  font-size: 13px;
+  font-weight: 600;
+}
+#sv:empty {
+  display: none;
+}
 #cf .tt {
   display: flex;
   justify-content: space-between;
-  font-size: 19px;
-  font-weight: 600;
+  align-items: baseline;
   font-variant-numeric: tabular-nums;
 }
-#cf .sl {
-  margin: 2px 0 -4px;
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--acc);
+#cf .tt span:first-child {
+  color: var(--mut);
+  font-size: 15px;
+}
+#ct {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+#ct.cambia {
+  animation: cambia 0.4s cubic-bezier(0.3, 0.9, 0.3, 1.4);
+}
+@keyframes cambia {
+  40% {
+    transform: scale(1.1);
+    color: var(--acc);
+  }
+}
+/* WhatsApp: el botón principal, verde y a lo ancho */
+#cf .ws {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 20px;
+  background: #25d366;
+  color: #04210f;
+  font-weight: 600;
+  box-shadow: 0 12px 30px -14px rgba(37, 211, 102, 0.8);
+}
+#cf .ws svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
 }
 #cf .sn {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
-#cf .sn.two {
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-}
 #cf .sn .btn {
-  padding: 12px 4px;
+  padding: 11px 4px;
   font-size: 15px;
+}
+/* Copiar y Compartir: como enlaces chiquitos */
+#cf .sn.mini {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+#cf .sn.mini button {
+  color: var(--mut);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+#cf .sn.mini button:hover {
+  color: var(--fg);
+}
+#cf .sn.mini button[hidden] {
+  display: none;
 }
 #cf [aria-disabled="true"] {
   opacity: 0.35;
   pointer-events: none;
-}
-#sv:empty {
-  display: none;
 }
 
 /* Texto de la lista para copiar a mano (si el navegador no deja copiar) */
@@ -352,9 +515,8 @@
 }
 @media (pointer: coarse) {
   .qt button {
-    width: 38px;
-    height: 38px;
-    line-height: 38px;
+    width: 34px;
+    height: 34px;
   }
 }
 @media (max-width: 359px) {

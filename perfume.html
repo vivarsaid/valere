@@ -28,24 +28,24 @@
 
 <!-- Estilos (el orden importa: los de abajo pueden ajustar a los de arriba) -->
 <link rel="stylesheet" href="css/base.css?v=b9db7fd6">
-<link rel="stylesheet" href="css/componentes.css?v=c1edb892">
-<link rel="stylesheet" href="css/cabecera.css?v=dc21edec">
+<link rel="stylesheet" href="css/componentes.css?v=b7ca9479">
+<link rel="stylesheet" href="css/cabecera.css?v=e0f1319f">
 <link rel="stylesheet" href="css/pie.css?v=4b401413">
 <link rel="stylesheet" href="css/dialogos.css?v=36561658">
 <link rel="stylesheet" href="css/avisos.css?v=2e7ac4af">
 <link rel="stylesheet" href="css/bienvenida.css?v=7bf912e9">
 <link rel="stylesheet" href="css/portada.css?v=bdbe6551">
 <link rel="stylesheet" href="css/carrusel.css?v=252471f4">
-<link rel="stylesheet" href="css/catalogo.css?v=2b2ce231">
+<link rel="stylesheet" href="css/catalogo.css?v=4dabb337">
 <link rel="stylesheet" href="css/producto.css?v=f9d149f3">
-<link rel="stylesheet" href="css/mi-lista.css?v=637d7fb7">
+<link rel="stylesheet" href="css/mi-lista.css?v=47d4cd3b">
 <link rel="stylesheet" href="css/comparador.css?v=e8c9d015">
 <link rel="stylesheet" href="css/examen.css?v=e9722150">
 <link rel="stylesheet" href="css/paginas.css?v=84824361">
 <link rel="stylesheet" href="css/pantallas-especiales.css?v=029f0135">
 <link rel="stylesheet" href="css/modo-ligero.css?v=b3cc1854">
 <link rel="stylesheet" href="css/anticopia.css?v=5e136053">
-<link rel="stylesheet" href="css/temporadas/halloween.css?v=edc60a97">
+<link rel="stylesheet" href="css/temporadas/halloween.css?v=84782c85">
 
 <!-- Antes de pintar: ajustes, tema de temporada, modo ligero y bienvenida -->
 <script src="js/config.js?v=59635eb3"></script>
@@ -61,20 +61,21 @@
 <script src="js/interfaz/formato.js?v=b7bae194" defer></script>
 <script src="js/interfaz/pagina.js?v=f8287c18" defer></script>
 <script src="js/interfaz/avisos.js?v=e9d8d0a2" defer></script>
+<script src="js/interfaz/vuelo.js?v=6e1559e8" defer></script>
 <script src="js/interfaz/ventanas.js?v=3644ae72" defer></script>
 <script src="js/frascos/fotos.js?v=4e67c68f" defer></script>
 <script src="js/frascos/motor3d.js?v=681cdc8c" defer></script>
-<script src="js/vistas/catalogo.js?v=83d625ed" defer></script>
+<script src="js/vistas/catalogo.js?v=17d02c26" defer></script>
 <script src="js/vistas/producto.js?v=b7b3fbe5" defer></script>
-<script src="js/vistas/mi-lista.js?v=91494608" defer></script>
+<script src="js/vistas/mi-lista.js?v=7ec4943d" defer></script>
 <script src="js/vistas/comparador.js?v=f065c3e9" defer></script>
-<script src="js/vistas/barra.js?v=93167b38" defer></script>
+<script src="js/vistas/barra.js?v=0c31b815" defer></script>
 <script src="js/vistas/carrusel.js?v=4aa6a90b" defer></script>
 <script src="js/vistas/nosotros.js?v=fd88bb89" defer></script>
 <script src="js/vistas/examen.js?v=b76fd96f" defer></script>
 <script src="js/vistas/bienvenida.js?v=0e669858" defer></script>
 <script src="js/temporadas/halloween.js?v=9c62d627" defer></script>
-<script src="js/app.js?v=a95ec2c1" defer></script>
+<script src="js/app.js?v=3b89f07f" defer></script>
 </head>
 <body data-pagina="perfume">
 <!-- Dibujos que se reusan: el frasco (#bo) y el logo (#lg) -->
@@ -94,11 +95,12 @@
 </svg>
 <noscript><style>#iv,#car{display:none!important}.nojs{display:block!important}</style><div class="nojs" style="margin:0;padding:16px 18px;background:#1c1c1e;color:#f5f5f7;text-align:center;font:15px/1.45 -apple-system,system-ui,sans-serif"><b style="display:block;font-size:16px;margin-bottom:4px">Esta vista previa no muestra el catálogo</b>Ábrela en Safari o Chrome para ver los perfumes, o escríbenos por <a href="https://wa.me/525529094378" style="color:#d9a85a">WhatsApp</a>.</div></noscript>
 
-<!-- Cabecera. Kits (.hd), Nosotros y Contacto (.hm) se esconden en pantallas chicas (siguen en el pie) -->
+<!-- Cabecera. En celular el menú (#menu) se abre con el botón ☰ (#mnb) -->
 <header><div class="in">
   <a class="logo" href="index.html" aria-label="valère, inicio"><svg class="lm" viewBox="0 0 100 100" aria-hidden="true"><use href="#lg"/></svg><span>valère</span></a>
-  <nav><a href="descubrir.html">Descubrir</a><a href="kits.html" class="hd">Kits</a><a href="comparar.html">Comparar</a><a href="nosotros.html" class="hm">Nosotros</a><a href="contacto.html" class="hm">Contacto</a></nav>
+  <nav id="menu" aria-label="Secciones"><a href="descubrir.html">Descubrir</a><a href="kits.html">Kits</a><a href="comparar.html">Comparar</a><a href="nosotros.html">Nosotros</a><a href="contacto.html">Contacto</a></nav>
   <button id="bag" data-accion="abrir-lista" aria-label="Abrir Mi lista">Mi lista <b data-n="0" id="bn">0</b></button>
+  <button id="mnb" data-accion="menu" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú"><i></i><i></i><i></i></button>
 </div></header>
 
 <main class="in">
@@ -119,18 +121,18 @@
 <!-- Mi lista (la llena js/vistas/mi-lista.js) -->
 <dialog id="cd" aria-label="Mi lista">
   <button class="x" data-accion="cerrar" aria-label="Cerrar">×</button>
-  <h3>Mi lista</h3>
+  <h3>Mi lista <span id="cn"></span></h3>
   <div id="ci"></div>
-  <div id="cf"><div class="tt"><span>Total estimado</span><span id="ct"></span></div>
-    <small id="sv"></small>
+  <div id="cf"><p id="sv"></p>
+    <div class="tt"><span>Total estimado</span><span id="ct"></span></div>
     <div class="gf" id="gf">
       <label class="gt"><span class="gi"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="12" width="24" height="6" rx="1.5"/><path d="M6 18v9a1.5 1.5 0 0 0 1.5 1.5h17A1.5 1.5 0 0 0 26 27v-9"/><path d="M16 12v16.5"/><path d="M16 12c-1-4-3.5-6.5-6-6.5a3 3 0 0 0 0 6zM16 12c1-4 3.5-6.5 6-6.5a3 3 0 0 1 0 6z"/></svg></span><span class="gx"><b>Envolver para regalo</b><small id="gh">Lo preparamos listo para regalar.</small></span><input type="checkbox" id="gk" role="switch" aria-label="Envolver para regalo"></label>
       <p id="gx" role="status" hidden>Por ahora el regalo no se puede pedir desde la página. Si lo quieres envuelto para regalo, mándanos tu lista y avísanos en el mismo chat de WhatsApp, Instagram o Facebook: nosotros lo preparamos.</p>
       <div id="gn" hidden><input id="gm" type="text" maxlength="120" placeholder="Mensaje para la tarjeta (opcional)" aria-label="Mensaje para la tarjeta" autocomplete="off"></div>
     </div>
-    <p class="sl">Enviar mi lista</p>
-    <div class="sn"><a class="btn" id="sw" target="_blank" rel="noopener">WhatsApp</a><a class="btn l" id="si" data-accion="copiar-y-abrir" target="_blank" rel="noopener">Instagram</a><a class="btn l" id="sf" data-accion="copiar-y-abrir" target="_blank" rel="noopener">Facebook</a></div>
-    <div class="sn two"><button class="btn l" id="sc" data-accion="copiar-lista">Copiar lista</button><button class="btn l" id="sh" data-accion="compartir-lista">Compartir</button></div>
+    <a class="btn ws" id="sw" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 0 0-8.66 15l-1.3 4.76 4.88-1.28A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-2.9.76.78-2.83-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.14c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.56.12-.16.25-.64.8-.78.97-.15.16-.29.18-.54.06a6.7 6.7 0 0 1-3.3-2.89c-.25-.43.25-.4.71-1.33.08-.16.04-.3-.02-.43l-.76-1.83c-.2-.48-.4-.41-.56-.42h-.47a.9.9 0 0 0-.66.31 2.77 2.77 0 0 0-.86 2.06 4.8 4.8 0 0 0 1 2.56 11 11 0 0 0 4.22 3.72c1.57.68 2.19.74 2.98.62.48-.07 1.46-.6 1.67-1.18.2-.58.2-1.07.15-1.18-.06-.1-.22-.16-.47-.28z"/></svg>Enviar por WhatsApp</a>
+    <div class="sn"><a class="btn l" id="si" data-accion="copiar-y-abrir" target="_blank" rel="noopener">Instagram</a><a class="btn l" id="sf" data-accion="copiar-y-abrir" target="_blank" rel="noopener">Facebook</a></div>
+    <div class="sn mini"><button id="sc" data-accion="copiar-lista">Copiar lista</button><button id="sh" data-accion="compartir-lista">Compartir</button></div>
     <textarea id="mn" readonly hidden rows="5" aria-label="Tu lista, lista para copiar"></textarea>
     <small>WhatsApp se abre con tu lista ya escrita. En Instagram y Facebook, tu lista se copia y se abre el chat: solo pégala y envíala. El total es estimado; ahí confirmamos disponibilidad, envío y pago.</small>
     <small class="lgl">Al enviar tu lista aceptas los <a href="terminos.html">Términos y condiciones</a> y el <a href="privacidad.html">Aviso de privacidad</a>.</small></div>

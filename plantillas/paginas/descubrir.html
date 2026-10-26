@@ -1,7 +1,26 @@
 <main>
   <section id="perfumes"><div class="in">
     <div class="bar"><h1 class="pg-t">Descubrir</h1></div>
-    <div class="tools"><input id="q" type="search" maxlength="60" enterkeyhint="search" placeholder="Nombre, marca o aroma" aria-label="Buscar perfumes" autocomplete="off"><div class="chips" id="ch"></div></div>
+    <!-- Buscador y filtros (los botones los dibuja js/vistas/catalogo.js) -->
+    <div class="tools">
+      <input id="q" type="search" maxlength="60" enterkeyhint="search" placeholder="Nombre, marca o aroma" aria-label="Buscar perfumes" autocomplete="off">
+      <div class="fl"><span class="fl-t">Para</span><div class="chips" id="ch"></div></div>
+      <div class="fl"><span class="fl-t">Precio</span><div class="chips" id="chp"></div></div>
+    </div>
+    <!-- Cuántos hay, limpiar filtros y ordenar -->
+    <div class="res">
+      <p id="nres" aria-live="polite"></p>
+      <button class="lk" id="lfl" data-accion="limpiar-filtros" hidden>Quitar filtros</button>
+      <label class="ord"><span>Ordenar</span>
+        <select id="ord" aria-label="Ordenar perfumes">
+          <option value="">Recomendados</option>
+          <option value="precio-asc">Menor precio</option>
+          <option value="precio-desc">Mayor precio</option>
+          <option value="descuento">Mayor descuento</option>
+          <option value="nombre">Nombre (A-Z)</option>
+        </select>
+      </label>
+    </div>
     <div id="g"></div>
     <p class="lk-w"><span style="color:var(--mut)">¿No sabes cuál elegir?</span> <button class="lk" data-accion="abrir-examen">Examen para saber más de tus gustos (opcional)</button></p>
   </div></section>

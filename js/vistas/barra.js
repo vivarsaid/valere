@@ -2,9 +2,8 @@
    VISTA: BARRITA FLOTANTE (#cb, abajo de la pantalla, en todas las páginas)
    -----------------------------------------------------------------------------
    Muestra lo que esté pasando:
-     · comparando y con algo en Mi lista:  Eros vs Scandal [Comparar] [Finalizar compra] ×
-     · solo comparando:                    Eros vs Scandal [Comparar] ×
-     · solo con algo en Mi lista:          2 en tu lista · $3,298 [Finalizar compra]
+     · comparando:               Eros vs Scandal [Comparar] [Finalizar compra] ×
+     · solo con algo en Mi lista: 2 en tu lista · $3,298 [Finalizar compra]
    "Finalizar compra" abre Mi lista, donde se manda por WhatsApp, Instagram o Facebook.
    La × solo quita la comparación (Mi lista no se toca).
 
@@ -26,8 +25,8 @@ const Barra = (() => {
     barra.hidden = !comparando && !piezas;
     $("#cbc").hidden = !comparando;
     $("#cbx").hidden = !comparando;
-    $("#cbf").hidden = !piezas;
-    barra.classList.toggle("dos", comparando && piezas > 0);
+    $("#cbf").hidden = false; // siempre junto a "Comparar" (con la lista vacía, Mi lista invita a elegir)
+    barra.classList.toggle("dos", comparando);
 
     let texto = "";
     if (comparando) {

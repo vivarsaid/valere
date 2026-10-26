@@ -5,7 +5,11 @@
    regalo y los botones para mandarla por WhatsApp, Instagram o Facebook.
    También actualiza el número junto a "Mi lista" en la cabecera (#bn).
 
-   Usa:     $, Lista, Regalo, Config, Formato, Barra
+   Cada perfume va en una tarjeta con su frasco; con una sola pieza, el "−" se
+   vuelve un botecito de basura. Con la lista vacía se esconde la parte de abajo
+   y sale un botón para ir a elegir.
+
+   Usa:     $, Lista, Regalo, Config, Formato, Pagina, Barra
    Expone:  VistaLista
    ============================================================================= */
 
@@ -13,19 +17,38 @@ const VistaLista = (() => {
   const E = Formato.escapar;
   const M = Formato.dinero;
 
+  // Botecito de basura: sale en lugar del "−" cuando solo queda una pieza
+  const BASURA =
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>';
+
+  /** Una tarjeta de la lista: frasco, marca, nombre, tamaño, cantidad y subtotal. */
   function linea(l, i) {
+    const p = l.perfume;
+    const cantidad = l.item.cantidad;
+    const menos =
+      cantidad > 1
+        ? `<button data-accion="cambiar-cantidad" data-linea="${i}" data-cambio="-1" aria-label="Quitar una pieza">−</button>`
+        : `<button class="bo" data-accion="cambiar-cantidad" data-linea="${i}" data-cambio="-1" aria-label="Quitar ${E(p.nombre)} de la lista">${BASURA}</button>`;
     return (
-      `<div class="ln"><div>` +
-      `<b>${E(l.perfume.nombre)}</b><br>` +
-      `<span>${E(l.perfume.marca)} · ${Formato.tamano(l.item.tam)} · ${M(l.precio)}</span>` +
-      `<div class="qt">` +
-      `<button data-accion="cambiar-cantidad" data-linea="${i}" data-cambio="-1" aria-label="Quitar uno">−</button>` +
-      `<i>${l.item.cantidad}</i>` +
-      `<button data-accion="cambiar-cantidad" data-linea="${i}" data-cambio="1" aria-label="Agregar uno">+</button>` +
-      `</div></div>` +
-      `<div class="pr">${M(l.subtotal)}</div></div>`
+      `<div class="ln">` +
+      `<a class="lf" href="${E(Pagina.enlacePerfume(p))}" tabindex="-1" aria-hidden="true">${Formato.frascoDibujado(p.color)}</a>` +
+      `<div class="lt"><small>${E(p.marca)}</small><b>${E(p.nombre)}</b>` +
+      `<span>${Formato.tamano(l.item.tam)} · ${M(l.precio)} c/u</span></div>` +
+      `<div class="lr"><div class="pr">${M(l.subtotal)}</div>` +
+      `<div class="qt">${menos}<i>${cantidad}</i>` +
+      `<button data-accion="cambiar-cantidad" data-linea="${i}" data-cambio="1" aria-label="Agregar una pieza">+</button>` +
+      `</div></div></div>`
     );
   }
+
+  /** Lista vacía: dibujo y botón para ir a elegir. */
+  const VACIA =
+    `<div id="em"><svg class="ev" viewBox="0 0 100 140" aria-hidden="true"><use href="#bo"/></svg>` +
+    `<b>Tu lista está vacía</b>` +
+    `<p>Toca «+ Mi lista» en los perfumes que te gusten y aquí se van juntando.</p>` +
+    `<a class="btn" href="descubrir.html">Ver perfumes</a></div>`;
+
+  let totalAnterior = -1;
 
   /** La parte de "Envolver para regalo". */
   function pintarRegalo(hayPiezas) {
@@ -82,11 +105,21 @@ const VistaLista = (() => {
     $("#bn").textContent = n;
     $("#bn").dataset.n = n;
 
-    $("#ci").innerHTML =
-      L.map(linea).join("") ||
-      `<p id="em">Aún no hay perfumes en tu lista.<br>Toca «+ Mi lista» en los que te gusten.</p>`;
-    $("#ct").textContent = M(total + extraRegalo);
-    $("#sv").textContent = ahorro > 0 ? `Con los descuentos ahorras ${M(ahorro)}` : "";
+    $("#ci").innerHTML = L.map(linea).join("") || VACIA;
+    $("#cn").textContent = n ? `${n} ${n === 1 ? "pieza" : "piezas"}` : "";
+    $("#cf").hidden = !n; // con la lista vacía no hay total ni botones de envío
+
+    // el total da un brinquito cuando cambia
+    const totalFinal = total + extraRegalo;
+    const ct = $("#ct");
+    ct.textContent = M(totalFinal);
+    if (totalAnterior >= 0 && totalAnterior !== totalFinal) {
+      ct.classList.remove("cambia");
+      void ct.offsetWidth;
+      ct.classList.add("cambia");
+    }
+    totalAnterior = totalFinal;
+    $("#sv").textContent = ahorro > 0 ? `Ahorras ${M(ahorro)} con los descuentos` : "";
     const aMano = $("#mn");
     if (aMano) aMano.hidden = true;
 

@@ -94,22 +94,112 @@ nav a[aria-current="page"] {
   color: var(--mut);
 }
 
-/* En pantallas chicas se esconden enlaces del menú (siguen en el pie):
-   .hm = Nosotros y Contacto (≤700 px) · .hd = Kits (≤420 px) */
-@media (max-width: 700px) {
-  nav {
-    gap: 16px;
-  }
-  nav .hm {
-    display: none;
-  }
-  header .in {
-    gap: 12px;
-  }
+/* Botón ☰ (solo en celular): tres rayitas que se vuelven × al abrir */
+#mnb {
+  display: none;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-right: -8px;
+  border-radius: 99px;
 }
-@media (max-width: 420px) {
-  nav .hd {
-    display: none;
+#mnb i {
+  position: absolute;
+  left: 11px;
+  width: 18px;
+  height: 1.8px;
+  border-radius: 2px;
+  background: var(--fg);
+  transition:
+    transform 0.3s cubic-bezier(0.3, 0.9, 0.3, 1.2),
+    opacity 0.2s;
+}
+#mnb i:nth-child(1) {
+  top: 14px;
+}
+#mnb i:nth-child(2) {
+  top: 19.5px;
+}
+#mnb i:nth-child(3) {
+  top: 25px;
+}
+header.abierto #mnb i:nth-child(1) {
+  transform: translateY(5.5px) rotate(45deg);
+}
+header.abierto #mnb i:nth-child(2) {
+  opacity: 0;
+}
+header.abierto #mnb i:nth-child(3) {
+  transform: translateY(-5.5px) rotate(-45deg);
+}
+
+/* En celular: el menú es un panel que baja desde la cabecera, con todas las secciones */
+@media (max-width: 700px) {
+  header .in {
+    gap: 8px;
+  }
+  #mnb {
+    display: block;
+  }
+  #menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px max(16px, env(safe-area-inset-right, 0px)) 18px max(16px, env(safe-area-inset-left, 0px));
+    background: rgba(0, 0, 0, 0.96);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 24px 40px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition:
+      opacity 0.25s,
+      transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+      visibility 0s 0.3s;
+  }
+  header.abierto #menu {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+  #menu a {
+    padding: 14px 4px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--fg);
+    border-bottom: 1px solid var(--line);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition:
+      opacity 0.3s,
+      transform 0.3s;
+  }
+  #menu a:last-child {
+    border-bottom: 0;
+  }
+  #menu a[aria-current="page"] {
+    color: var(--acc);
+  }
+  /* los enlaces entran uno tras otro */
+  header.abierto #menu a {
+    opacity: 1;
+    transform: none;
+  }
+  header.abierto #menu a:nth-child(2) {
+    transition-delay: 0.04s;
+  }
+  header.abierto #menu a:nth-child(3) {
+    transition-delay: 0.08s;
+  }
+  header.abierto #menu a:nth-child(4) {
+    transition-delay: 0.12s;
+  }
+  header.abierto #menu a:nth-child(5) {
+    transition-delay: 0.16s;
   }
 }
 @media (pointer: coarse) {
