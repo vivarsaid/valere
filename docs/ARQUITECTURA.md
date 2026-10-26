@@ -29,13 +29,13 @@ valere/
 
 | Página | Archivo | Qué tiene |
 |---|---|---|
-| Inicio | `index.html` | Bienvenida animada, título, carrusel 3D de perfumes, tres razones |
+| Inicio | `index.html` | Bienvenida animada, «Lo más vendido» en carrusel 3D, tres razones |
 | Descubrir | `descubrir.html` | Buscador, filtros, tarjetas y examen de gustos |
 | Kits | `kits.html` | Tarjetas de kits |
 | Comparar | `comparar.html` | Hasta 3 perfumes lado a lado |
 | Perfume | `perfume.html?p=versace-eros` | Detalle de un perfume (cada uno tiene su link) |
-| Nosotros | `nosotros.html` | La historia: por qué existe valère y qué nos importa |
-| Contacto | `contacto.html` | WhatsApp, Instagram, Facebook y cómo pedir |
+| Nosotros | `nosotros.html` | La historia (con color al bajar), números del catálogo, pirámide olfativa y valores |
+| Contacto | `contacto.html` | Botón de WhatsApp con mensaje listo, redes con su color, cómo pedir y preguntas frecuentes |
 | Aviso de privacidad | `privacidad.html` | Qué datos se reciben, para qué y cómo pedir verlos o borrarlos |
 | Términos y condiciones | `terminos.html` | Cómo se compra: productos, precios, pagos, envíos y devoluciones |
 
@@ -81,10 +81,11 @@ En **todas** las páginas están la cabecera, el pie (con los enlaces legales), 
 | 18 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador y selector |
 | 19 | `js/vistas/barra.js` | `Barra` | Barrita flotante: comparar y «Finalizar compra» (abre Mi lista) |
 | 20 | `js/vistas/carrusel.js` | `Carrusel` | Carrusel 3D de la portada (Three.js, se descarga después; ver abajo) |
-| 21 | `js/vistas/examen.js` | `Examen` | Examen de gustos y recomendación |
-| 22 | `js/vistas/bienvenida.js` | `Bienvenida` | Acomoda el acento de la animación y la quita al terminar |
-| 23 | `js/temporadas/halloween.js` | `Halloween` | Figuras, ambientes y efectos de temporada |
-| 24 | `js/app.js` | `App` | **Conecta todo** y arranca (ver abajo) |
+| 21 | `js/vistas/nosotros.js` | `VistaNosotros` | Nosotros: números del catálogo, color al bajar por los capítulos y pirámide olfativa |
+| 22 | `js/vistas/examen.js` | `Examen` | Examen de gustos y recomendación |
+| 23 | `js/vistas/bienvenida.js` | `Bienvenida` | Acomoda el acento de la animación y la quita al terminar |
+| 24 | `js/temporadas/halloween.js` | `Halloween` | Figuras, ambientes y efectos de temporada |
+| 25 | `js/app.js` | `App` | **Conecta todo** y arranca (ver abajo) |
 
 ### El carrusel 3D de la portada
 
@@ -125,6 +126,7 @@ App.iniciar()
 | `abrir-lista` | Cabecera, barrita («Finalizar compra») | Abre Mi lista |
 | `agregar` | Tarjetas, comparador, carrusel | Agrega a Mi lista (`data-id`) |
 | `carrusel-mover` | Portada | Flechas del carrusel (`data-paso`: −1 / 1) |
+| `piramide-capa` | Nosotros | Capa de la pirámide olfativa (`data-capa`: salida, corazon, fondo) |
 | `cambiar-cantidad` | Mi lista | − / + (`data-linea`, `data-cambio`) |
 | `copiar-lista`, `compartir-lista`, `copiar-y-abrir` | Mi lista | Copiar, compartir, copiar y abrir Instagram/Facebook |
 | `filtrar` | Descubrir | Filtro de género (`data-genero`) |
@@ -197,6 +199,7 @@ Cada archivo pone sus ajustes para celular **al final**, con `@media`:
 | `color` | — | Color del frasco dibujado |
 | `modelo` | — | Nombre en `modelos` (foto y forma del frasco 3D) |
 | `incluye` | — | Qué trae un kit |
+| `masVendido` | — | Lugar en «Lo más vendido» de la portada: `1` el primero, `2` el segundo… Sin este campo no sale. Si ninguno lo tiene, el carrusel muestra todos |
 
 Campos de `modelos`: `foto` (nombre del .webp), `c` color del frasco, `v` 1 = vidrio, `t` color de tapa, `tp` tapa (`cubo`, `cilindro`, `corona`), `l` color de etiqueta, `e` texto de etiqueta (`|` = renglón), `w`/`h`/`d` medidas.
 
@@ -211,6 +214,10 @@ Campos de `modelos`: `foto` (nombre del .webp), `c` color del frasco, `v` 1 = vi
 > `data/perfumes.json` no lo necesita: siempre se pide sin caché.
 
 **Agregar o cambiar un perfume** → `data/perfumes.json`. Guardar y recargar.
+
+**Cambiar «Lo más vendido» de la portada** → en `data/perfumes.json`, pon `"masVendido": 1`, `2`, `3`… en los perfumes que quieras, en ese orden. Quítaselo a los que ya no.
+
+**Cambiar las preguntas frecuentes** → `plantillas/paginas/contacto.html` (cada una es un `<details>`). Si tocan envíos, pagos o devoluciones, que digan lo mismo que los Términos.
 
 **Cambiar WhatsApp, redes, correo, regalo, 3D del carrusel o fechas del tema** → `js/config.js` y luego *Generar páginas*.
 

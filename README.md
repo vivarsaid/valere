@@ -10,6 +10,7 @@ Sitio para descubrir, comparar y guardar perfumes, y mandar la lista por WhatsAp
 | Quiero… | Archivo |
 |---|---|
 | Agregar, quitar o cambiar perfumes | `data/perfumes.json` |
+| Elegir «Lo más vendido» de la portada | `data/perfumes.json` → `"masVendido": 1, 2, 3…` |
 | Cambiar WhatsApp, redes, correo, regalo, 3D del carrusel, fechas del tema | `js/config.js` → luego *Generar páginas* |
 | Cambiar el Aviso de privacidad o los Términos (y su fecha) | `plantillas/paginas/privacidad.html`, `terminos.html` |
 | Cambiar colores | `css/base.css` (`:root`) → luego *Generar páginas* |

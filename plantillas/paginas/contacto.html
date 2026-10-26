@@ -1,20 +1,74 @@
 <main>
-  <section><div class="in">
-    <h1 class="pg-t">Contacto</h1>
-    <p class="sub2">Escríbenos por donde prefieras. Te confirmamos disponibilidad, envío y pago.</p>
-    <!-- Los links y datos salen de los AJUSTES en js/config.js -->
-    <div class="rd-g">
-      <a class="rd" data-red="wa" href="#" target="_blank" rel="noopener"><b>WhatsApp</b><span data-txt="wa"></span><i>Abrir chat ›</i></a>
-      <a class="rd" data-red="ig" href="#" target="_blank" rel="noopener"><b>Instagram</b><span data-txt="ig"></span><i>Ver perfil ›</i></a>
-      <a class="rd" data-red="fb" href="#" target="_blank" rel="noopener"><b>Facebook</b><span data-txt="fb"></span><i>Ver página ›</i></a>
-    </div>
+  <!-- Arriba: WhatsApp como botón principal. Los links y datos salen de los AJUSTES (js/config.js). -->
+  <section class="ct-h"><div class="in">
+    <p class="hs-k">Contacto</p>
+    <h1 class="pg-t">¿Te ayudamos a elegir?</h1>
+    <p class="hs-lead">Escríbenos y te responde una persona, no un robot. Te recomendamos, resolvemos tus dudas y te confirmamos disponibilidad, envío y pago.</p>
+    <a class="btn ct-wa" data-red="wa-ayuda" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 0 0-8.66 15l-1.3 4.76 4.88-1.28A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-2.9.76.78-2.83-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.14c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.56.12-.16.25-.64.8-.78.97-.15.16-.29.18-.54.06a6.7 6.7 0 0 1-3.3-2.89c-.25-.43.25-.4.71-1.33.08-.16.04-.3-.02-.43l-.76-1.83c-.2-.48-.4-.41-.56-.42h-.47a.9.9 0 0 0-.66.31 2.77 2.77 0 0 0-.86 2.06 4.8 4.8 0 0 0 1 2.56 11 11 0 0 0 4.22 3.72c1.57.68 2.19.74 2.98.62.48-.07 1.46-.6 1.67-1.18.2-.58.2-1.07.15-1.18-.06-.1-.22-.16-.47-.28z"/></svg>
+      Escríbenos por WhatsApp
+    </a>
+    <p class="ct-nota">Se abre el chat con un mensaje ya escrito · Ciudad de México</p>
+  </div></section>
 
-    <h2 class="sub-h">Cómo pedir</h2>
-    <div class="trust">
-      <div><h3>1. Arma tu lista</h3><p>Toca «+ Mi lista» en los perfumes que te gusten.</p></div>
-      <div><h3>2. Mándanosla</h3><p>Desde Mi lista, envíala por WhatsApp, Instagram o Facebook.</p></div>
-      <div><h3>3. Confirmamos</h3><p>Te decimos disponibilidad, envío y forma de pago.</p></div>
+  <!-- Las tres redes, cada una con su color -->
+  <section class="ct-r"><div class="in">
+    <div class="rd-g">
+      <a class="rd rd-wa" data-red="wa" href="#" target="_blank" rel="noopener">
+        <span class="rd-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2a10 10 0 0 0-8.66 15l-1.3 4.76 4.88-1.28A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-2.9.76.78-2.83-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.14c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.56.12-.16.25-.64.8-.78.97-.15.16-.29.18-.54.06a6.7 6.7 0 0 1-3.3-2.89c-.25-.43.25-.4.71-1.33.08-.16.04-.3-.02-.43l-.76-1.83c-.2-.48-.4-.41-.56-.42h-.47a.9.9 0 0 0-.66.31 2.77 2.77 0 0 0-.86 2.06 4.8 4.8 0 0 0 1 2.56 11 11 0 0 0 4.22 3.72c1.57.68 2.19.74 2.98.62.48-.07 1.46-.6 1.67-1.18.2-.58.2-1.07.15-1.18-.06-.1-.22-.16-.47-.28z"/></svg></span>
+        <b>WhatsApp</b><span data-txt="wa"></span><i>Abrir chat ›</i>
+      </a>
+      <a class="rd rd-ig" data-red="ig" href="#" target="_blank" rel="noopener">
+        <span class="rd-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.3"/></svg></span>
+        <b>Instagram</b><span data-txt="ig"></span><i>Ver perfil ›</i>
+      </a>
+      <a class="rd rd-fb" data-red="fb" href="#" target="_blank" rel="noopener">
+        <span class="rd-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.87.25-1.46 1.5-1.46h1.6V4.46A21 21 0 0 0 14.3 4.3c-2.3 0-3.8 1.4-3.8 3.96v2.24H7.9v3h2.6V21z"/></svg></span>
+        <b>Facebook</b><span data-txt="fb"></span><i>Ver página ›</i>
+      </a>
     </div>
-    <!-- Aquí se puede agregar: horario de atención, zonas de envío, formas de pago -->
+  </div></section>
+
+  <!-- Cómo pedir -->
+  <section><div class="in">
+    <h2 class="sub-h">Cómo pedir</h2>
+    <ol class="ct-pasos">
+      <li><span>1</span><div><h3>Arma tu lista</h3><p>Toca «+ Mi lista» en los perfumes que te gusten.</p></div></li>
+      <li><span>2</span><div><h3>Mándanosla</h3><p>Desde Mi lista, envíala por WhatsApp, Instagram o Facebook.</p></div></li>
+      <li><span>3</span><div><h3>Confirmamos</h3><p>Te decimos disponibilidad, envío y forma de pago.</p></div></li>
+    </ol>
+  </div></section>
+
+  <!-- Preguntas frecuentes. Las respuestas siguen los Términos: si cambias algo allá, cámbialo aquí. -->
+  <section><div class="in ct-f">
+    <h2 class="sub-h">Preguntas frecuentes</h2>
+    <details>
+      <summary>¿Los perfumes son originales?</summary>
+      <p>Sí, todos. La mayoría vienen nuevos y sellados en su caja. Si alguno es tester, viene sin caja o es un decant (una parte del perfume original en un frasco más pequeño), te lo decimos antes de que pagues.</p>
+    </details>
+    <details>
+      <summary>¿Cómo hago un pedido?</summary>
+      <p>Agrega los que te gusten a Mi lista y mándanosla por WhatsApp, Instagram o Facebook desde ahí mismo. Te confirmamos disponibilidad, precio total y envío, y tu compra queda hecha cuando pagas.</p>
+    </details>
+    <details>
+      <summary>¿Hacen envíos? ¿Cuánto cuesta?</summary>
+      <p>Sí. Estamos en la Ciudad de México; el costo y el tiempo de entrega dependen de tu zona y te los confirmamos antes de que pagues.</p>
+    </details>
+    <details>
+      <summary>¿Cómo pago?</summary>
+      <p>Te damos las formas de pago en el chat. Paga solo a las cuentas que te demos por nuestros canales oficiales. Nunca te pediremos NIP, contraseñas ni códigos de verificación.</p>
+    </details>
+    <details>
+      <summary>¿Puedo cancelar o devolver mi compra?</summary>
+      <p>Si todavía no sale tu pedido, cancelas sin costo. Si llega dañado o diferente a lo que te confirmamos, te lo cambiamos o te regresamos tu dinero. Y si te arrepientes, tienes 5 días hábiles desde que lo recibes para devolverlo sin usar. Todos los detalles están en los <a href="terminos.html">Términos y condiciones</a>.</p>
+    </details>
+    <details>
+      <summary>¿Lo pueden envolver para regalo?</summary>
+      <p>Sí. Al mandarnos tu lista, avísanos en el mismo chat que es para regalo y lo preparamos.</p>
+    </details>
+    <details>
+      <summary>¿Qué hacen con mis datos?</summary>
+      <p>Solo los usamos para atender y entregar tu pedido; no los vendemos. La página no te pide datos ni usa cookies de rastreo. Más en el <a href="privacidad.html">Aviso de privacidad</a>.</p>
+    </details>
   </div></section>
 </main>

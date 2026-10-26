@@ -1,8 +1,10 @@
 /* =============================================================================
    VISTA: CARRUSEL 3D DE LA PORTADA (#car, solo en index.html)
    -----------------------------------------------------------------------------
-   Los perfumes del catálogo (sin los kits) en un carrusel que se mueve con el
+   "Lo más vendido": los perfumes con "masVendido" en data/perfumes.json (si
+   ninguno lo tiene, todos menos los kits) en un carrusel que se mueve con el
    dedo, el mouse, la rueda del trackpad (de lado), las flechas o el teclado.
+   Si son pocos, se repiten para que el anillo se vea lleno.
    Los frascos se dibujan en 3D con Three.js y el fondo toma el color del
    perfume que está al centro. Tocar el frasco del centro abre su página.
 
@@ -34,8 +36,10 @@ const Carrusel = (() => {
 
   let caja = null; // <section id="car">
   const el = {};
-  let perfumes = []; // los que salen en el carrusel
-  let N = 0;
+  let perfumes = []; // los lugares del anillo (si son pocos, se repiten)
+  let N = 0; // cuántos lugares tiene el anillo
+  let distintos = 0; // cuántos perfumes distintos son (lo que dice el contador)
+  const MINIMO_EN_ANILLO = 9; // con menos, los frascos brincarían de un lado al otro
   let fondos = []; // [r, g, b] del fondo de cada perfume
 
   let destino = 0; // a dónde va (entero cuando está quieto)
@@ -124,7 +128,7 @@ const Carrusel = (() => {
     const tam = Catalogo.primerTamano(p);
     const detalle = [Formato.GENERO[p.genero], p.familia, Formato.tamano(tam)].filter(Boolean).join(" · ");
 
-    el.num.textContent = dosCifras(i + 1);
+    el.num.textContent = dosCifras((i % distintos) + 1);
     el.datos.innerHTML =
       `<small>${E(p.marca)}</small><h2>${E(p.nombre)}</h2><p class="car-fam">${E(detalle)}</p>` +
       `<div class="car-pr"><span>${Formato.precio(p, tam)} ${Formato.etiqueta(p, tam)}</span>` +
@@ -678,7 +682,7 @@ const Carrusel = (() => {
       cuerpo.position.y = -m.centro;
       cuerpo.scale.setScalar(0.82);
       grupo.userData.indice = i;
-      grupo.userData.fase = (numeroDe(p.id) % 100) / 10;
+      grupo.userData.fase = (numeroDe(p.id) % 100) / 10 + i * 1.7; // + i: los repetidos no flotan igual
       escena.add(grupo);
       frascos[i] = grupo;
       return grupo;
@@ -796,12 +800,25 @@ const Carrusel = (() => {
 
   /* ── Arranque ────────────────────────────────────────────────────────────── */
 
+  /**
+   * "Lo más vendido": los perfumes con "masVendido" en el JSON, del 1 en adelante.
+   * Si ninguno lo tiene, salen todos (sin los kits), en el orden del JSON.
+   */
+  function elegirPerfumes() {
+    const sinKits = Catalogo.todos().filter((p) => !p.esKit);
+    const vendidos = sinKits.filter((p) => p.masVendido > 0).sort((a, b) => a.masVendido - b.masVendido);
+    return vendidos.length ? vendidos : sinKits;
+  }
+
   /** Se llama una vez, cuando ya cargó el catálogo. */
   function iniciar() {
     caja = $("#car");
     if (!caja || caja.dataset.listo) return;
     caja.dataset.listo = 1;
-    perfumes = Catalogo.todos().filter((p) => !p.esKit);
+    perfumes = elegirPerfumes();
+    distintos = perfumes.length;
+    // Pocos perfumes: se repiten para llenar el anillo (el contador sigue diciendo 01 / 03)
+    if (distintos) while (perfumes.length < MINIMO_EN_ANILLO) perfumes = perfumes.concat(perfumes.slice(0, distintos));
     N = perfumes.length;
     caja.hidden = !N;
     if (!N) return;
@@ -813,7 +830,7 @@ const Carrusel = (() => {
     el.ver = $(".car-ver", caja);
     el.num = $(".car-num b", caja);
     el.datos = $(".car-datos", caja);
-    $(".car-tot", caja).textContent = dosCifras(N);
+    $(".car-tot", caja).textContent = dosCifras(distintos);
 
     fondos = perfumes.map((p) => colorDeFondo(p.color));
     escucharGestos();
