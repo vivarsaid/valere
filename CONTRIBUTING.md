@@ -43,7 +43,7 @@ Si no tienes permiso de escritura en el repositorio, primero haz un *fork* (bot�
 
 - [ ] Probé la página con **Live Server** y no hay errores en la consola (F12 → Consola).
 - [ ] La revisé en tamaño celular (F12 → ícono de celular).
-- [ ] Si cambié algo en `plantillas/`, corrí **Generar páginas** y subí los `.html` que cambiaron.
+- [ ] Si cambié algo en `plantillas/`, `css/` o `js/`, corrí **Generar páginas** y subí los `.html` que cambiaron (así cada CSS y JS lleva su huella `?v=…` y nadie ve una versión vieja).
 - [ ] Si cambié `data/perfumes.json`, sigue siendo JSON válido (sin comas de más).
 - [ ] Si agregué un archivo, lo documenté en `docs/ARQUITECTURA.md`.
 - [ ] El código está formateado con Prettier (se hace solo al guardar con la extensión).

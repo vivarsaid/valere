@@ -204,13 +204,19 @@ Campos de `modelos`: `foto` (nombre del .webp), `c` color del frasco, `v` 1 = vi
 
 ## 5. Recetas
 
+> **Regla general:** después de cambiar cualquier archivo de `plantillas/`, `css/` o `js/`, corre *Generar páginas*.
+> Además de armar los `.html`, le pone a cada CSS y JS una huella de su contenido (`css/base.css?v=1a2b3c4d`).
+> Si el archivo cambia, cambia la huella y el navegador descarga el nuevo; si no, usa el que ya tenía guardado
+> (GitHub Pages deja guardar los archivos 10 minutos, y sin la huella se mezclaba HTML nuevo con JS viejo).
+> `data/perfumes.json` no lo necesita: siempre se pide sin caché.
+
 **Agregar o cambiar un perfume** → `data/perfumes.json`. Guardar y recargar.
 
-**Cambiar WhatsApp, redes, correo, regalo, 3D del carrusel o fechas del tema** → `js/config.js`.
+**Cambiar WhatsApp, redes, correo, regalo, 3D del carrusel o fechas del tema** → `js/config.js` y luego *Generar páginas*.
 
 **Cambiar lo que dicen el Aviso de privacidad o los Términos** → `plantillas/paginas/privacidad.html` o `terminos.html`, cambia la fecha de «Última actualización» y genera las páginas.
 
-**Cambiar un color de todo el sitio** → `css/base.css`, en `:root`.
+**Cambiar un color de todo el sitio** → `css/base.css`, en `:root`, y luego *Generar páginas*.
 
 **Cambiar el menú, el pie o algo que está en todas las páginas**
 1. Edita `plantillas/comun-arriba.html` o `plantillas/comun-abajo.html`.

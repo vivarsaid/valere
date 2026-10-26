@@ -5,6 +5,8 @@
 #   plantillas/comun-arriba.html   <head>, estilos, scripts y cabecera
 #   plantillas/paginas/<pagina>.html  el contenido propio de cada pagina
 #   plantillas/comun-abajo.html    pie, Mi lista y avisos
+# y le pone a cada CSS y JS su huella (?v=...) para que el navegador no use uno viejo.
+# Por eso: despues de cambiar cualquier CSS o JS, vuelve a correr este archivo.
 # La lista de paginas, con su titulo y descripcion, esta en plantillas/paginas.txt
 #
 # Como correrlo:
@@ -21,6 +23,19 @@ $utf8 = New-Object System.Text.UTF8Encoding $false
 function Leer($ruta) { [IO.File]::ReadAllText((Join-Path $plantillas $ruta), [Text.Encoding]::UTF8) }
 
 $arriba = Leer "comun-arriba.html"
+
+# Huella de cada CSS y JS: css/base.css -> css/base.css?v=1a2b3c4d
+# Cuando un archivo cambia, cambia su huella y el navegador descarga el nuevo
+# (sin esto, despues de publicar se puede mezclar HTML nuevo con JS viejo).
+$sha = [Security.Cryptography.SHA256]::Create()
+$arriba = [regex]::Replace($arriba, '(href|src)="((?:css|js)/[^"?]+\.(?:css|js))"', {
+  param($m)
+  $ruta = Join-Path $raiz ($m.Groups[2].Value -replace '/', '\')
+  if (-not (Test-Path $ruta)) { return $m.Value }
+  $bytes = [IO.File]::ReadAllBytes($ruta)
+  $huella = ([BitConverter]::ToString($sha.ComputeHash($bytes)) -replace '-', '').Substring(0, 8).ToLower()
+  return $m.Groups[1].Value + '="' + $m.Groups[2].Value + '?v=' + $huella + '"'
+})
 $abajo = Leer "comun-abajo.html"
 $bienvenida = Leer "bienvenida.html"
 $secciones = "descubrir", "kits", "comparar", "nosotros", "contacto"   # las que aparecen en el menu
