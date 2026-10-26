@@ -1,8 +1,8 @@
 /* =============================================================================
    PORTADA (index.html)
    -----------------------------------------------------------------------------
-   Título grande, botones Descubrir / Comparar, el frasco del primer perfume
-   (#ht) y las tres razones (#confianza).
+   Título grande, botones Descubrir / Comparar, el carrusel 3D (#car, en
+   css/carrusel.css) y las tres razones (#confianza).
    ============================================================================= */
 
 .hero {
@@ -34,26 +34,7 @@
   justify-content: center;
 }
 
-/* El recuadro con el frasco */
-.tile {
-  margin-top: 48px;
-  height: clamp(280px, 46vw, 440px);
-  border-radius: 28px;
-  background: radial-gradient(ellipse 55% 60% at 50% 50%, #34343a, #1c1c1e 62%, #0c0c0d);
-  display: grid;
-  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
-  place-items: center;
-  overflow: hidden;
-}
-.tile svg {
-  height: 72%;
-  width: auto;
-  filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.6));
-}
-.tile .ph {
-  height: 84%;
-  max-height: 84%;
-}
+/* El carrusel 3D que va debajo tiene su propio archivo: css/carrusel.css */
 
 /* Rendimiento: no se dibuja hasta que se acerca a la pantalla */
 #confianza {
@@ -86,9 +67,5 @@
   }
   .hero h1 {
     font-size: clamp(30px, 6vw, 44px);
-  }
-  .tile {
-    height: 220px;
-    margin-top: 24px;
   }
 }

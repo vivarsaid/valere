@@ -1,7 +1,7 @@
 # =============================================================================
 # GENERAR PAGINAS
 # -----------------------------------------------------------------------------
-# Arma los 6 archivos .html de la raiz juntando:
+# Arma los archivos .html de la raiz juntando:
 #   plantillas/comun-arriba.html   <head>, estilos, scripts y cabecera
 #   plantillas/paginas/<pagina>.html  el contenido propio de cada pagina
 #   plantillas/comun-abajo.html    pie, Mi lista y avisos

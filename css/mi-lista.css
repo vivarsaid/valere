@@ -94,6 +94,15 @@
   font-size: 13px;
   line-height: 1.4;
 }
+/* "Al enviar tu lista aceptas los Términos…" */
+#cf .lgl {
+  margin-top: -6px;
+  font-size: 12px;
+}
+#cf .lgl a {
+  color: inherit;
+  text-underline-offset: 2px;
+}
 #cf .tt {
   display: flex;
   justify-content: space-between;

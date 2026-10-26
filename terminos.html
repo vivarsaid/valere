@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es-MX">
+<!--
+  ESTA PÁGINA SE GENERA SOLA. No la edites aquí: edita los archivos de plantillas/
+  y corre herramientas/generar-paginas.ps1 (en VS Code: Terminal → Ejecutar tarea → "Generar páginas").
+-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Términos y condiciones · valère</title>
+<meta name="description" content="Cómo se compra en valère: productos, precios, pagos, envíos, cambios y devoluciones.">
+<meta property="og:title" content="Términos y condiciones · valère">
+<meta property="og:description" content="Cómo se compra en valère: productos, precios, pagos, envíos, cambios y devoluciones.">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<meta name="format-detection" content="telephone=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<!-- Letra del logo (solo se descargan las letras de "valère") -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&text=val%C3%A8re&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&text=val%C3%A8re&display=swap"></noscript>
+<!-- El catálogo empieza a descargarse desde ya -->
+<link rel="preload" href="data/perfumes.json" as="fetch" crossorigin>
+
+<!-- Estilos (el orden importa: los de abajo pueden ajustar a los de arriba) -->
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/componentes.css">
+<link rel="stylesheet" href="css/cabecera.css">
+<link rel="stylesheet" href="css/pie.css">
+<link rel="stylesheet" href="css/dialogos.css">
+<link rel="stylesheet" href="css/avisos.css">
+<link rel="stylesheet" href="css/bienvenida.css">
+<link rel="stylesheet" href="css/portada.css">
+<link rel="stylesheet" href="css/carrusel.css">
+<link rel="stylesheet" href="css/catalogo.css">
+<link rel="stylesheet" href="css/producto.css">
+<link rel="stylesheet" href="css/mi-lista.css">
+<link rel="stylesheet" href="css/comparador.css">
+<link rel="stylesheet" href="css/examen.css">
+<link rel="stylesheet" href="css/paginas.css">
+<link rel="stylesheet" href="css/pantallas-especiales.css">
+<link rel="stylesheet" href="css/modo-ligero.css">
+<link rel="stylesheet" href="css/anticopia.css">
+<link rel="stylesheet" href="css/temporadas/halloween.css">
+
+<!-- Antes de pintar: ajustes, tema de temporada, modo ligero y bienvenida -->
+<script src="js/config.js"></script>
+<script src="js/base/antes-de-pintar.js"></script>
+
+<!-- El resto se ejecuta en este orden cuando la página ya está armada (defer) -->
+<script src="js/base/utilidades.js" defer></script>
+<script src="js/base/ajustes.js" defer></script>
+<script src="js/base/compatibilidad.js" defer></script>
+<script src="js/base/anticopia.js" defer></script>
+<script src="js/datos/catalogo.js" defer></script>
+<script src="js/datos/lista.js" defer></script>
+<script src="js/interfaz/formato.js" defer></script>
+<script src="js/interfaz/pagina.js" defer></script>
+<script src="js/interfaz/avisos.js" defer></script>
+<script src="js/interfaz/ventanas.js" defer></script>
+<script src="js/frascos/fotos.js" defer></script>
+<script src="js/frascos/motor3d.js" defer></script>
+<script src="js/vistas/catalogo.js" defer></script>
+<script src="js/vistas/producto.js" defer></script>
+<script src="js/vistas/mi-lista.js" defer></script>
+<script src="js/vistas/comparador.js" defer></script>
+<script src="js/vistas/barra.js" defer></script>
+<script src="js/vistas/carrusel.js" defer></script>
+<script src="js/vistas/examen.js" defer></script>
+<script src="js/vistas/bienvenida.js" defer></script>
+<script src="js/temporadas/halloween.js" defer></script>
+<script src="js/app.js" defer></script>
+</head>
+<body data-pagina="terminos">
+<!-- Dibujos que se reusan: el frasco (#bo) y el logo (#lg) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><linearGradient id="gs" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset=".35" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".26"/></linearGradient></defs>
+  <symbol id="bo" viewBox="0 0 100 140">
+    <ellipse cx="50" cy="135" rx="32" ry="3.5" fill="#000" opacity=".14"/>
+    <rect x="38" y="3" width="24" height="27" rx="4" fill="var(--cap)"/>
+    <rect x="43" y="29" width="14" height="13" fill="#a9a9ae"/>
+    <rect x="14" y="40" width="72" height="93" rx="17" fill="var(--c)"/>
+    <rect x="14" y="40" width="72" height="93" rx="17" fill="url(#gs)"/>
+    <rect x="29" y="72" width="42" height="34" rx="3" fill="#fff" opacity=".9"/>
+    <rect x="36" y="82" width="28" height="2.5" fill="#000" opacity=".72"/>
+    <rect x="41" y="90" width="18" height="1.8" fill="#000" opacity=".35"/>
+  </symbol>
+  <symbol id="lg" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="44"/><path d="M31 40L50 74L69 40"/><path d="M42 22L52 30" stroke="var(--acc)"/></g></symbol>
+</svg>
+<noscript><style>#iv,#car{display:none!important}.nojs{display:block!important}</style><div class="nojs" style="margin:0;padding:16px 18px;background:#1c1c1e;color:#f5f5f7;text-align:center;font:15px/1.45 -apple-system,system-ui,sans-serif"><b style="display:block;font-size:16px;margin-bottom:4px">Esta vista previa no muestra el catálogo</b>Ábrela en Safari o Chrome para ver los perfumes, o escríbenos por <a href="https://wa.me/525529094378" style="color:#d9a85a">WhatsApp</a>.</div></noscript>
+
+<!-- Cabecera. Kits (.hd), Nosotros y Contacto (.hm) se esconden en pantallas chicas (siguen en el pie) -->
+<header><div class="in">
+  <a class="logo" href="index.html" aria-label="valère, inicio"><svg class="lm" viewBox="0 0 100 100" aria-hidden="true"><use href="#lg"/></svg><span>valère</span></a>
+  <nav><a href="descubrir.html">Descubrir</a><a href="kits.html" class="hd">Kits</a><a href="comparar.html">Comparar</a><a href="nosotros.html" class="hm">Nosotros</a><a href="contacto.html" class="hm">Contacto</a></nav>
+  <button id="bag" data-accion="abrir-lista" aria-label="Abrir Mi lista">Mi lista <b data-n="0" id="bn">0</b></button>
+</div></header>
+
+<main>
+  <!-- Términos y condiciones. Si cambias algo, actualiza la fecha de abajo. -->
+  <section class="lg-d"><div class="in">
+    <p class="hs-k">Legal</p>
+    <h1 class="pg-t">Términos y condiciones</h1>
+    <p class="lg-f">Última actualización: 25 de octubre de 2026</p>
+
+    <p class="lg-r">En resumen: la página es un catálogo. No se cobra aquí. Tu compra queda hecha cuando, por chat, te confirmamos producto, precio total y envío, y tú pagas. Vendemos perfumes originales y siempre te decimos antes de pagar si uno está abierto, es tester o no trae caja.</p>
+
+    <h2>1. Quiénes somos</h2>
+    <p><b>valère</b> es una tienda de perfumes que vende por internet, con sede en la Ciudad de México, México. No tenemos tienda física. Nos encuentras en:</p>
+    <ul>
+      <li>WhatsApp: <a data-red="wa" data-txt="wa" href="https://wa.me/525529094378" target="_blank" rel="noopener">55 2909 4378</a></li>
+      <li>Instagram: <a data-red="ig" data-txt="ig" href="https://www.instagram.com/perfumeria_valere" target="_blank" rel="noopener">@perfumeria_valere</a></li>
+      <li>Facebook: <a data-red="fb" data-txt="fb" href="https://www.facebook.com/perfumeria-valere" target="_blank" rel="noopener">perfumeria-valere</a></li>
+      <li>Correo: <a data-red="correo" data-txt="correo" href="mailto:darissparta@gmail.com">darissparta@gmail.com</a></li>
+    </ul>
+    <p>Al usar la página o hacernos un pedido aceptas estos términos.</p>
+
+    <h2>2. Cómo se compra</h2>
+    <ol>
+      <li>Agregas los perfumes que te gusten a <b>Mi lista</b>. Mi lista no es un pedido ni aparta producto.</li>
+      <li>Nos mandas tu lista por WhatsApp, Instagram o Facebook.</li>
+      <li>Te confirmamos por escrito: disponibilidad, estado del producto, precio total, costo y tiempo de envío y formas de pago.</li>
+      <li>La compra queda hecha cuando aceptas lo que te confirmamos y pagas.</li>
+    </ol>
+    <p>El total que ves en la página es estimado. El que cuenta es el que te confirmamos en el chat antes de pagar.</p>
+
+    <h2>3. Los productos</h2>
+    <p>Todos nuestros perfumes son <b>originales</b>. La mayoría vienen nuevos y sellados en su caja. Algunos pueden ser:</p>
+    <ul>
+      <li><b>Tester:</b> perfume original que la marca hace para probar en tiendas. Puede venir sin tapa o en caja sencilla.</li>
+      <li><b>Sin caja:</b> perfume original nuevo, pero sin su empaque.</li>
+      <li><b>Abierto o decant:</b> perfume original ya abierto, o una parte de él pasada a otro frasco más pequeño. Un decant no es un producto empacado por la marca.</li>
+    </ul>
+    <p>Si un perfume es de alguno de estos tipos, <b>te lo decimos antes de que pagues</b>, y su precio lo considera.</p>
+    <p>Las fotos, los frascos dibujados y el carrusel 3D son ilustrativos: el frasco o la caja pueden cambiar según el lote. Las notas de cada perfume son una guía; cómo huele en tu piel puede variar.</p>
+
+    <h2>4. Precios y promociones</h2>
+    <ul>
+      <li>Los precios están en pesos mexicanos y son el precio total del producto: no se suman cargos escondidos. El envío se cotiza aparte y te lo decimos antes de pagar.</li>
+      <li>El precio tachado es el precio normal de referencia, y el porcentaje es el descuento sobre él.</li>
+      <li>Los precios y promociones pueden cambiar y dependen de que haya producto. Si ya te confirmamos un precio por chat, respetamos ese precio en ese pedido.</li>
+      <li>Si la página muestra un precio equivocado, te lo decimos antes de cobrarte y tú decides si sigues con la compra.</li>
+    </ul>
+
+    <h2>5. Pagos</h2>
+    <p>Las formas de pago te las confirmamos en el chat. Paga solo a las cuentas que te demos por nuestros canales oficiales (los de arriba). Nunca te pediremos NIP, contraseñas ni códigos de verificación.</p>
+
+    <h2>6. Envíos y entregas</h2>
+    <ul>
+      <li>La cobertura, el costo y el tiempo estimado de entrega te los confirmamos antes de que pagues.</li>
+      <li>Revisa que la dirección y los datos de quien recibe estén bien; si cambian, avísanos antes de que salga el pedido.</li>
+      <li>Al recibir, revisa el paquete. Si ves algo dañado, tómale fotos y avísanos.</li>
+    </ul>
+
+    <h2>7. Cambios, devoluciones y cancelaciones</h2>
+    <ul>
+      <li><b>Cancelar antes de que salga tu pedido:</b> sin costo. Te regresamos todo lo que pagaste.</li>
+      <li><b>Llegó dañado, incompleto o diferente</b> a lo que te confirmamos: avísanos lo antes posible (de preferencia en las primeras 48 horas) con fotos o video. Te lo cambiamos o te regresamos tu dinero, y nosotros pagamos el envío.</li>
+      <li><b>Te arrepentiste:</b> como compraste a distancia, la Ley Federal de Protección al Consumidor te da <b>5 días hábiles</b> desde que lo recibes para cancelar la compra. Avísanos por chat o correo y regrésanos el producto en el mismo estado en que lo recibiste (sin usar, con su caja y su sello si los traía). Te regresamos lo que pagaste por el producto; el envío de regreso lo pagas tú.</li>
+    </ul>
+    <p>Te regresamos el dinero por el mismo medio con el que pagaste, en cuanto recibamos y revisemos el producto.</p>
+
+    <h2>8. Las marcas</h2>
+    <p>Los nombres de perfumes y marcas que aparecen en la página pertenecen a sus dueños. valère es una tienda independiente: no es parte de esas marcas ni está patrocinada por ellas. Usamos sus nombres solo para decirte qué producto vendemos.</p>
+    <p>Los textos, el diseño y el contenido propio de la página son de valère; no se pueden copiar sin nuestro permiso.</p>
+
+    <h2>9. Tus datos</h2>
+    <p>Cómo cuidamos tus datos personales está en el <a href="privacidad.html">Aviso de privacidad</a>.</p>
+
+    <h2>10. Quejas</h2>
+    <p>Si algo no salió bien, escríbenos primero y lo resolvemos contigo. También puedes acudir a la Procuraduría Federal del Consumidor (Profeco): Teléfono del Consumidor 55 5568 8722 (Ciudad de México) u 800 468 8722 (resto del país), o en <a href="https://www.gob.mx/profeco" target="_blank" rel="noopener">gob.mx/profeco</a>.</p>
+
+    <h2>11. Cambios a estos términos</h2>
+    <p>Si cambiamos estos términos, los publicamos en esta página con la fecha nueva. Los cambios no afectan los pedidos que ya estaban confirmados.</p>
+
+    <h2>12. Leyes que aplican</h2>
+    <p>Estos términos se rigen por las leyes de México, en especial la Ley Federal de Protección al Consumidor.</p>
+
+    <p class="lg-v"><a class="volver" href="privacidad.html">Ver el Aviso de privacidad ›</a></p>
+  </div></section>
+</main>
+
+<!-- Pie. Los links de redes se llenan desde js/config.js -->
+<footer><div class="in">
+  <a class="logo" href="index.html"><svg class="lm" viewBox="0 0 100 100" aria-hidden="true"><use href="#lg"/></svg><span>valère</span></a>
+  <nav class="fn" aria-label="Secciones"><a href="descubrir.html">Descubrir</a><a href="kits.html">Kits</a><a href="comparar.html">Comparar</a><a href="nosotros.html">Nosotros</a><a href="contacto.html">Contacto</a></nav>
+  <span>Casa de venta de perfumes · descubre y compara · © 2026</span>
+  <span class="rs"><a id="fw" href="#" target="_blank" rel="noopener">WhatsApp</a><a id="fi" href="#" target="_blank" rel="noopener">Instagram</a><a id="ff" href="#" target="_blank" rel="noopener">Facebook</a></span>
+  <span class="lg"><a href="privacidad.html">Aviso de privacidad</a><a href="terminos.html">Términos y condiciones</a></span>
+</div></footer>
+
+<!-- Mi lista (la llena js/vistas/mi-lista.js) -->
+<dialog id="cd" aria-label="Mi lista">
+  <button class="x" data-accion="cerrar" aria-label="Cerrar">×</button>
+  <h3>Mi lista</h3>
+  <div id="ci"></div>
+  <div id="cf"><div class="tt"><span>Total estimado</span><span id="ct"></span></div>
+    <small id="sv"></small>
+    <div class="gf" id="gf">
+      <label class="gt"><span class="gi"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="12" width="24" height="6" rx="1.5"/><path d="M6 18v9a1.5 1.5 0 0 0 1.5 1.5h17A1.5 1.5 0 0 0 26 27v-9"/><path d="M16 12v16.5"/><path d="M16 12c-1-4-3.5-6.5-6-6.5a3 3 0 0 0 0 6zM16 12c1-4 3.5-6.5 6-6.5a3 3 0 0 1 0 6z"/></svg></span><span class="gx"><b>Envolver para regalo</b><small id="gh">Lo preparamos listo para regalar.</small></span><input type="checkbox" id="gk" role="switch" aria-label="Envolver para regalo"></label>
+      <p id="gx" role="status" hidden>Por ahora el regalo no se puede pedir desde la página. Si lo quieres envuelto para regalo, mándanos tu lista y avísanos en el mismo chat de WhatsApp, Instagram o Facebook: nosotros lo preparamos.</p>
+      <div id="gn" hidden><input id="gm" type="text" maxlength="120" placeholder="Mensaje para la tarjeta (opcional)" aria-label="Mensaje para la tarjeta" autocomplete="off"></div>
+    </div>
+    <p class="sl">Enviar mi lista</p>
+    <div class="sn"><a class="btn" id="sw" target="_blank" rel="noopener">WhatsApp</a><a class="btn l" id="si" data-accion="copiar-y-abrir" target="_blank" rel="noopener">Instagram</a><a class="btn l" id="sf" data-accion="copiar-y-abrir" target="_blank" rel="noopener">Facebook</a></div>
+    <div class="sn two"><button class="btn l" id="sc" data-accion="copiar-lista">Copiar lista</button><button class="btn l" id="sh" data-accion="compartir-lista">Compartir</button></div>
+    <textarea id="mn" readonly hidden rows="5" aria-label="Tu lista, lista para copiar"></textarea>
+    <small>WhatsApp se abre con tu lista ya escrita. En Instagram y Facebook, tu lista se copia y se abre el chat: solo pégala y envíala. El total es estimado; ahí confirmamos disponibilidad, envío y pago.</small>
+    <small class="lgl">Al enviar tu lista aceptas los <a href="terminos.html">Términos y condiciones</a> y el <a href="privacidad.html">Aviso de privacidad</a>.</small></div>
+</dialog>
+
+<!-- Barrita flotante: comparar y finalizar compra (la dibuja js/vistas/barra.js) -->
+<div id="cb" hidden><span id="cbt"></span><a class="btn" id="cbc" href="comparar.html">Comparar</a><button class="btn" id="cbf" data-accion="abrir-lista">Finalizar compra</button><button class="xx" id="cbx" data-accion="limpiar-comparacion" aria-label="Quitar comparación">×</button></div>
+
+<!-- Aviso: el regalo todavía no se puede pedir desde la página -->
+<dialog id="nt" aria-labelledby="ntt"><button class="x" data-accion="cerrar" aria-label="Cerrar aviso">×</button><div class="ntb"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="12" width="24" height="6" rx="1.5"/><path d="M6 18v9a1.5 1.5 0 0 0 1.5 1.5h17A1.5 1.5 0 0 0 26 27v-9"/><path d="M16 12v16.5"/><path d="M16 12c-1-4-3.5-6.5-6-6.5a3 3 0 0 0 0 6zM16 12c1-4 3.5-6.5 6-6.5a3 3 0 0 1 0 6z"/></svg><h3 id="ntt">Envolver para regalo</h3><p>Por ahora no se puede pedir desde la página.</p><p>Si lo quieres envuelto, mándanos tu lista y avísanos en el mismo chat de WhatsApp, Instagram o Facebook: nosotros lo preparamos.</p></div></dialog>
+
+<!-- Aviso corto ("Guardado en Mi lista") -->
+<div id="ts" role="status" popover="manual"></div>
+</body>
+</html>
