@@ -15,10 +15,98 @@
   font-size: 17px;
   text-decoration: none;
   text-align: center;
-  transition: opacity 0.2s;
+  transition:
+    opacity 0.2s,
+    transform 0.25s cubic-bezier(0.3, 0.9, 0.3, 1.3),
+    box-shadow 0.25s,
+    background 0.2s;
 }
 .btn:hover {
-  opacity: 0.82;
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -12px rgba(255, 255, 255, 0.45);
+}
+.btn.o:hover,
+.btn.l:hover {
+  box-shadow: none;
+}
+
+/* ── Al presionar, todos los botones se hunden un poquito ── */
+.btn:active,
+.cp:active,
+.chip:active,
+.x:active,
+#bag:active,
+#mnb:active,
+.qt button:active,
+.car-flechas button:active {
+  transform: scale(0.94);
+  transition-duration: 0.08s;
+}
+
+/* ── "+ Mi lista" confirma con ✓ un momento (lo pone js/interfaz/vuelo.js) ── */
+.hecho {
+  position: relative;
+  color: transparent !important;
+  animation: hecho 0.45s cubic-bezier(0.3, 0.9, 0.3, 1.4);
+}
+.hecho::after {
+  content: "✓ Listo";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--bg);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.btn.o.hecho::after,
+.btn.l.hecho::after {
+  color: var(--acc);
+}
+@keyframes hecho {
+  40% {
+    transform: scale(1.08);
+  }
+}
+
+/* ── El frasco que vuela a Mi lista (js/interfaz/vuelo.js) ── */
+.vuelo {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  will-change: transform;
+}
+.vuelo > div {
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.5));
+}
+/* "Mi lista" lo recibe con un saltito y su número brilla */
+#bag.recibe {
+  animation: recibe 0.55s cubic-bezier(0.3, 0.9, 0.3, 1.4);
+}
+#bag.recibe b {
+  animation: brilla 0.9s;
+}
+@keyframes recibe {
+  30% {
+    transform: scale(1.18) rotate(-4deg);
+  }
+  60% {
+    transform: scale(0.94) rotate(2deg);
+  }
+}
+@keyframes brilla {
+  0% {
+    box-shadow: 0 0 0 0 var(--acc);
+    background: var(--acc);
+    color: var(--bg);
+  }
+  100% {
+    box-shadow: 0 0 0 10px transparent;
+  }
 }
 .btn.o {
   background: none;
@@ -42,9 +130,14 @@
   border-radius: 99px;
   background: var(--surf);
   font-size: 14px;
+  white-space: nowrap;
   transition:
     background 0.2s,
-    color 0.2s;
+    color 0.2s,
+    transform 0.25s cubic-bezier(0.3, 0.9, 0.3, 1.3);
+}
+.chip:hover {
+  background: var(--surf2);
 }
 .chip[aria-pressed="true"] {
   background: var(--fg);
@@ -69,7 +162,12 @@
   font-size: 13px;
   transition:
     background 0.2s,
-    color 0.2s;
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.25s cubic-bezier(0.3, 0.9, 0.3, 1.3);
+}
+.cp:hover {
+  border-color: var(--mut);
 }
 .cp[aria-pressed="true"] {
   background: var(--acc);
@@ -159,5 +257,7 @@
 @media (hover: none) {
   .btn:hover {
     opacity: 1;
+    transform: none;
+    box-shadow: none;
   }
 }
