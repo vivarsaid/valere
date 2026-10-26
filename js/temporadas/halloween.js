@@ -127,10 +127,13 @@ const Halloween = (() => {
     poner("moon", { right: "5%", top: "6px", "--s": "84px", "--d": "7s", "--fy": "-6px" }, { gl: "255,214,140" });
     poner("star", { right: "20%", top: "46px", "--s": "22px", "--d": "3s" }, { gl: "255,230,150" });
     poner("star", { right: "3%", top: "120px", "--s": "16px", "--d": "4s", "--dl": "-1s" }, { gl: "255,230,150" });
-    poner("pumpkin", { left: "2.5%", bottom: "-4px", "--s": "76px", "--d": "5s" }, calabaza);
-    poner("ghost", { right: "3.5%", bottom: "34px", "--s": "66px", "--d": "6s", "--fy": "-14px" }, espectro);
-    poner("flower", { left: "13%", bottom: "4px", "--s": "44px", "--d": "7s" }, calabaza);
-    poner("flower", { right: "15%", bottom: "6px", "--s": "36px", "--d": "8s", "--dl": "-2s" }, calabaza);
+    // Las de abajo se paran sobre la orilla de arriba del carrusel (--car-h, en
+    // css/carrusel.css), para no tapar sus flechas ni el número.
+    const sobre = (px) => `calc(var(--car-h, 0px) + ${px}px)`;
+    poner("pumpkin", { left: "2.5%", bottom: sobre(10), "--s": "76px", "--d": "5s" }, calabaza);
+    poner("ghost", { right: "3.5%", bottom: sobre(40), "--s": "66px", "--d": "6s", "--fy": "-14px" }, espectro);
+    poner("flower", { left: "13%", bottom: sobre(16), "--s": "44px", "--d": "7s" }, calabaza);
+    poner("flower", { right: "15%", bottom: sobre(18), "--s": "36px", "--d": "8s", "--dl": "-2s" }, calabaza);
 
     if (!html.classList.contains("lite")) {
       // murciélagos que cruzan: [arriba %, tamaño px, duración s, retraso s]
@@ -184,13 +187,6 @@ const Halloween = (() => {
   function decorar() {
     if (!prendido() || !Catalogo.todos().length) return;
     decorarPortada();
-
-    const ht = $("#ht");
-    const primero = Catalogo.todos()[0];
-    if (ht && primero && !ht.dataset.hw) {
-      ht.dataset.hw = 1;
-      ht.style.setProperty("--gl", brillo(aura(primero), 0.6));
-    }
 
     $$("#g .card,#kg .card").forEach((c) => {
       const caja = $(".bt", c);

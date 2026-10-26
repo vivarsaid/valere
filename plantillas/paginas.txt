@@ -7,3 +7,5 @@ comparar.html|comparar|Comparar perfumes · valère|Compara hasta 3 perfumes lad
 perfume.html|perfume|Perfume · valère|Notas, tamaños y precio del perfume.
 nosotros.html|nosotros|Nuestra historia · valère|Por qué existe valère: comprar perfume no debería ser una apuesta.
 contacto.html|contacto|Contacto · valère|Escríbenos por WhatsApp, Instagram o Facebook.
+privacidad.html|privacidad|Aviso de privacidad · valère|Qué datos personales recibe valère, para qué los usa y cómo puedes verlos, corregirlos o borrarlos.
+terminos.html|terminos|Términos y condiciones · valère|Cómo se compra en valère: productos, precios, pagos, envíos, cambios y devoluciones.

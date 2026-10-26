@@ -17,6 +17,7 @@ const Config = (() => {
     whatsapp: String(A.WHATSAPP || "").replace(/\D/g, ""),
     instagram: String(A.INSTAGRAM || ""),
     facebook: String(A.FACEBOOK || ""),
+    correo: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(A.CORREO || "").trim()) ? String(A.CORREO).trim() : "",
 
     maxPiezas: entero(A.MAX_PIEZAS_POR_PERFUME, 20),
     maxPerfumes: entero(A.MAX_PERFUMES_DISTINTOS, 20),
@@ -25,6 +26,7 @@ const Config = (() => {
     regaloCosto: Math.max(0, Math.round(+A.REGALO_COSTO) || 0),
 
     vista3d: A.VISTA_3D !== false,
+    carrusel3d: A.CARRUSEL_3D !== false,
 
     /* En celular, Instagram abre directo el chat con la tienda;
        en computadora se abre el perfil (donde está el botón «Enviar mensaje»). */

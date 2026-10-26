@@ -1,7 +1,8 @@
 /* =============================================================================
    COMPARADOR (comparar.html)
    -----------------------------------------------------------------------------
-   · #cb   la barrita flotante "Eros vs Scandal · Comparar ×" (todas las páginas)
+   · #cb   la barrita flotante "Eros vs Scandal · Comparar · Finalizar compra ×"
+           (todas las páginas; la dibuja js/vistas/barra.js)
    · #cm   el comparador: una columna por perfume (.cg / .col) y secciones (.sec)
    · #pk   el selector "Cambiar perfume", con efecto de vidrio
    Lo dibuja js/vistas/comparador.js. Las reglas "#cm" sirven si se usa como
@@ -30,6 +31,7 @@
   animation: up 0.3s both;
 }
 #cbt {
+  flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -39,6 +41,25 @@
   padding: 9px 18px;
   font-size: 14px;
   white-space: nowrap;
+}
+/* Con los dos botones, "Finalizar compra" es el principal y "Comparar" va con borde */
+#cb.dos #cbc {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--fg);
+  padding-block: 8px;
+}
+@media (max-width: 480px) {
+  /* En celular, con los dos botones no cabe el texto: solo botones */
+  #cb.dos #cbt {
+    display: none;
+  }
+  #cb.dos {
+    padding-left: 8px;
+  }
+  #cb .btn {
+    padding-inline: 14px;
+  }
 }
 #cb .xx {
   width: 28px;

@@ -3,7 +3,31 @@
     <h1>Encuentra tu próximo perfume.</h1>
     <p>Descubre, compara y guarda tu lista. Cuando estés listo, nos la mandas por WhatsApp, Instagram o Facebook.</p>
     <div class="cta"><a class="btn" href="descubrir.html">Descubrir</a><a class="btn o" href="comparar.html">Comparar ›</a></div>
-    <div class="tile" id="ht"></div>
+
+    <!-- Carrusel 3D de perfumes (lo llena js/vistas/carrusel.js; estilos en css/carrusel.css) -->
+    <section class="car" id="car" aria-roledescription="carrusel" aria-label="Perfumes del catálogo">
+      <div class="car-esc">
+        <div class="car-luz"></div>
+        <div class="car-anillo" aria-hidden="true"><svg viewBox="0 0 1000 1000">
+          <defs><path id="car-circ" d="M500,500 m-390,0 a390,390 0 1,1 780,0 a390,390 0 1,1 -780,0"/></defs>
+          <text><textPath href="#car-circ" textLength="2440" lengthAdjust="spacingAndGlyphs">valère · casa de venta de perfumes · descubre y compara · </textPath></text>
+        </svg></div>
+        <canvas class="car-gl" aria-hidden="true"></canvas>
+        <div class="car-plano" aria-hidden="true"></div>
+      </div>
+      <a class="car-ver" href="descubrir.html"><i></i>ver perfume</a>
+      <div class="car-info">
+        <div class="car-num" aria-hidden="true"><b>01</b> / <span class="car-tot">01</span></div>
+        <div class="car-meta">
+          <p class="car-pista">desliza para descubrir</p>
+          <div class="car-datos" aria-live="polite"></div>
+        </div>
+        <div class="car-flechas">
+          <button data-accion="carrusel-mover" data-paso="-1" aria-label="Perfume anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button data-accion="carrusel-mover" data-paso="1" aria-label="Perfume siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+      </div>
+    </section>
   </div>
 
   <section id="confianza"><div class="in trust">

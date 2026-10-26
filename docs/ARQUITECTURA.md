@@ -9,7 +9,7 @@ Cada archivo trae además, al inicio, un bloque de comentarios que dice **qué h
 
 ```
 valere/
-├── index.html … contacto.html   Las 6 páginas. SE GENERAN SOLAS (ver sección 5): no se editan a mano
+├── index.html … terminos.html   Las 9 páginas. SE GENERAN SOLAS (ver sección 5): no se editan a mano
 ├── data/
 │   └── perfumes.json            El catálogo: perfumes, precios, notas y modelos de frasco
 ├── images/
@@ -29,15 +29,20 @@ valere/
 
 | Página | Archivo | Qué tiene |
 |---|---|---|
-| Inicio | `index.html` | Bienvenida animada, título, frasco destacado, tres razones |
+| Inicio | `index.html` | Bienvenida animada, título, carrusel 3D de perfumes, tres razones |
 | Descubrir | `descubrir.html` | Buscador, filtros, tarjetas y examen de gustos |
 | Kits | `kits.html` | Tarjetas de kits |
 | Comparar | `comparar.html` | Hasta 3 perfumes lado a lado |
 | Perfume | `perfume.html?p=versace-eros` | Detalle de un perfume (cada uno tiene su link) |
 | Nosotros | `nosotros.html` | La historia: por qué existe valère y qué nos importa |
 | Contacto | `contacto.html` | WhatsApp, Instagram, Facebook y cómo pedir |
+| Aviso de privacidad | `privacidad.html` | Qué datos se reciben, para qué y cómo pedir verlos o borrarlos |
+| Términos y condiciones | `terminos.html` | Cómo se compra: productos, precios, pagos, envíos y devoluciones |
 
-En **todas** las páginas están la cabecera, el pie, la ventana **Mi lista** y la barrita flotante de comparar.
+En **todas** las páginas están la cabecera, el pie (con los enlaces legales), la ventana **Mi lista** y la barrita flotante (comparar y «Finalizar compra»).
+
+> Las páginas legales tienen su fecha de «Última actualización» arriba. Si cambias algo de lo que dicen
+> (envíos, pagos, devoluciones, datos que pides), actualízalas y cambia la fecha.
 
 ---
 
@@ -73,11 +78,20 @@ En **todas** las páginas están la cabecera, el pie, la ventana **Mi lista** y 
 | 15 | `js/vistas/catalogo.js` | `VistaCatalogo` | Tarjetas, filtros y búsqueda |
 | 16 | `js/vistas/producto.js` | `VistaProducto` | Detalle del perfume |
 | 17 | `js/vistas/mi-lista.js` | `VistaLista` | Dibuja Mi lista |
-| 18 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", barrita, comparador y selector |
-| 19 | `js/vistas/examen.js` | `Examen` | Examen de gustos y recomendación |
-| 20 | `js/vistas/bienvenida.js` | `Bienvenida` | Acomoda el acento de la animación y la quita al terminar |
-| 21 | `js/temporadas/halloween.js` | `Halloween` | Figuras, ambientes y efectos de temporada |
-| 22 | `js/app.js` | `App` | **Conecta todo** y arranca (ver abajo) |
+| 18 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador y selector |
+| 19 | `js/vistas/barra.js` | `Barra` | Barrita flotante: comparar y «Finalizar compra» (abre Mi lista) |
+| 20 | `js/vistas/carrusel.js` | `Carrusel` | Carrusel 3D de la portada (Three.js, se descarga después; ver abajo) |
+| 21 | `js/vistas/examen.js` | `Examen` | Examen de gustos y recomendación |
+| 22 | `js/vistas/bienvenida.js` | `Bienvenida` | Acomoda el acento de la animación y la quita al terminar |
+| 23 | `js/temporadas/halloween.js` | `Halloween` | Figuras, ambientes y efectos de temporada |
+| 24 | `js/app.js` | `App` | **Conecta todo** y arranca (ver abajo) |
+
+### El carrusel 3D de la portada
+
+- Usa los perfumes del catálogo (sin kits). La forma del frasco y el color de la tapa salen del `modelo` del JSON si lo tiene (`tp: "cubo"` → cuadrado, `"corona"` → hexagonal); si no, a cada perfume le toca siempre la misma. El líquido es su `color`, y el fondo, ese mismo tono oscurecido.
+- **Three.js** (versión fija 0.160.0, desde jsDelivr) se descarga cuando la página ya terminó de cargar. Mientras, se ve el frasco plano y el carrusel ya funciona.
+- Para que sea fluido: solo arma los frascos cerca del centro (uno por cuadro), comparte las formas, no dibuja si no se ve o hay una ventana abierta, baja a 30 cuadros por segundo cuando está quieto y baja la resolución si el aparato va lento. Con el carrusel debajo, la cabecera y la barrita dejan de desenfocar (`html.car-bajo`).
+- Sin 3D: con `CARRUSEL_3D: false` en `js/config.js`, en modo ligero o sin WebGL.
 
 ### Qué pasa al abrir una página
 
@@ -88,7 +102,7 @@ App.iniciar()
   1. escucha clics, buscador y regalo
   2. Catalogo.cargar()            → descarga data/perfumes.json (o usa el último que cargó bien)
   3. Lista.leer(), Regalo.leer(), Comparador.leer()
-  4. pinta: redes, catálogo, Mi lista, portada y lo propio de la página
+  4. pinta: redes, catálogo, Mi lista, barrita, lo propio de la página y el carrusel (portada)
   5. avisa "valere:listo"         → arranca el tema de temporada
   6. Frascos.cargarFotos()        → al terminar avisa "valere:fotos" y se vuelve a pintar
 ```
@@ -108,8 +122,9 @@ App.iniciar()
 
 | Acción | Dónde | Qué hace |
 |---|---|---|
-| `abrir-lista` | Cabecera | Abre Mi lista |
-| `agregar` | Tarjetas, comparador | Agrega a Mi lista (`data-id`) |
+| `abrir-lista` | Cabecera, barrita («Finalizar compra») | Abre Mi lista |
+| `agregar` | Tarjetas, comparador, carrusel | Agrega a Mi lista (`data-id`) |
+| `carrusel-mover` | Portada | Flechas del carrusel (`data-paso`: −1 / 1) |
 | `cambiar-cantidad` | Mi lista | − / + (`data-linea`, `data-cambio`) |
 | `copiar-lista`, `compartir-lista`, `copiar-y-abrir` | Mi lista | Copiar, compartir, copiar y abrir Instagram/Facebook |
 | `filtrar` | Descubrir | Filtro de género (`data-genero`) |
@@ -136,12 +151,13 @@ Cada archivo es un tema. **El orden importa**: los de abajo pueden ajustar a los
 | `avisos.css` | Aviso corto de abajo |
 | `bienvenida.css` | Animación de entrada |
 | `portada.css` | Portada |
+| `carrusel.css` | Carrusel 3D de la portada |
 | `catalogo.css` | Buscador, filtros y tarjetas |
 | `producto.css` | Detalle del perfume |
 | `mi-lista.css` | Mi lista, regalo y su aviso |
-| `comparador.css` | Barrita, comparador y selector |
+| `comparador.css` | Barrita (comparar y finalizar compra), comparador y selector |
 | `examen.css` | Examen de gustos |
-| `paginas.css` | Títulos de página y Contacto |
+| `paginas.css` | Títulos de página, Contacto, Nosotros y páginas legales |
 | `pantallas-especiales.css` | Plegables, navegadores viejos, menos transparencia/movimiento |
 | `modo-ligero.css` | Menos efectos en equipos modestos |
 | `anticopia.css` | Sin selección de texto ni impresión |
@@ -190,7 +206,9 @@ Campos de `modelos`: `foto` (nombre del .webp), `c` color del frasco, `v` 1 = vi
 
 **Agregar o cambiar un perfume** → `data/perfumes.json`. Guardar y recargar.
 
-**Cambiar WhatsApp, redes, regalo o fechas del tema** → `js/config.js`.
+**Cambiar WhatsApp, redes, correo, regalo, 3D del carrusel o fechas del tema** → `js/config.js`.
+
+**Cambiar lo que dicen el Aviso de privacidad o los Términos** → `plantillas/paginas/privacidad.html` o `terminos.html`, cambia la fecha de «Última actualización» y genera las páginas.
 
 **Cambiar un color de todo el sitio** → `css/base.css`, en `:root`.
 

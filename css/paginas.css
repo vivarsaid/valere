@@ -131,7 +131,10 @@
   content: "“";
   display: block;
   color: var(--acc);
-  font: 400 1.8em/0.6 Georgia, "Times New Roman", serif;
+  font:
+    400 1.8em/0.6 Georgia,
+    "Times New Roman",
+    serif;
   margin-bottom: 0.2em;
 }
 /* "Lo que nos importa": sin el margen extra de .sub-h (la sección ya da espacio) */
@@ -144,6 +147,68 @@
 }
 .hs-f p {
   margin: 10px auto 0;
+  color: var(--mut);
+}
+
+/* ── Páginas legales: Aviso de privacidad y Términos (.lg-d) ── */
+.lg-d .in {
+  max-width: 760px;
+}
+.lg-f {
+  margin: 10px 0 0;
+  color: var(--mut);
+  font-size: 14px;
+}
+/* El resumen de arriba, en una caja */
+.lg-r {
+  margin: 28px 0 8px;
+  padding: 20px 24px;
+  border-radius: 18px;
+  background: var(--surf);
+  font-size: 17px;
+  line-height: 1.55;
+}
+.lg-d h2 {
+  margin: 44px 0 10px;
+  font-size: clamp(22px, 3vw, 28px);
+}
+.lg-d h3 {
+  margin: 24px 0 6px;
+  font-size: 18px;
+  font-weight: 600;
+}
+.lg-d p,
+.lg-d li {
+  color: var(--mut);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.lg-d p {
+  margin: 0 0 12px;
+}
+.lg-d b {
+  color: var(--fg);
+  font-weight: 600;
+}
+.lg-d ul,
+.lg-d ol {
+  margin: 0 0 12px;
+  padding-left: 22px;
+}
+.lg-d li + li {
+  margin-top: 6px;
+}
+.lg-d a {
+  color: var(--acc);
+  text-underline-offset: 3px;
+}
+.lg-d a {
+  overflow-wrap: anywhere; /* el correo solo se parte si no cabe */
+}
+.lg-v {
+  margin-top: 40px !important;
+}
+.lg-d a.volver {
   color: var(--mut);
 }
 
