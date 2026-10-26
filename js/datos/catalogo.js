@@ -26,6 +26,7 @@
      modelo:          "eros"                    ← nombre en "modelos" del JSON (opcional)
      incluye:         ""                        ← qué trae un kit
      esKit:           false
+     masVendido:      2                         ← lugar en "Lo más vendido" (0 = no sale)
    }
    ============================================================================= */
 
@@ -120,6 +121,7 @@ const Catalogo = (() => {
       modelo: raw.modelo ? String(raw.modelo) : "",
       incluye: texto(raw.incluye).trim(),
       esKit: !!precios[1],
+      masVendido: Math.floor(positivo(raw.masVendido)), // 1 = el más vendido; 0 = no está en la lista
     };
   }
 

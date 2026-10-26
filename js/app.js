@@ -62,6 +62,9 @@ const App = (() => {
     // Carrusel de la portada (flechas)
     "carrusel-mover": (el) => Carrusel.mover(+el.dataset.paso),
 
+    // Nosotros: capas de la pirámide olfativa
+    "piramide-capa": (el) => VistaNosotros.capa(el.dataset.capa),
+
     // Detalle del perfume
     "elegir-tamano": (el) => VistaProducto.elegirTamano(el.dataset.tam),
     "guardar-perfume": () => {
@@ -247,6 +250,10 @@ const App = (() => {
           : "";
       const enlaces = {
         wa: W ? `https://wa.me/${W}` : "#",
+        // Contacto: abre el chat con un mensaje ya escrito
+        "wa-ayuda": W
+          ? `https://wa.me/${W}?text=${encodeURIComponent("Hola valère, quiero ayuda para elegir un perfume.")}`
+          : "#",
         ig: `https://www.instagram.com/${encodeURIComponent(Config.instagram)}`,
         fb: `https://www.facebook.com/${encodeURIComponent(Config.facebook)}`,
         correo: Config.correo ? `mailto:${Config.correo}` : "#",
@@ -322,6 +329,11 @@ const App = (() => {
       Carrusel.iniciar(); // solo hace algo en la portada
     } catch (e) {
       Registro.recuperar(e, "carrusel");
+    }
+    try {
+      VistaNosotros.iniciar(); // solo hace algo en Nosotros
+    } catch (e) {
+      Registro.recuperar(e, "nosotros");
     }
 
     // Cuando terminan de cargar las fotos se vuelven a dibujar los frascos.
