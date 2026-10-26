@@ -19,7 +19,7 @@
 
 - [ ] Funciona con Live Server y no hay errores en la consola
 - [ ] Se ve bien en celular
-- [ ] Si toqué `plantillas/`, corrí **Generar páginas**
+- [ ] Si toqué `plantillas/`, `css/` o `js/`, corrí **Generar páginas**
 - [ ] Si toqué `data/perfumes.json`, el JSON sigue siendo válido
 - [ ] Si agregué archivos, los documenté en `docs/ARQUITECTURA.md`
 - [ ] El pull request va hacia **`desarrollo`** (no hacia `main`)
