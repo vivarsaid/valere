@@ -19,10 +19,12 @@
 const App = (() => {
   /* ── Lo que se repite en varias acciones ─────────────────────────────────── */
 
-  function agregarALista(id, tam) {
+  /** Guarda un perfume en Mi lista. `boton` es el que se tocó (de ahí sale el vuelo del frasco). */
+  function agregarALista(id, tam, boton) {
     const p = Catalogo.buscar(id);
     if (!p) return false;
     const r = Lista.agregar(p, tam);
+    if (r === "ok") Vuelo.aMiLista(boton, p);
     Avisos.corto(
       r === "ok"
         ? "Guardado en Mi lista"
@@ -39,11 +41,21 @@ const App = (() => {
     if (r === "quitado") Ventanas.pausar();
   }
 
+  /** Abre o cierra el menú de celular (header.abierto, ver css/cabecera.css). */
+  function menu(abrir) {
+    const h = $("header");
+    const b = $("#mnb");
+    if (!h || !b) return;
+    h.classList.toggle("abierto", abrir);
+    b.setAttribute("aria-expanded", abrir);
+    b.setAttribute("aria-label", abrir ? "Cerrar menú" : "Abrir menú");
+  }
+
   /* ── Qué hace cada botón (data-accion) ───────────────────────────────────── */
   const ACCIONES = {
     // Mi lista
     "abrir-lista": () => Ventanas.abrir($("#cd")),
-    agregar: (el) => agregarALista(el.dataset.id),
+    agregar: (el) => agregarALista(el.dataset.id, null, el),
     "cambiar-cantidad": (el) => cambiarCantidad(+el.dataset.linea, +el.dataset.cambio),
     "copiar-lista": () => Avisos.copiarYAvisar(Lista.mensaje(), "Lista copiada"),
     "compartir-lista": () => Avisos.compartir(Lista.mensaje()),
@@ -58,6 +70,8 @@ const App = (() => {
 
     // Catálogo
     filtrar: (el) => VistaCatalogo.filtrar(el.dataset.genero),
+    "filtrar-precio": (el) => VistaCatalogo.filtrarPrecio(el.dataset.rango),
+    "limpiar-filtros": () => VistaCatalogo.limpiar(),
 
     // Carrusel de la portada (flechas)
     "carrusel-mover": (el) => Carrusel.mover(+el.dataset.paso),
@@ -67,9 +81,9 @@ const App = (() => {
 
     // Detalle del perfume
     "elegir-tamano": (el) => VistaProducto.elegirTamano(el.dataset.tam),
-    "guardar-perfume": () => {
+    "guardar-perfume": (el) => {
       const p = VistaProducto.actual();
-      if (p && agregarALista(p.id, VistaProducto.tamano()) && VistaProducto.esVentana()) $("#pd").close();
+      if (p && agregarALista(p.id, VistaProducto.tamano(), el) && VistaProducto.esVentana()) $("#pd").close();
     },
 
     // Comparador
@@ -89,6 +103,9 @@ const App = (() => {
     "examen-continuar": () => Examen.continuar(),
     "examen-presupuesto": (el) => Examen.presupuesto(+el.dataset.valor),
     "examen-reiniciar": () => Examen.reiniciar(),
+
+    // Menú de celular (☰)
+    menu: () => menu(!$("header").classList.contains("abierto")),
 
     // Generales
     cerrar: (el) => {
@@ -151,6 +168,24 @@ const App = (() => {
         scrollTo({ top: 0, behavior: "smooth" });
       }
     });
+
+    // Menú de celular: se cierra al tocar fuera de la cabecera, con Escape o al hacerse ancha la pantalla.
+    document.addEventListener("click", (e) => {
+      if (e.target.closest && !e.target.closest("header")) menu(false);
+    });
+    addEventListener("keydown", (e) => {
+      if (e.key === "Escape") menu(false);
+    });
+    const ancha = matchMedia("(min-width: 701px)");
+    if (ancha.addEventListener) ancha.addEventListener("change", () => menu(false));
+
+    // Ordenar (solo en Descubrir)
+    const ord = $("#ord");
+    if (ord)
+      ord.addEventListener(
+        "change",
+        Registro.seguro((e) => VistaCatalogo.ordenar(e.target.value))
+      );
 
     // Buscador (solo en Descubrir)
     const q = $("#q");
