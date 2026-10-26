@@ -22,16 +22,24 @@
     opacity: 0;
   }
 } /* entrar desde la derecha */
+/* ── Encabezado: título, piezas y los tres pasos ── */
+.ch {
+  padding: 22px 64px 16px 24px;
+  border-bottom: 1px solid var(--line);
+  background: radial-gradient(
+    ellipse 70% 120% at 0% 0%,
+    color-mix(in srgb, var(--acc) 14%, transparent),
+    transparent 70%
+  );
+}
 #cd h3 {
   margin: 0;
-  padding: 22px 64px 16px 24px;
   display: flex;
   align-items: baseline;
   gap: 10px;
   font-size: 26px;
   font-weight: 600;
   letter-spacing: -0.02em;
-  border-bottom: 1px solid var(--line);
 }
 /* "3 piezas", junto al título */
 #cn {
@@ -40,43 +48,130 @@
   letter-spacing: 0;
   color: var(--mut);
 }
+/* ① Elige → ② Envía → ③ Confirmamos (data-paso = en cuál vas) */
+.pasos {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--mut);
+}
+.pasos li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.3s;
+}
+.pasos li + li::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  margin-right: 2px;
+  background: var(--line);
+}
+.pasos i {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 600;
+  transition:
+    background 0.3s,
+    border-color 0.3s,
+    color 0.3s;
+}
+/* el paso en el que vas */
+.pasos[data-paso="1"] li:nth-child(1),
+.pasos[data-paso="2"] li:nth-child(2) {
+  color: var(--fg);
+  font-weight: 600;
+}
+.pasos[data-paso="1"] li:nth-child(1) i,
+.pasos[data-paso="2"] li:nth-child(2) i {
+  background: var(--acc);
+  border-color: var(--acc);
+  color: var(--bg);
+}
+/* el paso ya hecho: palomita bronce */
+.pasos[data-paso="2"] li:nth-child(1) i {
+  border-color: var(--acc);
+  color: transparent;
+}
+.pasos[data-paso="2"] li:nth-child(1) i::after {
+  content: "✓";
+  position: absolute;
+  color: var(--acc);
+}
+.pasos[data-paso="2"] li:nth-child(2)::before {
+  background: var(--acc);
+}
 
 /* ── Las tarjetas de cada perfume ── */
 #ci {
   flex: 1;
   overflow: auto;
-  padding: 14px 16px;
+  padding: 14px 16px 18px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 .ln {
+  --pc: #3a3a3f; /* color del perfume (lo pone el JS) */
   display: grid;
-  grid-template-columns: 56px minmax(0, 1fr) auto;
+  grid-template-columns: 76px minmax(0, 1fr) auto;
   gap: 14px;
   align-items: center;
-  padding: 12px;
-  border-radius: 18px;
+  padding: 10px 14px 10px 10px;
+  border-radius: 20px;
   background: var(--surf);
+  border: 1px solid transparent;
   font-size: 15px;
   animation: up 0.35s both;
 }
-/* el frasquito, sobre un brillo suave */
+/* la que se acaba de agregar entra con un destello bronce */
+.ln.nueva {
+  animation:
+    up 0.35s both,
+    nueva 1.4s 0.1s;
+}
+@keyframes nueva {
+  0%,
+  30% {
+    border-color: var(--acc);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--acc) 22%, transparent);
+  }
+}
+/* el frasquito, sobre un fondo del color del perfume */
 .lf {
   display: grid;
   place-items: center;
-  height: 64px;
+  height: 88px;
   border-radius: 14px;
-  background: radial-gradient(circle at 50% 60%, rgba(255, 255, 255, 0.14), transparent 70%);
+  background: radial-gradient(circle at 50% 65%, color-mix(in srgb, var(--pc) 55%, transparent), transparent 75%),
+    color-mix(in srgb, var(--pc) 18%, var(--bg));
 }
 .lf svg {
-  height: 54px;
+  height: 66px;
   width: auto;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.45));
+  transition: transform 0.35s cubic-bezier(0.3, 0.9, 0.3, 1.3);
+}
+.lf:hover svg {
+  transform: scale(1.08) rotate(-4deg);
 }
 .lt {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
 .lt small {
   font-size: 11px;
@@ -94,19 +189,41 @@
   -webkit-box-orient: vertical;
 }
 .lt span {
-  margin-top: 2px;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: var(--mut);
   font-size: 13px;
 }
-.lr {
+.lt .dc {
+  font-size: 11px;
+  padding: 1px 7px;
+}
+.lt .qt {
+  margin-top: 8px;
+}
+/* precio: el de antes tachado y el que pagas */
+.ln .pr {
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
-}
-.ln .pr {
-  font-weight: 600;
+  justify-content: center;
+  text-align: right;
   font-variant-numeric: tabular-nums;
+}
+.ln .pr s {
+  color: var(--mut);
+  font-size: 13px;
+}
+.ln .pr b {
+  font-size: 17px;
+  font-weight: 600;
+}
+.ln .pr small {
+  color: var(--mut);
+  font-size: 12px;
 }
 /* selector de cantidad: una píldora con − n + */
 .qt {
@@ -153,6 +270,110 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* ── "Te puede gustar": fila deslizable de sugerencias ── */
+.sg {
+  margin-top: 10px;
+}
+.sg h4 {
+  margin: 0 0 10px 4px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--acc);
+}
+.sg-l {
+  display: flex;
+  gap: 10px;
+  margin: 0 -16px;
+  padding: 2px 16px 6px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.sg-l::-webkit-scrollbar {
+  display: none;
+}
+.sg-c {
+  --pc: #3a3a3f;
+  position: relative;
+  flex: none;
+  width: 136px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 8px 12px;
+  border-radius: 18px;
+  background: var(--surf);
+  scroll-snap-align: start;
+  font-size: 13px;
+}
+.sg-f {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 96px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  background: radial-gradient(circle at 50% 65%, color-mix(in srgb, var(--pc) 45%, transparent), transparent 75%),
+    color-mix(in srgb, var(--pc) 14%, var(--bg));
+}
+.sg-f svg {
+  height: 70px;
+  width: auto;
+}
+.sg-f .dc {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 10px;
+  padding: 1px 6px;
+}
+.sg-c small {
+  padding-inline: 4px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+.sg-c b {
+  padding-inline: 4px;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.sg-c span {
+  padding-inline: 4px;
+  margin-top: 2px;
+  color: var(--acc);
+  font-weight: 600;
+}
+/* el "+" redondo, sobre la esquina del frasco */
+.sg-a {
+  position: absolute;
+  top: 74px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 20px;
+  line-height: 1;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
+  transition: transform 0.25s cubic-bezier(0.3, 0.9, 0.3, 1.4);
+}
+.sg-a:hover {
+  transform: scale(1.12);
+}
+.sg-a:active {
+  transform: scale(0.9);
+}
+.sg-a.hecho::after {
+  content: "✓";
+}
+
 /* ── Lista vacía ── */
 #em {
   margin: auto 0;
@@ -188,7 +409,7 @@
   line-height: 1.45;
 }
 
-/* ── Parte de abajo: ahorro, total, regalo y botones de envío ── */
+/* ── Parte de abajo: resumen, regalo y botones de envío ── */
 #cf {
   padding: 16px 20px calc(20px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--line);
@@ -213,28 +434,42 @@
   color: inherit;
   text-underline-offset: 2px;
 }
-/* Ahorro: una etiqueta bronce */
-#sv {
-  align-self: flex-start;
-  margin: 0;
-  padding: 5px 12px;
-  border-radius: 99px;
-  background: color-mix(in srgb, var(--acc) 16%, transparent);
-  color: var(--acc);
-  font-size: 13px;
-  font-weight: 600;
-}
-#sv:empty {
-  display: none;
-}
-#cf .tt {
+/* ── Resumen: precio normal, descuentos, regalo y total ── */
+.rs {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--surf);
+  font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
-#cf .tt span:first-child {
+.rs > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
   color: var(--mut);
+}
+.rs > div[hidden] {
+  display: none;
+}
+#rn {
+  text-decoration: line-through;
+}
+/* tus descuentos, en bronce */
+.rs .ah {
+  color: var(--acc);
+  font-weight: 600;
+}
+.rs .tt {
+  align-items: baseline;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  color: var(--fg);
+}
+.rs .tt span:first-child {
   font-size: 15px;
 }
 #ct {
@@ -498,20 +733,20 @@
   height: 100%;
 }
 
-/* Pantallas bajitas: todo el panel se desliza junto (si no, la lista queda en una franja chiquita) */
-@media (max-height: 820px) {
-  html #cd[open] {
-    overflow-y: auto;
-    overscroll-behavior: contain;
-  }
-  html #cd[open] #ci {
-    flex: none;
-    overflow: visible;
-  }
-  html #cd[open] #cf {
-    max-height: none;
-    overflow: visible;
-  }
+/* Todo el panel se desliza junto: primero los perfumes y las sugerencias, luego
+   el resumen y los botones (si no, el resumen ocupa la ventana y la lista queda
+   en una franja chiquita). Con la lista vacía, el contenido se centra. */
+html #cd[open] {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+html #cd[open] #ci {
+  flex: 1 0 auto;
+  overflow: visible;
+}
+html #cd[open] #cf {
+  max-height: none;
+  overflow: visible;
 }
 @media (pointer: coarse) {
   .qt button {
@@ -528,9 +763,14 @@
   }
 }
 @media (max-height: 520px) {
+  .ch {
+    padding: 14px 56px 10px 20px;
+  }
   #cd h3 {
-    padding: 14px 20px 10px;
     font-size: 20px;
+  }
+  .pasos {
+    display: none;
   }
   #cf {
     padding-top: 12px;

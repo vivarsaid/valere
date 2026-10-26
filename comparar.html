@@ -36,13 +36,13 @@
 <link rel="stylesheet" href="css/bienvenida.css?v=7bf912e9">
 <link rel="stylesheet" href="css/portada.css?v=bdbe6551">
 <link rel="stylesheet" href="css/carrusel.css?v=252471f4">
-<link rel="stylesheet" href="css/catalogo.css?v=4dabb337">
+<link rel="stylesheet" href="css/catalogo.css?v=c7093b9f">
 <link rel="stylesheet" href="css/producto.css?v=f9d149f3">
-<link rel="stylesheet" href="css/mi-lista.css?v=47d4cd3b">
-<link rel="stylesheet" href="css/comparador.css?v=e8c9d015">
+<link rel="stylesheet" href="css/mi-lista.css?v=6ff43e79">
+<link rel="stylesheet" href="css/comparador.css?v=e2868e26">
 <link rel="stylesheet" href="css/examen.css?v=e9722150">
 <link rel="stylesheet" href="css/paginas.css?v=84824361">
-<link rel="stylesheet" href="css/pantallas-especiales.css?v=029f0135">
+<link rel="stylesheet" href="css/pantallas-especiales.css?v=95daa00a">
 <link rel="stylesheet" href="css/modo-ligero.css?v=b3cc1854">
 <link rel="stylesheet" href="css/anticopia.css?v=5e136053">
 <link rel="stylesheet" href="css/temporadas/halloween.css?v=84782c85">
@@ -61,14 +61,14 @@
 <script src="js/interfaz/formato.js?v=b7bae194" defer></script>
 <script src="js/interfaz/pagina.js?v=f8287c18" defer></script>
 <script src="js/interfaz/avisos.js?v=e9d8d0a2" defer></script>
-<script src="js/interfaz/vuelo.js?v=6e1559e8" defer></script>
+<script src="js/interfaz/vuelo.js?v=e521cb0d" defer></script>
 <script src="js/interfaz/ventanas.js?v=3644ae72" defer></script>
 <script src="js/frascos/fotos.js?v=4e67c68f" defer></script>
 <script src="js/frascos/motor3d.js?v=681cdc8c" defer></script>
-<script src="js/vistas/catalogo.js?v=17d02c26" defer></script>
+<script src="js/vistas/catalogo.js?v=940dbc6a" defer></script>
 <script src="js/vistas/producto.js?v=b7b3fbe5" defer></script>
-<script src="js/vistas/mi-lista.js?v=7ec4943d" defer></script>
-<script src="js/vistas/comparador.js?v=f065c3e9" defer></script>
+<script src="js/vistas/mi-lista.js?v=b99f3739" defer></script>
+<script src="js/vistas/comparador.js?v=6a387400" defer></script>
 <script src="js/vistas/barra.js?v=0c31b815" defer></script>
 <script src="js/vistas/carrusel.js?v=4aa6a90b" defer></script>
 <script src="js/vistas/nosotros.js?v=fd88bb89" defer></script>
@@ -120,10 +120,19 @@
 <!-- Mi lista (la llena js/vistas/mi-lista.js) -->
 <dialog id="cd" aria-label="Mi lista">
   <button class="x" data-accion="cerrar" aria-label="Cerrar">×</button>
-  <h3>Mi lista <span id="cn"></span></h3>
+  <div class="ch">
+    <h3>Mi lista <span id="cn"></span></h3>
+    <ol class="pasos" id="cpasos" data-paso="1" aria-label="Cómo pedir"><li><i>1</i>Elige</li><li><i>2</i>Envía</li><li><i>3</i>Confirmamos</li></ol>
+  </div>
   <div id="ci"></div>
-  <div id="cf"><p id="sv"></p>
-    <div class="tt"><span>Total estimado</span><span id="ct"></span></div>
+  <div id="cf">
+    <div class="rs">
+      <div id="rnf"><span>Precio normal</span><span id="rn"></span></div>
+      <div id="svf" class="ah"><span>Tus descuentos</span><span id="sv"></span></div>
+      <div id="rgf" hidden><span>Envolver para regalo</span><span id="rgv"></span></div>
+      <div class="tt"><span>Total estimado</span><span id="ct"></span></div>
+      <small>El envío se cotiza por chat según tu zona.</small>
+    </div>
     <div class="gf" id="gf">
       <label class="gt"><span class="gi"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="12" width="24" height="6" rx="1.5"/><path d="M6 18v9a1.5 1.5 0 0 0 1.5 1.5h17A1.5 1.5 0 0 0 26 27v-9"/><path d="M16 12v16.5"/><path d="M16 12c-1-4-3.5-6.5-6-6.5a3 3 0 0 0 0 6zM16 12c1-4 3.5-6.5 6-6.5a3 3 0 0 1 0 6z"/></svg></span><span class="gx"><b>Envolver para regalo</b><small id="gh">Lo preparamos listo para regalar.</small></span><input type="checkbox" id="gk" role="switch" aria-label="Envolver para regalo"></label>
       <p id="gx" role="status" hidden>Por ahora el regalo no se puede pedir desde la página. Si lo quieres envuelto para regalo, mándanos tu lista y avísanos en el mismo chat de WhatsApp, Instagram o Facebook: nosotros lo preparamos.</p>

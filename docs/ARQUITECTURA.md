@@ -76,10 +76,10 @@ En **todas** las páginas están la cabecera, el pie (con los enlaces legales), 
 | 13 | `js/interfaz/ventanas.js` | `Ventanas` | Abrir/cerrar ventanas, botón Atrás, doble toque |
 | 14 | `js/frascos/fotos.js` | `Frascos` | Decide si el frasco va en 3D, con foto o dibujado, y lo pinta |
 | 15 | `js/frascos/motor3d.js` | `Motor3D` | Motor 3D propio con WebGL (apagado con `VISTA_3D: false`) |
-| 16 | `js/vistas/catalogo.js` | `VistaCatalogo` | Tarjetas, filtros y búsqueda |
+| 16 | `js/vistas/catalogo.js` | `VistaCatalogo` | Tarjetas, filtros, orden, búsqueda y la invitación al examen dentro de la cuadrícula |
 | 17 | `js/vistas/producto.js` | `VistaProducto` | Detalle del perfume |
-| 18 | `js/vistas/mi-lista.js` | `VistaLista` | Dibuja Mi lista |
-| 19 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador y selector |
+| 18 | `js/vistas/mi-lista.js` | `VistaLista` | Dibuja Mi lista: pasos, tarjetas, «Te puede gustar» y resumen |
+| 19 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador y selector (si no eligieron nada, pone dos de ejemplo que no se guardan) |
 | 20 | `js/vistas/barra.js` | `Barra` | Barrita flotante: comparar y «Finalizar compra» (abre Mi lista) |
 | 21 | `js/vistas/carrusel.js` | `Carrusel` | Carrusel 3D de la portada (Three.js, se descarga después; ver abajo) |
 | 22 | `js/vistas/nosotros.js` | `VistaNosotros` | Nosotros: números del catálogo, color al bajar por los capítulos y pirámide olfativa |
@@ -137,7 +137,7 @@ App.iniciar()
 | `alternar-comparar`, `comparar-con` | Tarjetas, detalle | Agregar o quitar de la comparación |
 | `abrir-selector`, `elegir-perfume`, `cerrar-selector` | Comparador | "Cambiar perfume" |
 | `agregar-a-comparacion`, `quitar-de-comparacion`, `limpiar-comparacion` | Comparador, barrita | Tercer perfume, quitar, vaciar |
-| `abrir-examen`, `examen-*` | Descubrir | Examen de gustos |
+| `abrir-examen`, `examen-*` | Descubrir (botón junto al título y tarjeta en la cuadrícula) | Examen de gustos |
 | `cerrar`, `saltar-bienvenida` | Ventanas, portada | Cerrar ventana, saltar animación |
 
 ---
@@ -159,7 +159,7 @@ Cada archivo es un tema. **El orden importa**: los de abajo pueden ajustar a los
 | `carrusel.css` | Carrusel 3D de la portada |
 | `catalogo.css` | Buscador, filtros (para quién y precio), orden y tarjetas |
 | `producto.css` | Detalle del perfume |
-| `mi-lista.css` | Mi lista, regalo y su aviso |
+| `mi-lista.css` | Mi lista (pasos, tarjetas, sugerencias, resumen), regalo y su aviso |
 | `comparador.css` | Barrita (comparar y finalizar compra), comparador y selector |
 | `examen.css` | Examen de gustos |
 | `paginas.css` | Títulos de página, Contacto, Nosotros y páginas legales |

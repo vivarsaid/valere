@@ -20,6 +20,10 @@ const Comparador = (() => {
   const MAXIMO = 3;
   const E = Formato.escapar;
   let seleccion = []; // ids de los perfumes que se comparan
+  // true = la persona no eligió nada y Comparar puso dos de ejemplo.
+  // Los de ejemplo no se guardan (si no, la barrita "X vs Y" saldría en todas
+  // las páginas sin que nadie los eligiera).
+  let deEjemplo = false;
   let columnaCambiando = -1; // qué columna se está cambiando en el selector
   let tCerrarSelector = 0;
 
@@ -58,7 +62,7 @@ const Comparador = (() => {
   /** Limpia la selección, la guarda y actualiza los botones y la barrita. */
   function marcar() {
     seleccion = seleccion.filter((id, k) => Catalogo.buscar(id) && seleccion.indexOf(id) === k).slice(0, MAXIMO);
-    Almacen.guardar(CLAVE, seleccion);
+    if (!deEjemplo) Almacen.guardar(CLAVE, seleccion);
 
     $$('[data-accion="alternar-comparar"]').forEach((b) => {
       const elegido = seleccion.includes(b.dataset.id);
@@ -186,7 +190,9 @@ const Comparador = (() => {
     cm.querySelector(".cb").innerHTML =
       encabezado +
       frascos +
-      `<p class="lead">Las notas que se repiten aparecen resaltadas; al final las juntamos en el centro.</p>` +
+      (deEjemplo
+        ? `<p class="lead ej">Estos dos son de ejemplo. Toca «Cambiar perfume» para elegir los que quieras comparar.</p>`
+        : `<p class="lead">Las notas que se repiten aparecen resaltadas; al final las juntamos en el centro.</p>`) +
       estilo +
       CAPAS.map(seccionNotas).join("") +
       precios +
@@ -207,6 +213,7 @@ const Comparador = (() => {
       return Pagina.ir("comparar.html");
     }
     if (Catalogo.todos().length < 2) return Avisos.corto("Agrega al menos 2 perfumes para comparar");
+    if (seleccion.length < 2) deEjemplo = true;
     while (seleccion.length < 2) seleccion.push(primeroSinElegir().id);
     repintar();
     if (cm.tagName === "DIALOG") Ventanas.abrir(cm);
@@ -259,6 +266,7 @@ const Comparador = (() => {
   }
 
   function elegir(id) {
+    deEjemplo = false;
     const k = columnaCambiando;
     seleccion[k] = id;
     cerrarSelector();
@@ -296,6 +304,7 @@ const Comparador = (() => {
 
     /** Botón "Comparar" de una tarjeta: agrega o quita (si ya hay 3, sale el más viejo). */
     alternar(id) {
+      deEjemplo = false;
       const k = seleccion.indexOf(id);
       if (k >= 0) seleccion.splice(k, 1);
       else {
@@ -306,6 +315,7 @@ const Comparador = (() => {
     },
     /** "Comparar con otro" en el detalle: agrega este perfume y abre el comparador. */
     con(id) {
+      deEjemplo = false;
       if (!seleccion.includes(id)) {
         if (seleccion.length >= MAXIMO) seleccion.shift();
         seleccion.push(id);
@@ -314,10 +324,12 @@ const Comparador = (() => {
       abrir();
     },
     quitar(columna) {
+      deEjemplo = false;
       seleccion.splice(columna, 1);
       repintar();
     },
     agregarOtro() {
+      deEjemplo = false;
       const p = primeroSinElegir();
       if (p && seleccion.length < MAXIMO) {
         seleccion.push(p.id);
@@ -325,6 +337,7 @@ const Comparador = (() => {
       }
     },
     limpiar() {
+      deEjemplo = false;
       seleccion = [];
       marcar();
     },

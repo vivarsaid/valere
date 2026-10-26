@@ -1,6 +1,6 @@
 <main>
   <section id="perfumes"><div class="in">
-    <div class="bar"><h1 class="pg-t">Descubrir</h1></div>
+    <div class="bar"><h1 class="pg-t">Descubrir</h1><button class="ex-b" data-accion="abrir-examen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.9L19 9.7l-5.2 1.8L12 16.4l-1.8-4.9L5 9.7l5.2-1.8zM18.5 14l.9 2.3 2.3.9-2.3.9-.9 2.3-.9-2.3-2.3-.9 2.3-.9z"/></svg>Ayúdame a elegir</button></div>
     <!-- Buscador y filtros (los botones los dibuja js/vistas/catalogo.js) -->
     <div class="tools">
       <input id="q" type="search" maxlength="60" enterkeyhint="search" placeholder="Nombre, marca o aroma" aria-label="Buscar perfumes" autocomplete="off">
@@ -22,7 +22,6 @@
       </label>
     </div>
     <div id="g"></div>
-    <p class="lk-w"><span style="color:var(--mut)">¿No sabes cuál elegir?</span> <button class="lk" data-accion="abrir-examen">Examen para saber más de tus gustos (opcional)</button></p>
   </div></section>
 </main>
 <dialog id="qz" aria-label="Examen de gustos"><button class="x" data-accion="cerrar" aria-label="Cerrar">×</button><div class="qb"></div></dialog>

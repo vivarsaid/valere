@@ -245,10 +245,136 @@ a.main {
   color: var(--acc);
 }
 
-/* "¿No sabes cuál elegir? Examen…" */
-.lk-w {
-  margin-top: 32px;
-  text-align: center;
+/* ── Examen de gustos ──
+   .ex-b  el botón "✨ Ayúdame a elegir" junto al título
+   .ex    la tarjeta grande dentro de la cuadrícula (ocupa todo el renglón) */
+.ex-b {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 99px;
+  background: linear-gradient(120deg, var(--acc), #b57bff);
+  color: #120a1c;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px -12px rgba(181, 123, 255, 0.7);
+  transition:
+    transform 0.25s cubic-bezier(0.3, 0.9, 0.3, 1.3),
+    box-shadow 0.25s;
+}
+.ex-b:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px -12px rgba(181, 123, 255, 0.9);
+}
+.ex-b:active {
+  transform: scale(0.95);
+}
+.ex-b svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.ex {
+  grid-column: 1 / -1;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 28px;
+  padding: 26px 32px;
+  border-radius: 22px;
+  background: radial-gradient(
+      ellipse 60% 120% at 0% 50%,
+      color-mix(in srgb, var(--acc) 40%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(ellipse 50% 120% at 100% 50%, rgba(181, 123, 255, 0.35), transparent 70%), var(--surf);
+  border: 1px solid color-mix(in srgb, var(--acc) 35%, transparent);
+  animation: up 0.6s 0.25s backwards;
+}
+/* un brillo que cruza la tarjeta cada pocos segundos */
+.ex::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.09) 50%, transparent 65%);
+  transform: translateX(-100%);
+  animation: ex-brillo 5s 1.2s ease-in-out infinite;
+}
+@keyframes ex-brillo {
+  45%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+/* tres frasquitos en abanico */
+.ex-fr {
+  position: relative;
+  width: 104px;
+  height: 92px;
+}
+.ex-fr svg {
+  position: absolute;
+  bottom: 0;
+  width: 52px;
+  height: 73px;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.5));
+  transition: transform 0.4s cubic-bezier(0.3, 0.9, 0.3, 1.3);
+}
+.ex-fr svg:nth-child(1) {
+  left: 0;
+  transform: rotate(-14deg);
+}
+.ex-fr svg:nth-child(2) {
+  left: 26px;
+  bottom: 10px;
+  z-index: 1;
+}
+.ex-fr svg:nth-child(3) {
+  left: 52px;
+  transform: rotate(14deg);
+}
+.ex:hover .ex-fr svg:nth-child(1) {
+  transform: rotate(-22deg) translateX(-4px);
+}
+.ex:hover .ex-fr svg:nth-child(3) {
+  transform: rotate(22deg) translateX(4px);
+}
+.ex:hover .ex-fr svg:nth-child(2) {
+  transform: translateY(-6px);
+}
+.ex-t small {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--acc);
+}
+.ex-t b {
+  display: block;
+  margin-top: 4px;
+  font-size: clamp(22px, 2.6vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.ex-t span {
+  display: block;
+  margin-top: 6px;
+  color: var(--mut);
+  font-size: 15px;
+  line-height: 1.45;
+}
+.ex .btn {
+  white-space: nowrap;
+}
+html.lite .ex::after {
+  display: none;
 }
 
 @media (max-width: 700px) {
@@ -271,6 +397,33 @@ a.main {
   .res {
     flex-wrap: wrap;
     gap: 10px 14px;
+  }
+  /* examen: el botón va abajo del título y la tarjeta se acomoda en columna */
+  .ex-b {
+    font-size: 14px;
+    padding: 9px 16px;
+  }
+  .ex {
+    grid-template-columns: auto 1fr;
+    gap: 16px 18px;
+    padding: 20px;
+  }
+  .ex-fr {
+    width: 78px;
+    height: 70px;
+  }
+  .ex-fr svg {
+    width: 40px;
+    height: 56px;
+  }
+  .ex-fr svg:nth-child(2) {
+    left: 19px;
+  }
+  .ex-fr svg:nth-child(3) {
+    left: 38px;
+  }
+  .ex .btn {
+    grid-column: 1 / -1;
   }
   .ord span {
     display: none;

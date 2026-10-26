@@ -86,6 +86,23 @@ const VistaCatalogo = (() => {
     );
   }
 
+  /**
+   * Tarjeta grande que invita al examen de gustos. Va dentro de la cuadrícula,
+   * después de los primeros perfumes (solo en Descubrir, donde está el examen).
+   */
+  function invitacionExamen(perfumes) {
+    const colores = perfumes.slice(0, 3).map((p) => p.color);
+    while (colores.length < 3) colores.push("#3a3a3f");
+    return (
+      `<aside class="ex">` +
+      `<div class="ex-fr" aria-hidden="true">${colores.map(Formato.frascoDibujado).join("")}</div>` +
+      `<div class="ex-t"><small>Examen de gustos · 1 minuto</small><b>¿No sabes cuál elegir?</b>` +
+      `<span>Responde 3 preguntas rápidas y te recomendamos los perfumes que van contigo.</span></div>` +
+      `<button class="btn" data-accion="abrir-examen">Hacer el examen ›</button></aside>`
+    );
+  }
+  const DESPUES_DE = 4; // la invitación sale después de esta cantidad de perfumes
+
   /** Mensaje cuando no hay tarjetas que mostrar en Descubrir. */
   function sinResultados(hayKitsQueCoinciden) {
     if (hayKitsQueCoinciden) return `Lo que buscas está en <a href="kits.html">Kits de perfume</a>.`;
@@ -105,7 +122,12 @@ const VistaCatalogo = (() => {
     const kits = coinciden.filter((p) => p.esKit);
 
     const g = $("#g");
-    if (g) g.innerHTML = perfumes.map(tarjeta).join("") || `<p id="none">${sinResultados(kits.length > 0)}</p>`;
+    if (g) {
+      const tarjetas = perfumes.map(tarjeta);
+      if (tarjetas.length && $("#qz"))
+        tarjetas.splice(Math.min(DESPUES_DE, tarjetas.length), 0, invitacionExamen(perfumes));
+      g.innerHTML = tarjetas.join("") || `<p id="none">${sinResultados(kits.length > 0)}</p>`;
+    }
 
     // contador y "Quitar filtros"
     const n = $("#nres");
