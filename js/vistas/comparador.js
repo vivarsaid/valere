@@ -13,7 +13,7 @@
 
    Arriba de las notas: el radar de aromas y los veredictos (un ganador por
    categoría, la tarjeta se voltea al tocarla). Cada lado de la página se
-   difumina con el color de su perfume.
+   lleva una banda vertical con su color (columnas de color).
 
    Usa:     $, $$, Almacen, Catalogo, Formato, Texto, Pagina, Avisos, Ventanas, Barra, Examen, Taller3D
    Expone:  Comparador
@@ -73,6 +73,28 @@ const Comparador = (() => {
     Barra.pintar();
   }
 
+  /* ── Colores: uno por perfume, siempre distintos entre sí ──────────────────
+     Se usa el tono del perfume; si es casi gris (como Club de Nuit) o se parece
+     mucho al de otro, se toma uno de la paleta. Así nunca se confunden. */
+  const PALETA = ["#d4ad6e", "#4aa8c8", "#d26b7f", "#8fc97a", "#b48cf0"];
+  function coloresDe(ps) {
+    const tono = (hsl) => +hsl.match(/hsl\((\d+)/)[1];
+    const satur = (hsl) => +hsl.match(/hsl\(\d+ (\d+)%/)[1];
+    const tonoHex = (hex) => tono(Taller3D.colorVivo(hex));
+    const cerca = (a, b) => Math.min(Math.abs(a - b), 360 - Math.abs(a - b)) < 40;
+    const usados = [];
+    return ps.map((p) => {
+      let c = Taller3D.colorVivo(p.color);
+      let t = tono(c);
+      if (satur(c) < 25 || usados.some((u) => cerca(u, t))) {
+        c = PALETA.find((x) => !usados.some((u) => cerca(u, tonoHex(x)))) || PALETA[usados.length % PALETA.length];
+        t = tonoHex(c);
+      }
+      usados.push(t);
+      return c;
+    });
+  }
+
   /* ── Aromas: cuánto tiene cada perfume de cada familia (para el radar y los veredictos) ── */
 
   /** { cit: { n: 2, notas: ["limón", "bergamota"] }, … } según las palabras de cada familia */
@@ -90,7 +112,7 @@ const Comparador = (() => {
   }
 
   /** Radar de aromas: una telaraña de 5 puntas con un polígono por perfume. */
-  function radar(ps) {
+  function radar(ps, colores) {
     const fam = Examen.aromas();
     const C = 130; // centro
     const R = 92; // radio
@@ -117,13 +139,13 @@ const Comparador = (() => {
       .map(([k, nombre], i) => {
         const [x, y] = punta(i, 1.24);
         const ancla = x < C - 10 ? "end" : x > C + 10 ? "start" : "middle";
-        return `<text x="${x.toFixed(1)}" y="${(y + 4).toFixed(1)}" text-anchor="${ancla}">${Examen.icono(k)} ${E(nombre.split(" y ")[0])}</text>`;
+        return `<text x="${x.toFixed(1)}" y="${(y + 4).toFixed(1)}" text-anchor="${ancla}">${E(nombre.split(" y ")[0])}</text>`;
       })
       .join("");
     const formas = ps
       .map((p, i) => {
         const a = aromasDe(p);
-        const c = Taller3D.colorVivo(p.color);
+        const c = colores[i];
         return (
           `<polygon class="rd-p" style="--c:${c};animation-delay:${i * 0.18}s" ` +
           `points="${pts((k) => Math.max(0.08, a[fam[k][0]].n / 3))}"/>`
@@ -131,7 +153,7 @@ const Comparador = (() => {
       })
       .join("");
     const leyenda = ps
-      .map((p) => {
+      .map((p, i) => {
         const a = aromasDe(p);
         const fuertes = Examen.aromas()
           .filter(([k]) => a[k].n)
@@ -139,7 +161,7 @@ const Comparador = (() => {
           .slice(0, 2)
           .map(([, nombre]) => nombre.split(" y ")[0].toLowerCase());
         return (
-          `<li style="--c:${Taller3D.colorVivo(p.color)}"><i></i><b>${E(p.nombre)}</b>` +
+          `<li style="--c:${colores[i]}"><i></i><b>${E(p.nombre)}</b>` +
           `<span>${fuertes.length ? "Más " + fuertes.join(" y ") : "Sin notas suficientes"}</span></li>`
         );
       })
@@ -153,7 +175,7 @@ const Comparador = (() => {
   }
 
   /** Veredictos: un ganador por categoría; al tocar la tarjeta se voltea y muestra a todos. */
-  function veredictos(ps) {
+  function veredictos(ps, colores) {
     const M = Formato.dinero;
     const datos = ps.map((p) => ({ p, a: aromasDe(p) }));
     const tarjetas = [];
@@ -171,8 +193,8 @@ const Comparador = (() => {
       const empate = g.quienes.length > 1;
       const p = g.quienes[0].p;
       tarjetas.push(
-        `<button class="vr${empate ? " emp" : ""}" data-accion="voltear-veredicto" style="--c:${Taller3D.colorVivo(p.color)}" aria-label="${E(titulo)}: ver detalle">` +
-          `<span class="vr-f"><small>${icono} ${E(titulo)}</small><b>${empate ? "Empate" : E(p.nombre)}</b>` +
+        `<button class="vr${empate ? " emp" : ""}" data-accion="voltear-veredicto" style="--c:${colores[ps.indexOf(p)]}" aria-label="${E(titulo)}: ver detalle">` +
+          `<span class="vr-f"><small>${icono}${E(titulo)}</small><b>${empate ? "Empate" : E(p.nombre)}</b>` +
           `<i>${empate ? g.quienes.map((d) => E(d.p.nombre)).join(" y ") : E(motivo(g.quienes[0]))}</i><em>Toca para ver el detalle</em></span>` +
           `<span class="vr-d"><small>${E(titulo)}</small>` +
           datos.map((d, i) => `<span><b>${E(d.p.nombre)}</b>${E(detalle(d, g.vals[i]))}</span>`).join("") +
@@ -196,7 +218,7 @@ const Comparador = (() => {
     };
     agregar(
       "Mejor precio por ml",
-      "💧",
+      '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C8 8.5 6 12 6 15a6 6 0 0 0 12 0c0-3-2-6.5-6-12z"/></svg>',
       ganadorDe(porMl, true),
       (d) => M(Math.round(porMl(d))) + " por ml",
       (d, v) => (v == null ? "Kit" : M(Math.round(v)) + " por ml")
@@ -204,7 +226,7 @@ const Comparador = (() => {
     const desc = (d) => Catalogo.descuento(d.p, Catalogo.primerTamano(d.p));
     agregar(
       "Mayor descuento",
-      "🏷️",
+      Examen.icono("precio"),
       ganadorDe(desc),
       (d) => "−" + desc(d) + "%",
       (d, v) => (v ? "−" + v + "%" : "Sin descuento")
@@ -225,7 +247,7 @@ const Comparador = (() => {
       return p
         ? `<div class="cv-l lleno" style="--pc:${E(p.color)}"><div class="ct">${Formato.frasco(p)}</div>` +
             `<small>${E(p.marca)}</small><b>${E(p.nombre)}</b>` +
-            `<button class="sw" data-accion="abrir-selector" data-columna="${k}">Cambiar</button></div>`
+            `<button class="btn l cv-c" data-accion="abrir-selector" data-columna="${k}">Cambiar</button></div>`
         : `<button class="cv-l" data-accion="abrir-selector" data-columna="${k}" aria-haspopup="dialog">` +
             `<span class="cv-mas" aria-hidden="true">+</span><b>Elegir perfume</b><small>${k ? "el segundo" : "el primero"}</small></button>`;
     };
@@ -238,22 +260,15 @@ const Comparador = (() => {
   function pintar() {
     const ps = perfumes();
     const n = ps.length;
-    // cada lado de la página se difumina con el color de su perfume (ver css/comparador.css)
-    const cm0 = $("#cm");
-    cm0.style.setProperty("--n", n);
-    [0, 1, 2].forEach((i) =>
-      cm0.style.setProperty("--c" + (i + 1), ps[i] ? Taller3D.colorVivo(ps[i].color) : "transparent")
-    );
-    cm0.classList.toggle("con-color", n >= 2);
-    cm0.classList.toggle("tres", n === 3);
     if (n < 2) return pintarVacio(ps);
+    const colores = coloresDe(ps); // uno por columna: bandas, radar y veredictos
     const M = Formato.dinero;
     const notas = (p, capa) => p.notas[capa];
 
     /** Una fila con una columna por perfume (cada una con el color de su perfume en --pc). */
     const columnas = (contenido, clase = "") =>
       `<div class="cg${clase ? " " + clase : ""}" style="--n:${n}">` +
-      ps.map((p, k) => `<div class="col" style="--pc:${E(p.color)}">${contenido(p, k)}</div>`).join("") +
+      ps.map((p, k) => `<div class="col" style="--pc:${colores[k]}">${contenido(p, k)}</div>`).join("") +
       `</div>`;
 
     /** Cuántos perfumes tienen cada nota (para resaltar las repetidas). */
@@ -317,8 +332,10 @@ const Comparador = (() => {
       `<div class="cb-top">${barraVentana}` +
       columnas(
         (p, k) =>
-          `<div class="nm"><h4>${E(p.nombre)}</h4>` +
-          `<button class="sw" data-accion="abrir-selector" data-columna="${k}" aria-haspopup="dialog"><span class="lg">Cambiar perfume</span><span class="sh">Cambiar</span></button></div>`
+          // ficha: punto del color, marca y nombre, y botón redondo para cambiarlo
+          `<div class="nm"><span class="nm-p" aria-hidden="true"></span>` +
+          `<span class="nm-t"><small>${E(p.marca)}</small><h4>${E(p.nombre)}</h4></span>` +
+          `<button class="sw" data-accion="abrir-selector" data-columna="${k}" aria-haspopup="dialog" aria-label="Cambiar ${E(p.nombre)}" title="Cambiar perfume"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h12l-3-3M17 17H5l3 3"/></svg></button></div>`
       ) +
       `</div>`;
 
@@ -363,13 +380,16 @@ const Comparador = (() => {
         ? `<p class="ad"><button class="btn o" data-accion="agregar-a-comparacion">+ Agregar otro perfume</button></p>`
         : "";
 
+    // las columnas de color: una banda por perfume detrás de todo (css/comparador.css)
+    const bandas = `<div class="cm-bandas" style="--n:${n}" aria-hidden="true">${colores.map((c) => `<i style="--c:${c}"></i>`).join("")}</div>`;
     cm.querySelector(".cb").innerHTML =
+      bandas +
       encabezado +
       frascos +
       `<p class="lead">Las notas que se repiten aparecen resaltadas; al final las juntamos en el centro.</p>` +
       `<p class="cm-q"><button data-accion="limpiar-comparacion">× Quitar comparación</button></p>` +
-      radar(ps) +
-      veredictos(ps) +
+      radar(ps, colores) +
+      veredictos(ps, colores) +
       estilo +
       CAPAS.map(seccionNotas).join("") +
       precios +

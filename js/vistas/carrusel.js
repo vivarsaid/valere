@@ -408,7 +408,7 @@ const Carrusel = (() => {
       vista.paso = vista.vertical ? 0.46 : 0.56;
       vista.radio = vista.vertical ? 4.4 : 5.6;
       // los frascos van arriba, para dejar libre abajo el nombre y el precio
-      vista.alturaBase = vista.vertical ? 1.25 : 1.05;
+      vista.alturaBase = vista.vertical ? 0.15 : 0.2;
       escena.fog.near = camara.position.z - 1;
       escena.fog.far = camara.position.z + 7;
       camara.updateProjectionMatrix();

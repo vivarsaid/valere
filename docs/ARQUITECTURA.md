@@ -81,7 +81,7 @@ En **todas** las páginas están la cabecera, el pie (con los enlaces legales), 
 | 18 | `js/vistas/catalogo.js` | `VistaCatalogo` | Tarjetas, filtros, orden, búsqueda y la invitación al examen dentro de la cuadrícula |
 | 19 | `js/vistas/producto.js` | `VistaProducto` | Detalle del perfume |
 | 20 | `js/vistas/mi-lista.js` | `VistaLista` | Dibuja Mi lista: pasos, tarjetas, «Te puede gustar» y resumen |
-| 21 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador (radar de aromas, veredictos y notas; cada lado difuminado con el color de su perfume) y selector. Sin 2 perfumes elegidos muestra dos lugares vacíos |
+| 21 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador (columnas de color, radar de aromas, veredictos y notas; cada perfume con un color distinto) y selector. Sin 2 perfumes elegidos muestra dos lugares vacíos |
 | 22 | `js/vistas/barra.js` | `Barra` | Barrita flotante: comparar y «Finalizar compra» (abre Mi lista) |
 | 23 | `js/vistas/carrusel.js` | `Carrusel` | Carrusel 3D de la portada (Three.js, se descarga después; ver abajo) |
 | 24 | `js/vistas/nosotros.js` | `VistaNosotros` | Nosotros: números del catálogo, color al bajar por los capítulos y pirámide olfativa |
@@ -153,13 +153,13 @@ Cada archivo es un tema. **El orden importa**: los de abajo pueden ajustar a los
 |---|---|
 | `base.css` | **Colores** (`:root`), letra, reglas generales |
 | `componentes.css` | Botones (y sus animaciones), chips, etiqueta de descuento, frasco, vuelo a Mi lista, bloques de tres columnas |
-| `cabecera.css` | Barra de arriba, logo, menú con la lámpara que se desliza (en celular, el panel ☰) y "Mi lista" |
+| `cabecera.css` | Barra de arriba (se esconde al bajar y regresa al subir, con línea de avance), logo, menú con la lámpara (en celular, el panel ☰) y "Mi lista" |
 | `pie.css` | Pie de página |
 | `dialogos.css` | Lo común a todas las ventanas |
 | `avisos.css` | Aviso corto de abajo |
 | `bienvenida.css` | Animación de entrada |
 | `portada.css` | Portada |
-| `carrusel.css` | Carrusel 3D de la portada |
+| `carrusel.css` | Carrusel 3D de la portada, a pantalla completa con el título adentro |
 | `catalogo.css` | Buscador, filtros (para quién y precio), orden y tarjetas |
 | `producto.css` | Detalle del perfume (frasco sobre su color y en 3D) |
 | `mi-lista.css` | Mi lista (pasos, tarjetas, sugerencias, resumen), regalo y su aviso |
@@ -264,4 +264,5 @@ Campos de `modelos`: `foto` (nombre del .webp), `c` color del frasco, `v` 1 = vi
 
 - Todo se formatea con **Prettier** (reglas en `.prettierrc.json`). Con la extensión de Prettier en VS Code se acomoda solo al guardar.
 - Nombres y comentarios en español.
+- Sin emojis en la página: los íconos son trazos SVG de línea (ver `TRAZOS` en `js/vistas/examen.js`).
 - Cada archivo empieza con un bloque que dice qué hace, qué usa y qué expone. Si agregas un archivo, sigue el mismo formato y anótalo en esta guía.

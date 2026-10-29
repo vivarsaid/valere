@@ -21,6 +21,7 @@ header {
   position: sticky;
   top: env(safe-area-inset-top, 0px);
   z-index: 9;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
   background: color-mix(in srgb, var(--bg) 82%, transparent);
   -webkit-backdrop-filter: saturate(180%) blur(18px);
   backdrop-filter: saturate(180%) blur(18px);
@@ -92,6 +93,28 @@ nav a[aria-current="page"] {
 #bag b[data-n="0"] {
   background: var(--surf);
   color: var(--mut);
+}
+
+/* ── Al bajar, el menú se esconde; al subir, regresa (lo controla js/app.js) ── */
+html.menu-oculto header {
+  transform: translateY(calc(-100% - 2px));
+}
+/* la línea de avance: cuánto se lleva de la página */
+header .avance {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--acc), #b57bff);
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  header {
+    transition: none;
+  }
 }
 
 /* ── La lámpara del menú (compu) ──

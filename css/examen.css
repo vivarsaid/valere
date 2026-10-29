@@ -125,6 +125,29 @@
 .opt:active {
   transform: scale(0.97);
 }
+.ico {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -0.2em;
+}
+.oi .ico {
+  width: 24px;
+  height: 24px;
+}
+.qch i {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.qch .ico {
+  color: var(--acc);
+}
 .oi {
   flex: none;
   display: grid;

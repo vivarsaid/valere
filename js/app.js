@@ -211,6 +211,32 @@ const App = (() => {
       lamparaDelMenu();
     } catch (e) {}
 
+    const html = document.documentElement;
+    // El menú se esconde al bajar y regresa al subir (html.menu-oculto, ver css/cabecera.css).
+    // La línea de arriba (.avance) marca cuánto se lleva de la página.
+    const cabecera = $("header");
+    const avance = $("header .avance");
+    let yAntes = scrollY;
+    let cuadroMenu = 0;
+    addEventListener(
+      "scroll",
+      () => {
+        if (cuadroMenu) return;
+        cuadroMenu = requestAnimationFrame(() => {
+          cuadroMenu = 0;
+          const y = scrollY;
+          const abierto = cabecera && cabecera.classList.contains("abierto");
+          if (y < 120 || abierto) html.classList.remove("menu-oculto");
+          else if (y > yAntes + 6) html.classList.add("menu-oculto");
+          else if (y < yAntes - 6) html.classList.remove("menu-oculto");
+          if (Math.abs(y - yAntes) > 6 || y < 120) yAntes = y;
+          const alto = document.documentElement.scrollHeight - innerHeight;
+          if (avance) avance.style.transform = `scaleX(${alto > 0 ? Math.min(1, y / alto) : 0})`;
+        });
+      },
+      { passive: true }
+    );
+
     // Portada: las tres razones aparecen una tras otra al llegar a ellas.
     const razones = $("#confianza");
     if (razones) {

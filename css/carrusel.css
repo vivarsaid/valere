@@ -12,34 +12,23 @@
    redibuja 60 veces por segundo es lo que más traba en celulares.
    ============================================================================= */
 
-/* main agrupa sus capas: así el resplandor (z-index -1) queda detrás del contenido
-   pero encima del fondo negro de la página (si no, el fondo lo tapa) */
-body[data-pagina="inicio"] main {
-  position: relative;
-  z-index: 0;
-}
-
-/* ── Resplandor de la portada: el color del perfume del centro, regado por la página ──
+/* ── Resplandor: el color vivo del perfume del centro, dentro del carrusel ──
    Dos capas (<i>): la que tiene .on se ve; al cambiar de perfume se cruzan. */
 .car-brillo {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1300px;
+  inset: 0;
   z-index: -1;
-  overflow: hidden;
   pointer-events: none;
 }
 .car-brillo i {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-      ellipse 70% 40% at 50% 56%,
+      ellipse 46% 50% at 50% 52%,
       color-mix(in srgb, var(--c, #333) 55%, transparent),
-      transparent 74%
+      transparent 72%
     ),
-    radial-gradient(ellipse 110% 55% at 50% 30%, color-mix(in srgb, var(--c, #333) 30%, transparent), transparent 80%);
+    radial-gradient(ellipse 90% 75% at 50% 45%, color-mix(in srgb, var(--c, #333) 24%, transparent), transparent 80%);
   opacity: 0;
   transition: opacity 0.9s ease;
   will-change: opacity;
@@ -47,15 +36,12 @@ body[data-pagina="inicio"] main {
 .car-brillo i.on {
   opacity: 1;
 }
-@media (max-width: 700px) {
-  .car-brillo {
-    height: 1150px;
-  }
-}
 
 /* --car-h también lo usa el tema de temporada para acomodar sus figuras encima */
-.hero {
-  --car-h: clamp(520px, 50vw, 660px);
+/* La portada empieza con el carrusel: sin el espacio de arriba de .hero */
+body[data-pagina="inicio"] .hero {
+  --car-h: max(560px, calc(100svh - 52px));
+  padding-block: 0;
 }
 /* El carrusel ocupa todo el ancho de la pantalla, sin recuadro: su color
    (--car-bg, lo pone js/vistas/carrusel.js) se desvanece arriba y abajo para
@@ -69,38 +55,75 @@ body[data-pagina="inicio"] main {
   --car-bg: #1c1c1e;
   position: relative;
   width: 100vw;
-  margin-top: 40px;
+  margin-top: 0;
   margin-left: calc(50% - 50vw);
   padding: 0; /* es <section>, pero sin el espacio de las secciones */
   height: var(--car-h);
   overflow: hidden;
   isolation: isolate;
-  background: linear-gradient(180deg, transparent, var(--car-bg) 22%, var(--car-bg) 78%, transparent);
+  background: var(--car-bg);
+  transition: background-color 0.3s;
   color: #fff;
   text-align: center;
   contain: layout paint;
 }
-/* y una luz del mismo color en el centro, para que no se vea plano */
+/* orillas más oscuras (viñeta) */
 .car::before {
   content: "";
   position: absolute;
   z-index: -1;
-  inset: 10% 0;
-  background: radial-gradient(
-    ellipse 50% 55% at 50% 45%,
-    color-mix(in srgb, var(--car-bg) 55%, #fff 12%),
-    transparent 72%
-  );
+  inset: 0;
+  background: radial-gradient(ellipse 85% 80% at 50% 48%, transparent 45%, rgba(0, 0, 0, 0.6) 100%);
   pointer-events: none;
+}
+/* abajo se funde con el negro de la página; arriba, una sombra suave bajo la cabecera */
+.car::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 68%, var(--bg) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.4), transparent 22%);
+  pointer-events: none;
+}
+
+/* Título, texto y botones: adentro, arriba a la izquierda */
+.car-cab {
+  position: absolute;
+  z-index: 3;
+  top: clamp(28px, 6vh, 64px);
+  left: max(16px, calc(50% - 540px));
+  max-width: min(460px, calc(100% - 32px));
+  text-align: left;
+  pointer-events: none;
+}
+.car-cab > * {
+  pointer-events: auto;
+}
+.car-cab h1 {
+  margin: 0;
+  font-size: clamp(40px, 5.6vw, 72px);
+  line-height: 1;
+  text-wrap: balance;
+  animation: up 0.8s 0.1s both;
+}
+.car-cab p {
+  margin: 14px 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: clamp(15px, 1.5vw, 17px);
+  line-height: 1.55;
+  animation: up 0.8s 0.2s both;
+}
+.car-cab .cta {
+  margin-top: 22px;
+  justify-content: flex-start;
+  animation: up 0.8s 0.3s both;
 }
 
 /* ── Escenario ── */
 .car-esc {
   position: absolute;
   inset: 0;
-  /* lo que va detrás (luz, texto que gira, frascos) se desvanece arriba y abajo: sin orillas rectas */
-  -webkit-mask: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent);
-  mask: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent);
   touch-action: pan-y; /* de arriba a abajo baja la página; de lado mueve el carrusel */
   cursor: grab;
   user-select: none;
@@ -372,7 +395,11 @@ body[data-pagina="inicio"] #cb {
     --car-h: 560px;
   }
   .car {
-    margin-top: 36px;
+    margin-top: 0;
+  }
+  /* en celular la barra de datos es más alta: las figuras de temporada se acomodan arriba de ella */
+  .hero {
+    --car-info-h: 340px;
   }
   .car-info {
     grid-template-columns: auto 1fr auto;
@@ -417,4 +444,20 @@ body[data-pagina="inicio"] #cb {
 html.lite .car-anillo svg,
 html.lite .car-ver i::after {
   animation: none;
+}
+
+/* Con la barrita de abajo visible, los datos del carrusel suben para que no los tape */
+body:has(#cb:not([hidden])) .car-info {
+  padding-bottom: 92px;
+}
+@media (max-width: 700px) {
+  .car-cab {
+    top: 22px;
+  }
+  .car-cab p {
+    display: none; /* en celular, solo el título y los botones */
+  }
+  .car-cab .cta {
+    margin-top: 14px;
+  }
 }

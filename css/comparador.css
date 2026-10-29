@@ -139,50 +139,81 @@
   border-left: 1px solid var(--line);
 }
 
-/* Nombre y botón "Cambiar perfume" (.lg texto largo, .sh texto corto en celular) */
+/* Ficha de cada perfume en la barra fija: punto del color, marca, nombre y botón para cambiarlo */
 .nm {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding-block: 4px 12px;
+  gap: 10px;
+  margin: 6px 0 10px;
+  padding: 8px 8px 8px 12px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--pc, var(--acc)) 14%, var(--surf));
+  border: 1px solid color-mix(in srgb, var(--pc, var(--acc)) 40%, transparent);
+  text-align: left;
+  min-width: 0;
+}
+.nm-p {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--pc, var(--acc));
+  box-shadow: 0 0 12px var(--pc, var(--acc));
+}
+.nm-t {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.nm-t small {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mut);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .nm h4 {
   margin: 0;
   font-size: 17px;
-  line-height: 1.2;
-  font-weight: 600;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  line-height: 1.15;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 .sw {
-  position: relative;
-  display: inline-block;
-  padding: 7px 16px;
-  border-radius: 99px;
-  font-size: 14px;
-  white-space: nowrap;
-  background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.07));
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.38),
-    0 4px 14px rgba(0, 0, 0, 0.35);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--fg);
   transition:
-    background 0.2s,
-    transform 0.2s;
+    transform 0.4s cubic-bezier(0.3, 0.9, 0.3, 1.3),
+    border-color 0.2s,
+    background 0.2s;
+}
+.sw svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .sw:hover {
-  background: linear-gradient(rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.12));
+  transform: rotate(180deg);
+  border-color: var(--pc, var(--acc));
+  background: var(--surf2);
 }
 .sw:active {
-  transform: scale(0.95);
-}
-.sw .sh {
-  display: none;
+  transform: rotate(180deg) scale(0.9);
 }
 .lead {
   margin: 22px 0 0;
@@ -309,8 +340,10 @@ button.cv-l:hover {
   height: 150px;
   width: auto;
 }
-.cv-l .sw {
+.cv-l .cv-c {
   margin-top: 8px;
+  padding: 8px 18px;
+  font-size: 14px;
 }
 .cv-vs {
   display: grid;
@@ -374,13 +407,12 @@ button.cv-l:hover {
   border-radius: 20px;
   display: grid;
   place-items: center;
-  /* cada frasco sobre el color de su perfume (--pc) */
+  /* solo el brillo del color del perfume: la banda de la columna ya da el fondo */
   background: radial-gradient(
-      ellipse 62% 58% at 50% 58%,
-      color-mix(in srgb, var(--pc, #fff) 50%, transparent),
-      transparent 74%
-    ),
-    color-mix(in srgb, var(--pc, #333) 12%, var(--bg));
+    ellipse 58% 55% at 50% 56%,
+    color-mix(in srgb, var(--pc, #fff) 45%, transparent),
+    transparent 74%
+  );
 }
 .cg .ct > svg,
 .cg .ct > .ph {
@@ -525,36 +557,54 @@ button.cv-l:hover {
   background: none;
 }
 
-/* ── Cada lado de la página difuminado con el color de su perfume (--c1, --c2, --c3) ── */
-body[data-pagina="comparar"] main {
-  overflow-x: clip; /* el difuminado llega a las orillas sin crear scroll de lado */
-}
-div#cm.con-color {
+/* ── Columnas de color: una banda vertical por perfume, detrás de toda la comparación ── */
+div#cm .cb {
   position: relative;
   isolation: isolate;
 }
-div#cm.con-color::before {
-  content: "";
+.cm-bandas {
   position: absolute;
   z-index: -1;
   top: 0;
   bottom: 0;
-  left: 50%;
-  width: 100vw;
-  translate: -50% 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--c1) 30%, transparent), transparent 42%),
-    linear-gradient(270deg, color-mix(in srgb, var(--c2) 30%, transparent), transparent 42%);
-  -webkit-mask: linear-gradient(180deg, transparent, #000 8%, #000 88%, transparent);
-  mask: linear-gradient(180deg, transparent, #000 8%, #000 88%, transparent);
+  left: var(--pd);
+  right: var(--pd);
+  display: grid;
+  grid-template-columns: repeat(var(--n, 2), minmax(0, 1fr));
+  gap: 10px;
   pointer-events: none;
-  animation: fi 1s both;
-  opacity: 0;
 }
-/* con 3 perfumes: izquierda, centro y derecha */
-div#cm.con-color.tres::before {
-  background: linear-gradient(90deg, color-mix(in srgb, var(--c1) 30%, transparent), transparent 34%),
-    radial-gradient(ellipse 22% 60% at 50% 45%, color-mix(in srgb, var(--c2) 26%, transparent), transparent 80%),
-    linear-gradient(270deg, color-mix(in srgb, var(--c3) 30%, transparent), transparent 34%);
+.cm-bandas i {
+  border-radius: 28px 28px 0 0;
+  background: radial-gradient(
+      ellipse 90% 340px at 50% 0,
+      color-mix(in srgb, var(--c) 34%, transparent),
+      transparent 100%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--c) 14%, transparent),
+      color-mix(in srgb, var(--c) 6%, transparent) 55%,
+      transparent
+    );
+  border-top: 1px solid color-mix(in srgb, var(--c) 55%, transparent);
+  animation: banda 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.cm-bandas i:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.cm-bandas i:nth-child(3) {
+  animation-delay: 0.2s;
+}
+@keyframes banda {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+/* las líneas entre columnas sobran: las bandas ya separan */
+.cg > .col + .col {
+  border-left-color: transparent;
 }
 
 /* ── Radar de aromas ── */
@@ -703,6 +753,20 @@ div#cm.con-color.tres::before {
 .vr:hover .vr-f {
   box-shadow: 0 16px 34px -18px var(--c);
   transform: translateY(-3px);
+}
+.vr-f small {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vr-f small .ico {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .vr-f small,
 .vr-d small {
@@ -987,7 +1051,12 @@ div#cm {
 div#cm .cb-top {
   top: calc(52px + env(safe-area-inset-top, 0px));
   padding-top: 12px;
+  transition: top 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
 } /* debajo de la cabecera */
+/* con el menú escondido, la barra de nombres sube hasta arriba */
+html.menu-oculto div#cm .cb-top {
+  top: env(safe-area-inset-top, 0px);
+}
 
 @media (min-width: 701px) {
   #pk {
@@ -1009,9 +1078,33 @@ div#cm .cb-top {
   .nm h4 {
     font-size: 15px;
   }
-  .sw {
-    font-size: 13px;
-    padding: 6px 12px;
+  /* ficha en columna: el nombre completo (hasta 2 renglones) y el botón abajo */
+  .nm {
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 6px 8px;
+    border-radius: 18px;
+    text-align: center;
+  }
+  .nm-p {
+    display: none;
+  }
+  .nm-t {
+    align-items: center;
+  }
+  .nm-t small {
+    display: none;
+  }
+  .nm h4 {
+    font-size: 14px;
+    line-height: 1.2;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .nm {
+    border-top: 3px solid var(--pc, var(--acc));
   }
   .sw .lg {
     display: none;
@@ -1050,7 +1143,8 @@ div#cm .cb-top {
 }
 @media (pointer: coarse) {
   .sw {
-    min-height: 38px;
+    width: 38px;
+    height: 38px;
   }
   .cb-bar .cx,
   .pk-h .cx {
@@ -1081,8 +1175,12 @@ div#cm .cb-top {
     font-size: 13px;
   }
   .sw {
-    font-size: 12px;
-    padding: 5px 9px;
+    width: 30px;
+    height: 30px;
+  }
+  .nm-p {
+    width: 9px;
+    height: 9px;
   }
   .pz {
     font-size: 15px;

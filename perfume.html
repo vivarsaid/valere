@@ -33,18 +33,18 @@
 <!-- Estilos (el orden importa: los de abajo pueden ajustar a los de arriba) -->
 <link rel="stylesheet" href="css/base.css?v=1d1fb296">
 <link rel="stylesheet" href="css/componentes.css?v=d4926e71">
-<link rel="stylesheet" href="css/cabecera.css?v=3074dbd8">
+<link rel="stylesheet" href="css/cabecera.css?v=69a4e7b7">
 <link rel="stylesheet" href="css/pie.css?v=6de146e8">
 <link rel="stylesheet" href="css/dialogos.css?v=36561658">
 <link rel="stylesheet" href="css/avisos.css?v=2e7ac4af">
 <link rel="stylesheet" href="css/bienvenida.css?v=7bf912e9">
 <link rel="stylesheet" href="css/portada.css?v=955c985d">
-<link rel="stylesheet" href="css/carrusel.css?v=e18cd885">
+<link rel="stylesheet" href="css/carrusel.css?v=3e89f506">
 <link rel="stylesheet" href="css/catalogo.css?v=a2f8f8ae">
 <link rel="stylesheet" href="css/producto.css?v=39277b31">
 <link rel="stylesheet" href="css/mi-lista.css?v=c87ca5ea">
-<link rel="stylesheet" href="css/comparador.css?v=40e256af">
-<link rel="stylesheet" href="css/examen.css?v=528f9295">
+<link rel="stylesheet" href="css/comparador.css?v=2cffd9d6">
+<link rel="stylesheet" href="css/examen.css?v=323a4fd9">
 <link rel="stylesheet" href="css/paginas.css?v=c6401ffa">
 <link rel="stylesheet" href="css/pantallas-especiales.css?v=95daa00a">
 <link rel="stylesheet" href="css/modo-ligero.css?v=b3cc1854">
@@ -61,7 +61,7 @@
 <script src="js/base/compatibilidad.js?v=9bb21d7a" defer></script>
 <script src="js/base/anticopia.js?v=8544c3d1" defer></script>
 <script src="js/datos/catalogo.js?v=46a07d76" defer></script>
-<script src="js/datos/lista.js?v=8a52869e" defer></script>
+<script src="js/datos/lista.js?v=0e6dfef2" defer></script>
 <script src="js/interfaz/formato.js?v=b7bae194" defer></script>
 <script src="js/interfaz/pagina.js?v=f8287c18" defer></script>
 <script src="js/interfaz/avisos.js?v=e9d8d0a2" defer></script>
@@ -74,14 +74,14 @@
 <script src="js/vistas/catalogo.js?v=ba85a2b1" defer></script>
 <script src="js/vistas/producto.js?v=736b6f12" defer></script>
 <script src="js/vistas/mi-lista.js?v=46205026" defer></script>
-<script src="js/vistas/comparador.js?v=dbafcbcc" defer></script>
+<script src="js/vistas/comparador.js?v=1055da57" defer></script>
 <script src="js/vistas/barra.js?v=0c31b815" defer></script>
-<script src="js/vistas/carrusel.js?v=bc7f5cc0" defer></script>
+<script src="js/vistas/carrusel.js?v=925ea162" defer></script>
 <script src="js/vistas/nosotros.js?v=fd88bb89" defer></script>
-<script src="js/vistas/examen.js?v=dbd29fde" defer></script>
+<script src="js/vistas/examen.js?v=5617541b" defer></script>
 <script src="js/vistas/bienvenida.js?v=0e669858" defer></script>
-<script src="js/temporadas/halloween.js?v=9c62d627" defer></script>
-<script src="js/app.js?v=6dedaaf1" defer></script>
+<script src="js/temporadas/halloween.js?v=9ee42c30" defer></script>
+<script src="js/app.js?v=bfc44e75" defer></script>
 </head>
 <body data-pagina="perfume">
 <!-- Dibujos que se reusan: el frasco (#bo) y el logo (#lg) -->
@@ -102,7 +102,7 @@
 <noscript><style>#iv,#car{display:none!important}.nojs{display:block!important}</style><div class="nojs" style="margin:0;padding:16px 18px;background:#1c1c1e;color:#f5f5f7;text-align:center;font:15px/1.45 -apple-system,system-ui,sans-serif"><b style="display:block;font-size:16px;margin-bottom:4px">Esta vista previa no muestra el catálogo</b>Ábrela en Safari o Chrome para ver los perfumes, o escríbenos por <a href="https://wa.me/525529094378" style="color:#d9a85a">WhatsApp</a>.</div></noscript>
 
 <!-- Cabecera. En celular el menú (#menu) se abre con el botón ☰ (#mnb) -->
-<header><div class="in">
+<header><span class="avance" aria-hidden="true"></span><div class="in">
   <a class="logo" href="index.html" aria-label="valère, inicio"><svg class="lm" viewBox="0 0 100 100" aria-hidden="true"><use href="#lg"/></svg><span>valère</span></a>
   <nav id="menu" aria-label="Secciones"><a href="descubrir.html">Descubrir</a><a href="kits.html">Kits</a><a href="comparar.html">Comparar</a><a href="nosotros.html">Nosotros</a><a href="contacto.html">Contacto</a><span class="luz" aria-hidden="true"></span></nav>
   <button id="bag" data-accion="abrir-lista" aria-label="Abrir Mi lista">Mi lista <b data-n="0" id="bn">0</b></button>

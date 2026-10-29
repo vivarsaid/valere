@@ -1,13 +1,15 @@
 <main>
-  <!-- Resplandor del color del perfume del carrusel, regado por la portada (dos capas que se cruzan) -->
-  <div class="car-brillo" aria-hidden="true"><i></i><i></i></div>
   <div class="in hero">
-    <h1>Lo más vendido</h1>
-    <p>Los perfumes que más nos piden. Desliza para verlos y toca uno para conocer sus notas.</p>
-    <div class="cta"><a class="btn" href="descubrir.html">Descubrir</a><a class="btn o" href="comparar.html">Comparar ›</a></div>
-
-    <!-- Carrusel 3D de perfumes (lo llena js/vistas/carrusel.js; estilos en css/carrusel.css) -->
+    <!-- Carrusel 3D a pantalla completa (lo llena js/vistas/carrusel.js; estilos en css/carrusel.css).
+         El título va adentro, arriba a la izquierda. -->
     <section class="car" id="car" aria-roledescription="carrusel" aria-label="Lo más vendido">
+      <!-- Resplandor del color del perfume (dos capas que se cruzan al cambiar de perfume) -->
+      <div class="car-brillo" aria-hidden="true"><i></i><i></i></div>
+      <div class="car-cab">
+        <h1>Lo más vendido</h1>
+        <p>Los perfumes que más nos piden. Desliza para verlos y toca uno para conocer sus notas.</p>
+        <div class="cta"><a class="btn" href="descubrir.html">Descubrir</a><a class="btn o" href="comparar.html">Comparar ›</a></div>
+      </div>
       <div class="car-esc">
         <div class="car-luz"></div>
         <div class="car-anillo" aria-hidden="true"><svg viewBox="0 0 1000 1000">
