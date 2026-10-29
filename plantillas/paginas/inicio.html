@@ -1,11 +1,15 @@
 <main>
   <div class="in hero">
-    <h1>Lo más vendido</h1>
-    <p>Los perfumes que más nos piden. Desliza para verlos y toca uno para conocer sus notas.</p>
-    <div class="cta"><a class="btn" href="descubrir.html">Descubrir</a><a class="btn o" href="comparar.html">Comparar ›</a></div>
-
-    <!-- Carrusel 3D de perfumes (lo llena js/vistas/carrusel.js; estilos en css/carrusel.css) -->
+    <!-- Carrusel 3D a pantalla completa (lo llena js/vistas/carrusel.js; estilos en css/carrusel.css).
+         El título va adentro, arriba a la izquierda. -->
     <section class="car" id="car" aria-roledescription="carrusel" aria-label="Lo más vendido">
+      <!-- Resplandor del color del perfume (dos capas que se cruzan al cambiar de perfume) -->
+      <div class="car-brillo" aria-hidden="true"><i></i><i></i></div>
+      <div class="car-cab">
+        <h1>Lo más vendido</h1>
+        <p>Los perfumes que más nos piden. Desliza para verlos y toca uno para conocer sus notas.</p>
+        <div class="cta"><a class="btn" href="descubrir.html">Descubrir</a><a class="btn o" href="comparar.html">Comparar ›</a></div>
+      </div>
       <div class="car-esc">
         <div class="car-luz"></div>
         <div class="car-anillo" aria-hidden="true"><svg viewBox="0 0 1000 1000">
@@ -30,9 +34,13 @@
     </section>
   </div>
 
-  <section id="confianza"><div class="in trust">
-    <div><h3>Descubre sin presión</h3><p>Busca por nombre o aroma y compara lado a lado. Sin cuentas ni registros.</p></div>
-    <div><h3>Guarda tu lista</h3><p>Agrega los que te gusten a Mi lista; se queda guardada en tu navegador.</p></div>
-    <div><h3>Pide por donde prefieras</h3><p>Mándanos tu lista por WhatsApp, Instagram o Facebook y te confirmamos disponibilidad, envío y pago.</p></div>
+  <!-- Tres razones, con su ícono; aparecen una tras otra al llegar a ellas -->
+  <section id="confianza"><div class="in">
+    <p class="hs-k rz-k">así de fácil</p>
+    <div class="trust rz">
+      <div><span class="rz-i" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg></span><span class="rz-n">01</span><h3>Descubre sin presión</h3><p>Busca por nombre o aroma y compara lado a lado. Sin cuentas ni registros.</p></div>
+      <div><span class="rz-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20s-8-5-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15 12 20 12 20z"/></svg></span><span class="rz-n">02</span><h3>Guarda tu lista</h3><p>Agrega los que te gusten a Mi lista; se queda guardada en tu navegador.</p></div>
+      <div><span class="rz-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 3L3 10.5l7 2.5 2.5 7z"/><path d="M10 13l11-10"/></svg></span><span class="rz-n">03</span><h3>Pide por donde prefieras</h3><p>Mándanos tu lista por WhatsApp, Instagram o Facebook y te confirmamos disponibilidad, envío y pago.</p></div>
+    </div>
   </div></section>
 </main>

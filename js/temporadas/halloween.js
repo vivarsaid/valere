@@ -127,9 +127,9 @@ const Halloween = (() => {
     poner("moon", { right: "5%", top: "6px", "--s": "84px", "--d": "7s", "--fy": "-6px" }, { gl: "255,214,140" });
     poner("star", { right: "20%", top: "46px", "--s": "22px", "--d": "3s" }, { gl: "255,230,150" });
     poner("star", { right: "3%", top: "120px", "--s": "16px", "--d": "4s", "--dl": "-1s" }, { gl: "255,230,150" });
-    // Las de abajo se paran sobre la orilla de arriba del carrusel (--car-h, en
-    // css/carrusel.css), para no tapar sus flechas ni el número.
-    const sobre = (px) => `calc(var(--car-h, 0px) + ${px}px)`;
+    // Las de abajo flotan encima de la barra de datos del carrusel (que llena la
+    // primera pantalla), para no tapar sus flechas ni el número.
+    const sobre = (px) => `calc(var(--car-info-h, 150px) + ${px}px)`; // arriba de la barra de datos del carrusel
     poner("pumpkin", { left: "2.5%", bottom: sobre(10), "--s": "76px", "--d": "5s" }, calabaza);
     poner("ghost", { right: "3.5%", bottom: sobre(40), "--s": "66px", "--d": "6s", "--fy": "-14px" }, espectro);
     poner("flower", { left: "13%", bottom: sobre(16), "--s": "44px", "--d": "7s" }, calabaza);

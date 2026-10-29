@@ -18,6 +18,55 @@
   margin-bottom: 24px;
 }
 
+/* Encabezado: palabra en cursiva, título y descripción */
+.pg-c {
+  margin-bottom: 32px;
+}
+.pg-c .sub2 {
+  max-width: 34em;
+}
+
+/* Kits: "El perfume · Su complemento · Listo para regalar" */
+.kt-v {
+  list-style: none;
+  margin: 0 0 32px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.kt-v li {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 14px;
+  align-items: center;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: var(--surf);
+  border: 1px solid color-mix(in srgb, var(--acc) 22%, transparent);
+}
+.kt-v svg {
+  grid-row: 1 / 3;
+  width: 44px;
+  height: 44px;
+  padding: 9px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--acc) 16%, transparent);
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.kt-v b {
+  font-weight: 600;
+}
+.kt-v span {
+  color: var(--mut);
+  font-size: 14px;
+}
+
 /* Buscador con lupa */
 .tools {
   display: flex;
@@ -133,12 +182,54 @@
     border-color 0.3s,
     box-shadow 0.35s;
 }
-/* Al pasar el mouse: la tarjeta sube y el frasco crece un poco */
+/* Al pasar el mouse: la tarjeta sube, el borde toma el color del perfume, una luz
+   sigue al mouse (--mx/--my los pone js/app.js) y el frasco se eleva */
+.card {
+  position: relative;
+  isolation: isolate;
+}
+.card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 30%),
+    color-mix(in srgb, var(--pc, #fff) 30%, transparent),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.35s;
+  pointer-events: none;
+}
 @media (hover: hover) {
   .card:hover {
-    transform: translateY(-4px);
-    border-color: var(--line);
-    box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.9);
+    transform: translateY(-5px);
+    border-color: color-mix(in srgb, var(--pc, #fff) 45%, var(--line));
+    box-shadow:
+      0 22px 46px -24px rgba(0, 0, 0, 0.95),
+      0 0 0 1px color-mix(in srgb, var(--pc, #fff) 18%, transparent);
+  }
+  .card:hover::after {
+    opacity: 1;
+  }
+  /* "+ Mi lista" con un brillo que lo cruza */
+  .card .cp.sv {
+    position: relative;
+    overflow: hidden;
+  }
+  .card .cp.sv::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.85) 50%, transparent 70%);
+    transform: translateX(-120%);
+    pointer-events: none;
+  }
+  .card:hover .cp.sv::before {
+    transition: transform 0.7s ease;
+    transform: translateX(120%);
   }
   .card .bt > svg,
   .card .bt > .ph {
@@ -171,7 +262,39 @@ a.main {
   place-items: center;
   margin-bottom: 16px;
   border-radius: 16px;
-  background: radial-gradient(ellipse 70% 60% at 50% 58%, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0) 72%);
+  /* resplandor del color del perfume (--pc lo pone js/vistas/catalogo.js) */
+  background: radial-gradient(
+      ellipse 62% 58% at 50% 60%,
+      color-mix(in srgb, var(--pc, #fff) 42%, transparent),
+      transparent 74%
+    ),
+    radial-gradient(ellipse 70% 60% at 50% 58%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 72%);
+}
+/* Kits: etiqueta "Kit" con moño, abajo a la derecha del frasco */
+.bt .kt {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 99px;
+  background: var(--fg);
+  color: var(--bg);
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 600;
+}
+.bt .kt::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='10' width='18' height='11' rx='1.5'/%3E%3Cpath d='M12 10v11M12 10c-1-3-3-5-5-5a2.5 2.5 0 0 0 0 5zM12 10c1-3 3-5 5-5a2.5 2.5 0 0 1 0 5z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='10' width='18' height='11' rx='1.5'/%3E%3Cpath d='M12 10v11M12 10c-1-3-3-5-5-5a2.5 2.5 0 0 0 0 5zM12 10c1-3 3-5 5-5a2.5 2.5 0 0 1 0 5z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
 }
 .card .bt svg {
   height: 100%;
@@ -194,7 +317,7 @@ a.main {
   color: var(--mut);
 }
 .card b {
-  font-size: 19px;
+  font-size: 23px;
   line-height: 1.2;
   font-weight: 600;
   margin-top: 2px;
@@ -245,37 +368,7 @@ a.main {
   color: var(--acc);
 }
 
-/* ── Examen de gustos ──
-   .ex-b  el botón "✨ Ayúdame a elegir" junto al título
-   .ex    la tarjeta grande dentro de la cuadrícula (ocupa todo el renglón) */
-.ex-b {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
-  border-radius: 99px;
-  background: linear-gradient(120deg, var(--acc), #b57bff);
-  color: #120a1c;
-  font-size: 15px;
-  font-weight: 600;
-  box-shadow: 0 10px 30px -12px rgba(181, 123, 255, 0.7);
-  transition:
-    transform 0.25s cubic-bezier(0.3, 0.9, 0.3, 1.3),
-    box-shadow 0.25s;
-}
-.ex-b:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 34px -12px rgba(181, 123, 255, 0.9);
-}
-.ex-b:active {
-  transform: scale(0.95);
-}
-.ex-b svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-}
-
+/* ── Examen de gustos: la tarjeta grande dentro de la cuadrícula (ocupa todo el renglón) ── */
 .ex {
   grid-column: 1 / -1;
   position: relative;
@@ -378,6 +471,10 @@ html.lite .ex::after {
 }
 
 @media (max-width: 700px) {
+  .kt-v {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
   /* los filtros se deslizan de lado, sin bajar de renglón */
   .fl {
     margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
@@ -398,11 +495,7 @@ html.lite .ex::after {
     flex-wrap: wrap;
     gap: 10px 14px;
   }
-  /* examen: el botón va abajo del título y la tarjeta se acomoda en columna */
-  .ex-b {
-    font-size: 14px;
-    padding: 9px 16px;
-  }
+  /* examen: la tarjeta se acomoda en columna */
   .ex {
     grid-template-columns: auto 1fr;
     gap: 16px 18px;
@@ -440,7 +533,7 @@ html.lite .ex::after {
     height: 130px;
   }
   .card b {
-    font-size: 16px;
+    font-size: 19px;
   }
   .card .bt .ph {
     height: 130px;

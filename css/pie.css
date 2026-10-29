@@ -52,7 +52,10 @@ footer .lg a:hover {
   color: var(--fg);
 }
 
-/* Con la barrita de comparar visible, el pie deja espacio para que no la tape */
+/* Con la barrita de abajo visible, la página y el pie dejan espacio para que no tape nada */
+body:has(#cb:not([hidden])) main {
+  padding-bottom: 80px;
+}
 body:has(#cb:not([hidden])) footer {
   padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px));
 }

@@ -14,7 +14,7 @@ Sitio para descubrir, comparar y guardar perfumes, y mandar la lista por WhatsAp
 | Elegir qué perfumes salen en el carrusel (opcional) | `data/perfumes.json` → `"masVendido": 1, 2, 3…` (sin ninguno, salen todos) |
 | Cambiar WhatsApp, redes, correo, regalo, 3D del carrusel, fechas del tema | `js/config.js` → luego *Generar páginas* |
 | Cambiar el Aviso de privacidad o los Términos (y su fecha) | `plantillas/paginas/privacidad.html`, `terminos.html` |
-| Cambiar colores | `css/base.css` (`:root`) → luego *Generar páginas* |
+| Cambiar colores o letras | `css/base.css` (`:root`) → luego *Generar páginas* |
 | Cambiar menú, pie o algo de todas las páginas | `plantillas/` → luego *Generar páginas* |
 
 > Los `.html` de la raíz se generan solos desde `plantillas/`. Edita las plantillas y corre

@@ -76,17 +76,19 @@ En **todas** las páginas están la cabecera, el pie (con los enlaces legales), 
 | 13 | `js/interfaz/ventanas.js` | `Ventanas` | Abrir/cerrar ventanas, botón Atrás, doble toque |
 | 14 | `js/frascos/fotos.js` | `Frascos` | Decide si el frasco va en 3D, con foto o dibujado, y lo pinta |
 | 15 | `js/frascos/motor3d.js` | `Motor3D` | Motor 3D propio con WebGL (apagado con `VISTA_3D: false`) |
-| 16 | `js/vistas/catalogo.js` | `VistaCatalogo` | Tarjetas, filtros, orden, búsqueda y la invitación al examen dentro de la cuadrícula |
-| 17 | `js/vistas/producto.js` | `VistaProducto` | Detalle del perfume |
-| 18 | `js/vistas/mi-lista.js` | `VistaLista` | Dibuja Mi lista: pasos, tarjetas, «Te puede gustar» y resumen |
-| 19 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador y selector (si no eligieron nada, pone dos de ejemplo que no se guardan) |
-| 20 | `js/vistas/barra.js` | `Barra` | Barrita flotante: comparar y «Finalizar compra» (abre Mi lista) |
-| 21 | `js/vistas/carrusel.js` | `Carrusel` | Carrusel 3D de la portada (Three.js, se descarga después; ver abajo) |
-| 22 | `js/vistas/nosotros.js` | `VistaNosotros` | Nosotros: números del catálogo, color al bajar por los capítulos y pirámide olfativa |
-| 23 | `js/vistas/examen.js` | `Examen` | Examen de gustos y recomendación |
-| 24 | `js/vistas/bienvenida.js` | `Bienvenida` | Acomoda el acento de la animación y la quita al terminar |
-| 25 | `js/temporadas/halloween.js` | `Halloween` | Figuras, ambientes y efectos de temporada |
-| 26 | `js/app.js` | `App` | **Conecta todo** y arranca (ver abajo) |
+| 16 | `js/frascos/taller3d.js` | `Taller3D` | Arma los frascos 3D con Three.js (lo usan el carrusel y el detalle) |
+| 17 | `js/frascos/vitrina3d.js` | `Vitrina3D` | El frasco 3D que gira en el detalle del perfume |
+| 18 | `js/vistas/catalogo.js` | `VistaCatalogo` | Tarjetas, filtros, orden, búsqueda y la invitación al examen dentro de la cuadrícula |
+| 19 | `js/vistas/producto.js` | `VistaProducto` | Detalle del perfume |
+| 20 | `js/vistas/mi-lista.js` | `VistaLista` | Dibuja Mi lista: pasos, tarjetas, «Te puede gustar» y resumen |
+| 21 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador en tablero (fichas, radar de aromas, veredictos, números, en común y tabla de notas; cada perfume con un color distinto) y selector. Sin 2 perfumes elegidos muestra dos lugares vacíos |
+| 22 | `js/vistas/barra.js` | `Barra` | Barrita flotante: comparar y «Finalizar compra» (abre Mi lista) |
+| 23 | `js/vistas/carrusel.js` | `Carrusel` | Carrusel 3D de la portada (Three.js, se descarga después; ver abajo) |
+| 24 | `js/vistas/nosotros.js` | `VistaNosotros` | Nosotros: números del catálogo, color al bajar por los capítulos y pirámide olfativa |
+| 25 | `js/vistas/examen.js` | `Examen` | Examen de gustos y recomendación |
+| 26 | `js/vistas/bienvenida.js` | `Bienvenida` | Acomoda el acento de la animación y la quita al terminar |
+| 27 | `js/temporadas/halloween.js` | `Halloween` | Figuras, ambientes y efectos de temporada |
+| 28 | `js/app.js` | `App` | **Conecta todo** y arranca (ver abajo) |
 
 ### El carrusel 3D de la portada
 
@@ -137,6 +139,7 @@ App.iniciar()
 | `alternar-comparar`, `comparar-con` | Tarjetas, detalle | Agregar o quitar de la comparación |
 | `abrir-selector`, `elegir-perfume`, `cerrar-selector` | Comparador | "Cambiar perfume" |
 | `agregar-a-comparacion`, `quitar-de-comparacion`, `limpiar-comparacion` | Comparador, barrita | Tercer perfume, quitar, vaciar |
+| `voltear-veredicto` | Comparar | Voltea una tarjeta de veredicto para ver el dato de cada perfume |
 | `abrir-examen`, `examen-*` | Descubrir (botón junto al título y tarjeta en la cuadrícula) | Examen de gustos |
 | `cerrar`, `saltar-bienvenida` | Ventanas, portada | Cerrar ventana, saltar animación |
 
@@ -150,18 +153,18 @@ Cada archivo es un tema. **El orden importa**: los de abajo pueden ajustar a los
 |---|---|
 | `base.css` | **Colores** (`:root`), letra, reglas generales |
 | `componentes.css` | Botones (y sus animaciones), chips, etiqueta de descuento, frasco, vuelo a Mi lista, bloques de tres columnas |
-| `cabecera.css` | Barra de arriba, logo, menú (en celular, el panel ☰) y "Mi lista" |
+| `cabecera.css` | Barra de arriba (se esconde al bajar y regresa al subir, con línea de avance), logo, menú con la lámpara (en celular, el panel ☰) y "Mi lista" |
 | `pie.css` | Pie de página |
 | `dialogos.css` | Lo común a todas las ventanas |
 | `avisos.css` | Aviso corto de abajo |
 | `bienvenida.css` | Animación de entrada |
 | `portada.css` | Portada |
-| `carrusel.css` | Carrusel 3D de la portada |
+| `carrusel.css` | Carrusel 3D de la portada, a pantalla completa con el título adentro |
 | `catalogo.css` | Buscador, filtros (para quién y precio), orden y tarjetas |
-| `producto.css` | Detalle del perfume |
+| `producto.css` | Detalle del perfume (frasco sobre su color y en 3D) |
 | `mi-lista.css` | Mi lista (pasos, tarjetas, sugerencias, resumen), regalo y su aviso |
 | `comparador.css` | Barrita (comparar y finalizar compra), comparador y selector |
-| `examen.css` | Examen de gustos |
+| `examen.css` | Examen de gustos (mosaicos con ícono, barra de avance y resultado) |
 | `paginas.css` | Títulos de página, Contacto, Nosotros y páginas legales |
 | `pantallas-especiales.css` | Plegables, navegadores viejos, menos transparencia/movimiento |
 | `modo-ligero.css` | Menos efectos en equipos modestos |
@@ -228,6 +231,10 @@ Campos de `modelos`: `foto` (nombre del .webp), `c` color del frasco, `v` 1 = vi
 
 **Cambiar un color de todo el sitio** → `css/base.css`, en `:root`, y luego *Generar páginas*.
 
+**Cambiar las letras** → en `css/base.css` (`:root`): `--titulo` (títulos y nombres de perfume, Cormorant Garamond), `--sys` (texto y descripciones, Montserrat) y `--script` (logo y palabras sueltas, Pinyon Script). Si cambias de letra, cambia también el link de Google Fonts en `plantillas/comun-arriba.html`.
+
+**Cambiar el ícono de la pestaña** → `images/logo.svg` (y `images/logo-180.png` para iPhone).
+
 **Cambiar el menú, el pie o algo que está en todas las páginas**
 1. Edita `plantillas/comun-arriba.html` o `plantillas/comun-abajo.html`.
 2. En VS Code: *Terminal → Ejecutar tarea… → Generar páginas*.
@@ -257,4 +264,5 @@ Campos de `modelos`: `foto` (nombre del .webp), `c` color del frasco, `v` 1 = vi
 
 - Todo se formatea con **Prettier** (reglas en `.prettierrc.json`). Con la extensión de Prettier en VS Code se acomoda solo al guardar.
 - Nombres y comentarios en español.
+- Sin emojis en la página: los íconos son trazos SVG de línea (ver `TRAZOS` en `js/vistas/examen.js`).
 - Cada archivo empieza con un bloque que dice qué hace, qué usa y qué expone. Si agregas un archivo, sigue el mismo formato y anótalo en esta guía.
