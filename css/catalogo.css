@@ -182,12 +182,54 @@
     border-color 0.3s,
     box-shadow 0.35s;
 }
-/* Al pasar el mouse: la tarjeta sube y el frasco crece un poco */
+/* Al pasar el mouse: la tarjeta sube, el borde toma el color del perfume, una luz
+   sigue al mouse (--mx/--my los pone js/app.js) y el frasco se eleva */
+.card {
+  position: relative;
+  isolation: isolate;
+}
+.card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 30%),
+    color-mix(in srgb, var(--pc, #fff) 30%, transparent),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.35s;
+  pointer-events: none;
+}
 @media (hover: hover) {
   .card:hover {
-    transform: translateY(-4px);
-    border-color: var(--line);
-    box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.9);
+    transform: translateY(-5px);
+    border-color: color-mix(in srgb, var(--pc, #fff) 45%, var(--line));
+    box-shadow:
+      0 22px 46px -24px rgba(0, 0, 0, 0.95),
+      0 0 0 1px color-mix(in srgb, var(--pc, #fff) 18%, transparent);
+  }
+  .card:hover::after {
+    opacity: 1;
+  }
+  /* "+ Mi lista" con un brillo que lo cruza */
+  .card .cp.sv {
+    position: relative;
+    overflow: hidden;
+  }
+  .card .cp.sv::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.85) 50%, transparent 70%);
+    transform: translateX(-120%);
+    pointer-events: none;
+  }
+  .card:hover .cp.sv::before {
+    transition: transform 0.7s ease;
+    transform: translateX(120%);
   }
   .card .bt > svg,
   .card .bt > .ph {

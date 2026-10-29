@@ -22,7 +22,22 @@ const VistaProducto = (() => {
     ["Fondo", "fondo"],
   ];
 
-  const precioHTML = () => `${Formato.precio(actual, tam)} ${Formato.etiqueta(actual, tam)}`;
+  // Íconos de cada capa de notas (gota, corazón, capas)
+  const ICONO_CAPA = {
+    salida: '<path d="M12 3C8 8.5 6 12 6 15a6 6 0 0 0 12 0c0-3-2-6.5-6-12z"/>',
+    corazon: '<path d="M12 20s-8-5-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15 12 20 12 20z"/>',
+    fondo: '<path d="M12 4L3 9l9 5 9-5z"/><path d="M3 13l9 5 9-5"/>',
+  };
+  const icono = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONO_CAPA[k]}</svg>`;
+
+  /** Precio del tamaño elegido, su descuento y cuánto se ahorra. */
+  const precioHTML = () => {
+    const antes = Catalogo.precioAntes(actual, tam);
+    return (
+      `${Formato.precio(actual, tam)} ${Formato.etiqueta(actual, tam)}` +
+      (antes ? `<span class="ah">Ahorras ${Formato.dinero(antes - actual.precios[tam])}</span>` : "")
+    );
+  };
   const esVentana = () => {
     const d = $("#pd");
     return !!d && d.tagName === "DIALOG";
@@ -48,8 +63,17 @@ const VistaProducto = (() => {
         }</dd></dl>`
       : "";
     const capas = CAPAS.filter(([, k]) => p.notas[k].length);
+    // Notas: un renglón por capa, con su ícono y cada nota en una pastilla
     const notas = capas.length
-      ? `<dl>${capas.map(([titulo, k]) => `<dt>${titulo}</dt><dd>${E(p.notas[k].join(", "))}</dd>`).join("")}</dl>`
+      ? `<div class="nts">` +
+        capas
+          .map(
+            ([titulo, k]) =>
+              `<div class="nt-f"><span class="nt-i">${icono(k)}</span><div><small>${titulo}</small>` +
+              `<p>${p.notas[k].map((n) => `<i>${E(n)}</i>`).join("")}</p></div></div>`
+          )
+          .join("") +
+        `</div>`
       : "";
     const tamanos = Object.keys(p.precios)
       .map(
@@ -59,17 +83,18 @@ const VistaProducto = (() => {
       .join("");
 
     el.classList.remove("vacio");
+    el.style.setProperty("--pc", p.color); // el color del perfume para los brillos
     el.innerHTML =
       (ventana ? `<button class="x" data-accion="cerrar" aria-label="Cerrar">×</button>` : "") +
       `<div class="im" style="--pc:${E(p.color)}">${Formato.frasco(p)}</div>` +
       `<div class="tx">` +
-      `<small>${E(p.marca)}</small><${H}>${E(p.nombre)}</${H}>` +
+      `<small class="mk">${E(p.marca)}</small><${H}>${E(p.nombre)}</${H}>` +
       `<p class="fam">${E(Formato.GENERO[p.genero] || "Perfume")} · ${E(p.familia)}</p>` +
       incluye +
       notas +
       `<div class="sz">${tamanos}</div>` +
       `<div id="pp">${precioHTML()}</div>` +
-      `<button class="btn" data-accion="guardar-perfume">Guardar en mi lista</button>` +
+      `<button class="btn gd" data-accion="guardar-perfume">Guardar en mi lista</button>` +
       `<button class="btn o" data-accion="comparar-con" data-id="${E(p.id)}">Comparar con otro ›</button>` +
       `</div>`;
 

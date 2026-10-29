@@ -20,10 +20,6 @@ const Comparador = (() => {
   const MAXIMO = 3;
   const E = Formato.escapar;
   let seleccion = []; // ids de los perfumes que se comparan
-  // true = la persona no eligió nada y Comparar puso dos de ejemplo.
-  // Los de ejemplo no se guardan (si no, la barrita "X vs Y" saldría en todas
-  // las páginas sin que nadie los eligiera).
-  let deEjemplo = false;
   let columnaCambiando = -1; // qué columna se está cambiando en el selector
   let tCerrarSelector = 0;
 
@@ -62,7 +58,7 @@ const Comparador = (() => {
   /** Limpia la selección, la guarda y actualiza los botones y la barrita. */
   function marcar() {
     seleccion = seleccion.filter((id, k) => Catalogo.buscar(id) && seleccion.indexOf(id) === k).slice(0, MAXIMO);
-    if (!deEjemplo) Almacen.guardar(CLAVE, seleccion);
+    Almacen.guardar(CLAVE, seleccion);
 
     $$('[data-accion="alternar-comparar"]').forEach((b) => {
       const elegido = seleccion.includes(b.dataset.id);
@@ -75,9 +71,30 @@ const Comparador = (() => {
 
   /* ── El comparador ───────────────────────────────────────────────────────── */
 
+  /**
+   * Con menos de 2 perfumes no hay tabla: se ven dos lugares ("＋ Elegir
+   * perfume") para escogerlos. Así nunca se compara nada que no se eligió.
+   */
+  function pintarVacio(ps) {
+    const lugar = (k) => {
+      const p = ps[k];
+      return p
+        ? `<div class="cv-l lleno" style="--pc:${E(p.color)}"><div class="ct">${Formato.frasco(p)}</div>` +
+            `<small>${E(p.marca)}</small><b>${E(p.nombre)}</b>` +
+            `<button class="sw" data-accion="abrir-selector" data-columna="${k}">Cambiar</button></div>`
+        : `<button class="cv-l" data-accion="abrir-selector" data-columna="${k}" aria-haspopup="dialog">` +
+            `<span class="cv-mas" aria-hidden="true">+</span><b>Elegir perfume</b><small>${k ? "el segundo" : "el primero"}</small></button>`;
+    };
+    $("#cm .cb").innerHTML =
+      `<div class="cv"><div class="cv-g">${lugar(0)}<span class="cv-vs" aria-hidden="true">vs</span>${lugar(1)}</div>` +
+      `<p class="lead">Elige dos perfumes y te mostramos lado a lado sus notas, su estilo y su precio. También puedes tocar «Comparar» en cualquier tarjeta de Descubrir.</p>` +
+      `<p class="cv-ir"><a class="btn l" href="descubrir.html">Ir a Descubrir</a></p></div>`;
+  }
+
   function pintar() {
     const ps = perfumes();
     const n = ps.length;
+    if (n < 2) return pintarVacio(ps);
     const M = Formato.dinero;
     const notas = (p, capa) => p.notas[capa];
 
@@ -197,9 +214,8 @@ const Comparador = (() => {
     cm.querySelector(".cb").innerHTML =
       encabezado +
       frascos +
-      (deEjemplo
-        ? `<p class="lead ej">Estos dos son de ejemplo. Toca «Cambiar perfume» para elegir los que quieras comparar.</p>`
-        : `<p class="lead">Las notas que se repiten aparecen resaltadas; al final las juntamos en el centro.</p>`) +
+      `<p class="lead">Las notas que se repiten aparecen resaltadas; al final las juntamos en el centro.</p>` +
+      `<p class="cm-q"><button data-accion="limpiar-comparacion">× Quitar comparación</button></p>` +
       estilo +
       CAPAS.map(seccionNotas).join("") +
       precios +
@@ -220,8 +236,6 @@ const Comparador = (() => {
       return Pagina.ir("comparar.html");
     }
     if (Catalogo.todos().length < 2) return Avisos.corto("Agrega al menos 2 perfumes para comparar");
-    if (seleccion.length < 2) deEjemplo = true;
-    while (seleccion.length < 2) seleccion.push(primeroSinElegir().id);
     repintar();
     if (cm.tagName === "DIALOG") Ventanas.abrir(cm);
   }
@@ -273,8 +287,7 @@ const Comparador = (() => {
   }
 
   function elegir(id) {
-    deEjemplo = false;
-    const k = columnaCambiando;
+    const k = Math.min(columnaCambiando, seleccion.length); // un lugar vacío se llena al final
     seleccion[k] = id;
     cerrarSelector();
     repintar();
@@ -311,7 +324,6 @@ const Comparador = (() => {
 
     /** Botón "Comparar" de una tarjeta: agrega o quita (si ya hay 3, sale el más viejo). */
     alternar(id) {
-      deEjemplo = false;
       const k = seleccion.indexOf(id);
       if (k >= 0) seleccion.splice(k, 1);
       else {
@@ -322,7 +334,6 @@ const Comparador = (() => {
     },
     /** "Comparar con otro" en el detalle: agrega este perfume y abre el comparador. */
     con(id) {
-      deEjemplo = false;
       if (!seleccion.includes(id)) {
         if (seleccion.length >= MAXIMO) seleccion.shift();
         seleccion.push(id);
@@ -331,21 +342,20 @@ const Comparador = (() => {
       abrir();
     },
     quitar(columna) {
-      deEjemplo = false;
       seleccion.splice(columna, 1);
       repintar();
     },
     agregarOtro() {
-      deEjemplo = false;
       const p = primeroSinElegir();
       if (p && seleccion.length < MAXIMO) {
         seleccion.push(p.id);
         repintar();
       }
     },
+    /** "Quitar comparación": vacía la selección (en comparar.html quedan los lugares vacíos). */
     limpiar() {
-      deEjemplo = false;
       seleccion = [];
+      if ($("#cm .cb")) pintar();
       marcar();
     },
   };

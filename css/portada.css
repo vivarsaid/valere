@@ -36,6 +36,110 @@
 
 /* El carrusel 3D que va debajo tiene su propio archivo: css/carrusel.css */
 
+/* ── Las tres razones (#confianza): tarjetas con ícono que aparecen una tras otra ── */
+.rz-k {
+  text-align: center;
+}
+.trust.rz {
+  margin-top: 18px;
+  gap: 16px;
+}
+.rz > div {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 28px 26px 26px;
+  border-radius: 22px;
+  background: var(--surf);
+  border: 1px solid transparent;
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.3s;
+}
+/* brillo bronce en la esquina, que crece al pasar el mouse */
+.rz > div::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -40%;
+  right: -30%;
+  width: 80%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--acc) 28%, transparent), transparent);
+  opacity: 0.6;
+  transition:
+    transform 0.5s,
+    opacity 0.4s;
+}
+.rz > div:hover {
+  transform: translateY(-5px);
+  border-color: color-mix(in srgb, var(--acc) 40%, transparent);
+}
+.rz > div:hover::before {
+  transform: scale(1.35);
+  opacity: 1;
+}
+.rz-i {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 18px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--acc) 16%, transparent);
+  transition: transform 0.4s cubic-bezier(0.3, 0.9, 0.3, 1.4);
+}
+.rz > div:hover .rz-i {
+  transform: rotate(-8deg) scale(1.08);
+}
+.rz-i svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.rz-n {
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  font: italic 500 30px/1 var(--elegante);
+  color: color-mix(in srgb, var(--fg) 22%, transparent);
+}
+.rz h3 {
+  font-family: var(--titulo);
+  font-size: 23px;
+}
+/* aparecer una tras otra al llegar (#confianza.vista la pone js/app.js) */
+#confianza .rz > div {
+  opacity: 0;
+  translate: 0 26px;
+  transition:
+    opacity 0.6s,
+    translate 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.3s;
+}
+#confianza.vista .rz > div {
+  opacity: 1;
+  translate: 0 0;
+}
+#confianza.vista .rz > div:nth-child(2) {
+  transition-delay: 0.12s, 0.12s, 0s, 0s;
+}
+#confianza.vista .rz > div:nth-child(3) {
+  transition-delay: 0.24s, 0.24s, 0s, 0s;
+}
+@media (prefers-reduced-motion: reduce) {
+  #confianza .rz > div {
+    opacity: 1;
+    translate: none;
+  }
+}
+
 /* Rendimiento: no se dibuja hasta que se acerca a la pantalla */
 #confianza {
   content-visibility: auto;

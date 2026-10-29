@@ -2,8 +2,9 @@
    VITRINA 3D: EL FRASCO QUE GIRA EN EL DETALLE DEL PERFUME (perfume.html)
    -----------------------------------------------------------------------------
    Pone, encima del frasco plano, el mismo frasco en 3D que se ve en el
-   carrusel (js/frascos/taller3d.js). Gira despacio solo; con el dedo o el
-   mouse se puede girar. Mientras Three.js no carga, se ve el frasco plano.
+   carrusel (js/frascos/taller3d.js). Gira despacio solo; con el dedo, el
+   mouse o la barra de abajo (‹ ━━●━━ ›) se puede girar. Mientras Three.js no
+   carga, se ve el frasco plano.
 
    · No dibuja si no se ve, si la pestaña está oculta o hay una ventana abierta.
    · En modo ligero, sin WebGL o con AJUSTES.CARRUSEL_3D = false se queda plano.
@@ -70,9 +71,28 @@ const Vitrina3D = (() => {
       despertar();
     }
 
-    /* Girar con el dedo o el mouse (de lado); arriba-abajo sigue bajando la página */
     let giro = 0.5; // ángulo actual
     let velocidad = sinMovimiento ? 0 : 0.45; // rad/s, el giro solo
+    /* Barra para girar (‹ ━━●━━ ›): al moverla, el frasco va a ese ángulo y deja de girar solo */
+    const barra = document.createElement("label");
+    barra.className = "vt-giro";
+    barra.innerHTML =
+      '<span aria-hidden="true">‹</span><input type="range" min="0" max="360" step="1" value="30" aria-label="Girar el frasco"><span aria-hidden="true">›</span>';
+    caja.appendChild(barra);
+    const deslizador = barra.querySelector("input");
+    const pintarBarra = () => {
+      const grados = ((((giro * 180) / Math.PI) % 360) + 360) % 360;
+      deslizador.value = Math.round(grados);
+      deslizador.style.setProperty("--avance", (grados / 360) * 100 + "%");
+    };
+    deslizador.addEventListener("input", () => {
+      velocidad = 0; // ya lo está girando la persona
+      giro = (+deslizador.value * Math.PI) / 180;
+      deslizador.style.setProperty("--avance", (+deslizador.value / 360) * 100 + "%");
+      despertar();
+    });
+
+    /* Girar con el dedo o el mouse (de lado); arriba-abajo sigue bajando la página */
     let arrastre = null;
     lienzo.addEventListener("pointerdown", (e) => {
       arrastre = { x: e.clientX, g: giro, id: e.pointerId };
@@ -109,6 +129,7 @@ const Vitrina3D = (() => {
       t += dt;
       if (!arrastre) giro += velocidad * dt;
       frasco.rotation.set(0.06, giro, 0);
+      if (velocidad || arrastre) pintarBarra();
       frasco.position.y = sinMovimiento ? 0 : Math.sin(t * 1.1) * 0.08;
       renderer.render(escena, camara);
       dibujarUnaVez = false;
@@ -150,6 +171,7 @@ const Vitrina3D = (() => {
         if (vigiaTamano) vigiaTamano.disconnect();
         vigiaVentanas.disconnect();
         document.removeEventListener("visibilitychange", alCambiarPestana);
+        barra.remove();
         renderer.dispose();
         try {
           renderer.forceContextLoss();

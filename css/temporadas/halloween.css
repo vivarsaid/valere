@@ -312,7 +312,8 @@ html.hw .card .bt > .kt,
 html.hw .card .bt > .dk,
 html.hw .cg .ct > .dk,
 html.hw #pd .im > .dk,
-html.hw #pd .im > .vt-gl {
+html.hw #pd .im > .vt-gl,
+html.hw #pd .im > .vt-giro {
   position: absolute;
 }
 html.hw .card:hover .bt::before,
