@@ -152,7 +152,7 @@ Cada archivo es un tema. **El orden importa**: los de abajo pueden ajustar a los
 |---|---|
 | `base.css` | **Colores** (`:root`), letra, reglas generales |
 | `componentes.css` | Botones (y sus animaciones), chips, etiqueta de descuento, frasco, vuelo a Mi lista, bloques de tres columnas |
-| `cabecera.css` | Barra de arriba, logo, menú (en celular, el panel ☰) y "Mi lista" |
+| `cabecera.css` | Barra de arriba, logo, menú con la lámpara que se desliza (en celular, el panel ☰) y "Mi lista" |
 | `pie.css` | Pie de página |
 | `dialogos.css` | Lo común a todas las ventanas |
 | `avisos.css` | Aviso corto de abajo |

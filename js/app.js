@@ -51,6 +51,41 @@ const App = (() => {
     b.setAttribute("aria-label", abrir ? "Cerrar menú" : "Abrir menú");
   }
 
+  /**
+   * La lámpara del menú (compu): se acomoda sobre la sección actual y se
+   * desliza al enlace que tenga el mouse o el foco. Ver css/cabecera.css.
+   */
+  function lamparaDelMenu() {
+    const nav = $("#menu");
+    const luz = nav && $(".luz", nav);
+    if (!luz) return;
+    const enlaces = $$("a", nav);
+    const actual = $('a[aria-current="page"]', nav);
+    const alumbrar = (a) => {
+      enlaces.forEach((x) => x.classList.toggle("alumbrado", x === a));
+      if (!a) return luz.classList.remove("on");
+      luz.style.setProperty("--x", a.offsetLeft + "px");
+      luz.style.setProperty("--w", a.offsetWidth + "px");
+      luz.classList.add("on");
+    };
+    const regresar = () => alumbrar(actual);
+    enlaces.forEach((a) => {
+      a.addEventListener("mouseenter", () => alumbrar(a));
+      a.addEventListener("focus", () => alumbrar(a));
+    });
+    nav.addEventListener("mouseleave", regresar);
+    nav.addEventListener("focusout", (e) => {
+      if (!nav.contains(e.relatedTarget)) regresar();
+    });
+    // al cargar la letra o cambiar el tamaño, los enlaces se mueven: se vuelve a acomodar
+    addEventListener("resize", regresar);
+    if (document.fonts) document.fonts.ready.then(regresar);
+    // la primera vez aparece sin deslizarse
+    luz.style.transition = "none";
+    regresar();
+    requestAnimationFrame(() => requestAnimationFrame(() => (luz.style.transition = "")));
+  }
+
   /* ── Qué hace cada botón (data-accion) ───────────────────────────────────── */
   const ACCIONES = {
     // Mi lista
@@ -169,6 +204,10 @@ const App = (() => {
         scrollTo({ top: 0, behavior: "smooth" });
       }
     });
+
+    try {
+      lamparaDelMenu();
+    } catch (e) {}
 
     // Menú de celular: se cierra al tocar fuera de la cabecera, con Escape o al hacerse ancha la pantalla.
     document.addEventListener("click", (e) => {
