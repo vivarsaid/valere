@@ -81,7 +81,7 @@ En **todas** las páginas están la cabecera, el pie (con los enlaces legales), 
 | 18 | `js/vistas/catalogo.js` | `VistaCatalogo` | Tarjetas, filtros, orden, búsqueda y la invitación al examen dentro de la cuadrícula |
 | 19 | `js/vistas/producto.js` | `VistaProducto` | Detalle del perfume |
 | 20 | `js/vistas/mi-lista.js` | `VistaLista` | Dibuja Mi lista: pasos, tarjetas, «Te puede gustar» y resumen |
-| 21 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador (columnas de color, radar de aromas, veredictos y notas; cada perfume con un color distinto) y selector. Sin 2 perfumes elegidos muestra dos lugares vacíos |
+| 21 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador en tablero (fichas, radar de aromas, veredictos, números, en común y tabla de notas; cada perfume con un color distinto) y selector. Sin 2 perfumes elegidos muestra dos lugares vacíos |
 | 22 | `js/vistas/barra.js` | `Barra` | Barrita flotante: comparar y «Finalizar compra» (abre Mi lista) |
 | 23 | `js/vistas/carrusel.js` | `Carrusel` | Carrusel 3D de la portada (Three.js, se descarga después; ver abajo) |
 | 24 | `js/vistas/nosotros.js` | `VistaNosotros` | Nosotros: números del catálogo, color al bajar por los capítulos y pirámide olfativa |

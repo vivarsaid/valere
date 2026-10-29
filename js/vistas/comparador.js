@@ -235,6 +235,19 @@ const Comparador = (() => {
     return `<section class="sec vrs"><h3 class="cen">Veredictos</h3><div class="vr-g">${tarjetas.join("")}</div></section>`;
   }
 
+  /** Una frase corta según la familia del perfume (para la ficha). */
+  function fraseDe(p) {
+    const f = Texto.normalizar(p.familia + " " + p.nombre);
+    if (p.esKit) return "Un set listo para regalar.";
+    if (/gourmand|vainilla|dulce/.test(f)) return "Dulce y envolvente.";
+    if (/oriental|especiad|ambar|intens/.test(f)) return "Cálido e intenso.";
+    if (/amaderad/.test(f)) return "Profundo y elegante.";
+    if (/floral/.test(f)) return "Delicado y femenino.";
+    if (/citric|fresc|acuatic|verde/.test(f)) return "Fresco y ligero.";
+    if (/aromatic|fougere/.test(f)) return "Limpio y clásico.";
+    return "Un aroma para descubrir.";
+  }
+
   /* ── El comparador ───────────────────────────────────────────────────────── */
 
   /**
@@ -265,12 +278,6 @@ const Comparador = (() => {
     const M = Formato.dinero;
     const notas = (p, capa) => p.notas[capa];
 
-    /** Una fila con una columna por perfume (cada una con el color de su perfume en --pc). */
-    const columnas = (contenido, clase = "") =>
-      `<div class="cg${clase ? " " + clase : ""}" style="--n:${n}">` +
-      ps.map((p, k) => `<div class="col" style="--pc:${colores[k]}">${contenido(p, k)}</div>`).join("") +
-      `</div>`;
-
     /** Cuántos perfumes tienen cada nota (para resaltar las repetidas). */
     function conteo(capa) {
       const porPerfume = ps.map((p) => new Set(notas(p, capa).map(Texto.normalizar)));
@@ -287,114 +294,125 @@ const Comparador = (() => {
       return { porPerfume, veces, comunes };
     }
 
-    const seccionNotas = ([capa, titulo]) => {
-      const { veces } = conteo(capa);
-      const filas = (p) =>
-        notas(p, capa)
-          .map((t) => `<p${veces[Texto.normalizar(t)] > 1 ? ' class="sh2"' : ""}>${E(t)}</p>`)
-          .join("") || `<p class="mu">—</p>`;
-      // las notas van como pastillas; las que se repiten, en bronce
-      return (
-        `<section class="sec notas"><h3>${titulo}</h3>` +
-        columnas((p) => icono(capa) + `<div class="nt">${filas(p)}</div>`) +
-        `</section>`
-      );
-    };
-
-    /** Al final: las notas que comparten, centradas. */
-    function seccionEnComun() {
-      const filas = CAPAS.map(([capa, , corto]) => {
-        const { porPerfume, comunes } = conteo(capa);
-        if (!comunes.length) return "";
-        const lista = comunes
-          .map((t) => {
-            const quienes = ps.filter((p, j) => porPerfume[j].has(Texto.normalizar(t)));
-            const nota = quienes.length < n ? ` <i>(${quienes.map((p) => E(p.nombre)).join(", ")})</i>` : "";
-            return E(Texto.mayuscula(t)) + nota;
-          })
-          .join(" · ");
-        return `<div class="cr"><small>${corto}</small><span>${lista}</span></div>`;
-      }).join("");
-      return (
-        `<section class="sec"><h3 class="cen">Notas en común</h3>` +
-        `<div class="mid">${filas || `<span class="mu">Estos perfumes no comparten notas.</span>`}</div></section>`
-      );
-    }
-
     const cm = $("#cm");
     const esVentana = cm.tagName === "DIALOG";
     const barraVentana = esVentana
       ? `<div class="cb-bar"><span></span><b>Comparar perfumes</b><button class="cx" data-accion="cerrar" aria-label="Cerrar">×</button></div>`
       : "";
+    const SWAP = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h12l-3-3M17 17H5l3 3"/></svg>';
+    const porMl = (p) => (p.esKit ? 0 : p.precios[Catalogo.primerTamano(p)] / Catalogo.primerTamano(p));
 
-    // nombres fijos arriba
-    const encabezado =
-      `<div class="cb-top">${barraVentana}` +
-      columnas(
-        (p, k) =>
-          // ficha: punto del color, marca y nombre, y botón redondo para cambiarlo
-          `<div class="nm"><span class="nm-p" aria-hidden="true"></span>` +
-          `<span class="nm-t"><small>${E(p.marca)}</small><h4>${E(p.nombre)}</h4></span>` +
-          `<button class="sw" data-accion="abrir-selector" data-columna="${k}" aria-haspopup="dialog" aria-label="Cambiar ${E(p.nombre)}" title="Cambiar perfume"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h12l-3-3M17 17H5l3 3"/></svg></button></div>`
-      ) +
+    /* 1. Fichas: una por perfume, con su color, frasco, estilo, precio y botones */
+    const fichas =
+      `<div class="cmb-f" style="--n:${n}">` +
+      ps
+        .map((p, k) => {
+          const tam = Catalogo.primerTamano(p);
+          return (
+            `<article class="cmf" style="--pc:${colores[k]};--i:${k}">` +
+            `<div class="cmf-im">${Formato.frasco(p)}${Formato.etiqueta(p, tam)}</div>` +
+            `<div class="cmf-t"><small>${E(p.marca)}</small><h3>${E(p.nombre)}</h3>` +
+            `<span class="cmf-e">${E(p.familia || "Perfume")}</span>` +
+            `<p class="cmf-fr">${E(fraseDe(p))}</p>` +
+            `<p class="cmf-pr">${Formato.precio(p, tam)} <span>${Formato.tamano(tam)}</span></p></div>` +
+            `<div class="cmf-b"><button class="btn" data-accion="agregar" data-id="${E(p.id)}">+ Mi lista</button>` +
+            `<button class="sw" data-accion="abrir-selector" data-columna="${k}" aria-haspopup="dialog" aria-label="Cambiar ${E(p.nombre)}" title="Cambiar perfume">${SWAP}</button>` +
+            (n > 2
+              ? `<button class="sw rmx" data-accion="quitar-de-comparacion" data-columna="${k}" aria-label="Quitar ${E(p.nombre)}" title="Quitar">×</button>`
+              : "") +
+            `</div></article>`
+          );
+        })
+        .join("") +
       `</div>`;
 
-    const frascos = columnas((p, k) => {
-      const tam = Catalogo.primerTamano(p);
-      return (
-        `<div class="ct">${Formato.frasco(p)}${Formato.etiqueta(p, tam)}</div>` +
-        `<button class="btn" data-accion="agregar" data-id="${E(p.id)}"><span class="lg">Guardar en mi lista</span><span class="sh">+ Mi lista</span></button>` +
-        (n > 2 ? `<button class="rm" data-accion="quitar-de-comparacion" data-columna="${k}">Quitar</button>` : "") +
-        `<p class="pz">${Formato.precio(p, tam)}</p>`
-      );
-    }, "fr"); // fr: la fila de los frascos (lleva el "vs" entre columnas)
-
-    const estilo =
-      `<section class="sec"><h3>Estilo</h3>` +
-      columnas(
-        (p) =>
-          icono("estilo") +
-          `<div class="big">${E(p.familia)}</div><p class="mu">${E(Formato.PARA[p.genero] || "Perfume")} · ${E(p.marca)}</p>`
+    /* 2. Números clave: precio por ml, descuento y tamaño, con barras */
+    const maxMl = Math.max(...ps.map(porMl), 1);
+    const maxDesc = Math.max(...ps.map((p) => Catalogo.descuento(p, Catalogo.primerTamano(p))), 1);
+    const fila = (titulo, valor, ancho, mejor) =>
+      `<div class="cmn-f"><span class="cmn-t">${titulo}</span><div class="cmn-v">` +
+      ps
+        .map((p, k) => {
+          const v = valor(p);
+          return (
+            `<div class="cmn-c${mejor(p) ? " gana" : ""}" style="--pc:${colores[k]};--w:${ancho(p)}%">` +
+            `<span class="cmn-n">${E(p.nombre)}</span><b>${v}</b><i></i></div>`
+          );
+        })
+        .join("") +
+      `</div></div>`;
+    const mlMin = Math.min(...ps.filter((p) => !p.esKit).map(porMl));
+    const numeros =
+      `<section class="cmc cmn"><h3>En números</h3>` +
+      fila(
+        "Precio por ml",
+        (p) => (p.esKit ? "Kit" : M(Math.round(porMl(p)))),
+        (p) => (p.esKit ? 0 : Math.max(6, (porMl(p) / maxMl) * 100)),
+        (p) => !p.esKit && porMl(p) === mlMin
       ) +
-      `</section>`;
+      fila(
+        "Descuento",
+        (p) => {
+          const d = Catalogo.descuento(p, Catalogo.primerTamano(p));
+          return d ? "−" + d + "%" : "—";
+        },
+        (p) => Math.max(4, (Catalogo.descuento(p, Catalogo.primerTamano(p)) / maxDesc) * 100),
+        (p) => Catalogo.descuento(p, Catalogo.primerTamano(p)) === maxDesc
+      ) +
+      `<p class="cmn-a">La barra más corta en precio por ml es la que más rinde tu dinero.</p></section>`;
 
-    const precios =
-      `<section class="sec"><h3>Tamaños y precios</h3>` +
-      columnas(
-        (p) =>
-          icono("precio") +
-          Object.keys(p.precios)
-            .map((t) => {
-              const antes = Catalogo.precioAntes(p, t);
-              return (
-                `<div class="big">${Formato.tamano(t)}</div><p>${Formato.precio(p, t)} ${Formato.etiqueta(p, t)}</p>` +
-                (antes ? `<p class="sa">Ahorras ${M(antes - p.precios[t])}</p>` : "")
-              );
+    /* 3. Notas: tabla compacta, las compartidas en bronce; sin datos, invitación al chat */
+    const chat = Config.whatsapp
+      ? `https://wa.me/${Config.whatsapp}?text=${encodeURIComponent("Hola valère, ¿me cuentan las notas de este perfume?")}`
+      : "contacto.html";
+    const tablaNotas =
+      `<section class="cmc cmt"><h3>Notas</h3><p class="cmc-a">Las que comparten aparecen en bronce.</p>` +
+      `<div class="cmt-g" style="--n:${n}"><span></span>` +
+      ps.map((p, k) => `<span class="cmt-h" style="--pc:${colores[k]}"><i></i>${E(p.nombre)}</span>`).join("") +
+      CAPAS.map(([capa, titulo]) => {
+        const { veces } = conteo(capa);
+        return (
+          `<span class="cmt-c">${Texto.mayuscula(titulo.replace("Notas de ", ""))}</span>` +
+          ps
+            .map((p, k) => {
+              const lista = notas(p, capa);
+              const celda = lista.length
+                ? lista.map((t) => `<i class="${veces[Texto.normalizar(t)] > 1 ? "cp2" : ""}">${E(t)}</i>`).join("")
+                : `<a class="cmt-x" href="${E(chat)}" target="_blank" rel="noopener">Te contamos sus notas por chat ›</a>`;
+              return `<div class="cmt-d" style="--pc:${colores[k]}" data-p="${E(p.nombre)}">${celda}</div>`;
             })
             .join("")
-      ) +
+        );
+      }).join("") +
+      `</div></section>`;
+
+    const comunes = CAPAS.flatMap(([capa]) => conteo(capa).comunes);
+    const enComun =
+      `<section class="cmc cmk"><h3>Tienen en común</h3>` +
+      (comunes.length
+        ? `<p>${comunes.map((t) => `<i>${E(Texto.mayuscula(t))}</i>`).join("")}</p>`
+        : `<p class="mu">Estos perfumes no comparten notas: son muy distintos entre sí.</p>`) +
       `</section>`;
 
-    const agregarOtro =
-      n < MAXIMO && Catalogo.todos().length > n
-        ? `<p class="ad"><button class="btn o" data-accion="agregar-a-comparacion">+ Agregar otro perfume</button></p>`
-        : "";
+    const pie =
+      `<div class="cmb-p">` +
+      (n < MAXIMO && Catalogo.todos().length > n
+        ? `<button class="btn l" data-accion="agregar-a-comparacion">+ Agregar otro perfume</button>`
+        : "") +
+      `<button class="cmb-q" data-accion="limpiar-comparacion">× Quitar comparación</button></div>`;
 
-    // las columnas de color: una banda por perfume detrás de todo (css/comparador.css)
-    const bandas = `<div class="cm-bandas" style="--n:${n}" aria-hidden="true">${colores.map((c) => `<i style="--c:${c}"></i>`).join("")}</div>`;
+    // El tablero: fichas arriba; radar + veredictos; números; notas y en común (css/comparador.css)
     cm.querySelector(".cb").innerHTML =
-      bandas +
-      encabezado +
-      frascos +
-      `<p class="lead">Las notas que se repiten aparecen resaltadas; al final las juntamos en el centro.</p>` +
-      `<p class="cm-q"><button data-accion="limpiar-comparacion">× Quitar comparación</button></p>` +
-      radar(ps, colores) +
-      veredictos(ps, colores) +
-      estilo +
-      CAPAS.map(seccionNotas).join("") +
-      precios +
-      seccionEnComun() +
-      agregarOtro;
+      barraVentana +
+      fichas +
+      `<div class="cmb">` +
+      `<div class="cmc cmr">${radar(ps, colores)}</div>` +
+      `<div class="cmc cmv">${veredictos(ps, colores)}</div>` +
+      numeros +
+      enComun +
+      tablaNotas +
+      `</div>` +
+      pie;
   }
 
   const repintar = () => {

@@ -1232,3 +1232,538 @@ html.menu-oculto div#cm .cb-top {
     align-items: center;
   }
 }
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   TABLERO DE COMPARAR (opción A): fichas arriba y tarjetas que llenan el ancho
+     .cmb-f  las fichas, una por perfume (--pc = su color)
+     .cmb    la cuadrícula: radar | veredictos · números | en común · notas
+     .cmc    cada tarjeta
+   ═════════════════════════════════════════════════════════════════════════════ */
+div#cm {
+  width: min(1160px, 100%);
+}
+div#cm .cb {
+  padding-bottom: 24px;
+}
+
+/* ── Fichas ── */
+.cmb-f {
+  display: grid;
+  grid-template-columns: repeat(var(--n, 2), minmax(0, 1fr));
+  gap: 12px;
+}
+.cmf {
+  --pc: var(--acc);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 24px;
+  background: radial-gradient(
+      ellipse 80% 55% at 50% 0%,
+      color-mix(in srgb, var(--pc) 34%, transparent),
+      transparent 75%
+    ),
+    var(--surf);
+  border: 1px solid color-mix(in srgb, var(--pc) 42%, transparent);
+  animation: up 0.55s calc(var(--i, 0) * 90ms) both;
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.35s;
+}
+.cmf:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 44px -26px var(--pc);
+}
+.cmf-im {
+  position: relative;
+  height: 190px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: radial-gradient(
+    ellipse 55% 55% at 50% 58%,
+    color-mix(in srgb, var(--pc) 45%, transparent),
+    transparent 75%
+  );
+}
+.cmf-im > svg,
+.cmf-im > .ph {
+  height: 165px;
+  width: auto;
+  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.5));
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.cmf:hover .cmf-im > svg,
+.cmf:hover .cmf-im > .ph {
+  transform: translateY(-5px) scale(1.04);
+}
+.cmf-im .dc {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+}
+.cmf-t {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+.cmf-t small {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+.cmf-t h3 {
+  margin: 0;
+  font: 600 24px/1.1 var(--titulo);
+}
+.cmf-e {
+  margin-top: 4px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--pc) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--pc) 45%, transparent);
+  font-size: 12px;
+}
+.cmf-fr {
+  margin: 0;
+  color: var(--mut);
+  font: italic 500 17px/1.3 var(--elegante);
+}
+.cmf-pr {
+  margin: 4px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.cmf-pr s {
+  color: var(--mut);
+  font-size: 14px;
+  font-weight: 400;
+}
+.cmf-pr span {
+  color: var(--mut);
+  font-size: 13px;
+  font-weight: 400;
+}
+.cmf-b {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cmf-b .btn {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 15px;
+}
+.cmf-b .rmx {
+  font-size: 18px;
+  line-height: 1;
+}
+.cmf-b .rmx:hover {
+  transform: none;
+  color: #ff6b5e;
+  border-color: #ff6b5e;
+}
+
+/* ── La cuadrícula de tarjetas ── */
+.cmb {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.cmc {
+  grid-column: span 12;
+  min-width: 0;
+  padding: 22px;
+  border-radius: 24px;
+  background: var(--surf);
+  border: 1px solid var(--line);
+  animation: up 0.55s 0.15s both;
+}
+.cmc > h3,
+.cmc .sec > h3 {
+  margin: 0 0 14px;
+  font: 600 26px/1.1 var(--titulo);
+  text-align: left;
+}
+.cmc-a {
+  margin: -8px 0 14px;
+  color: var(--mut);
+  font-size: 13px;
+}
+/* el radar y los veredictos traen su propia sección: aquí sin márgenes ni línea */
+.cmc .sec {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.cmr {
+  grid-column: span 7;
+}
+.cmv {
+  grid-column: span 5;
+}
+.cmn {
+  grid-column: span 7;
+}
+.cmk {
+  grid-column: span 5;
+}
+.cmr .rd-g {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+}
+.cmr svg {
+  max-width: 430px;
+}
+.cmr .rd-l {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.cmr .rd-l li {
+  flex: 1 1 170px;
+}
+.cmr .rd-l li {
+  padding: 10px 12px;
+}
+.cmr .rd-l b {
+  font-size: 17px;
+}
+.cmv .vr-g {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.cmv .vr {
+  height: 128px;
+}
+.cmv .vr-f,
+.cmv .vr-d {
+  padding: 12px 14px;
+}
+.cmv .vr-f b {
+  font-size: 19px;
+}
+.cmv .vr-f em {
+  display: none;
+}
+
+/* ── En números: barras por perfume ── */
+.cmn-f + .cmn-f {
+  margin-top: 16px;
+}
+.cmn-t {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+.cmn-v {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cmn-c {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 12px;
+  align-items: baseline;
+  font-size: 14px;
+}
+.cmn-n {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cmn-c b {
+  font-variant-numeric: tabular-nums;
+}
+.cmn-c i {
+  grid-column: 1 / -1;
+  height: 7px;
+  border-radius: 7px;
+  background: var(--surf2);
+  position: relative;
+  overflow: hidden;
+}
+.cmn-c i::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--w);
+  border-radius: 7px;
+  background: var(--pc);
+  box-shadow: 0 0 10px var(--pc);
+  animation: barra 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  transform-origin: left;
+}
+@keyframes barra {
+  from {
+    transform: scaleX(0);
+  }
+}
+.cmn-c.gana b {
+  color: var(--acc);
+}
+.cmn-a {
+  margin: 14px 0 0;
+  color: var(--mut);
+  font-size: 12px;
+}
+
+/* ── Tienen en común ── */
+.cmk p {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.cmk i {
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--acc) 18%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--acc) 55%, transparent);
+  font-style: normal;
+  font-size: 14px;
+}
+.cmk p.mu {
+  display: block;
+  color: var(--mut);
+  font-size: 14px;
+}
+
+/* ── Notas: tabla compacta ── */
+.cmt-g {
+  display: grid;
+  grid-template-columns: 96px repeat(var(--n, 2), minmax(0, 1fr));
+  gap: 8px;
+  align-items: stretch;
+}
+.cmt-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px 4px;
+  font: 600 16px/1.2 var(--titulo);
+}
+.cmt-h i {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--pc);
+  box-shadow: 0 0 10px var(--pc);
+}
+.cmt-c {
+  display: flex;
+  align-items: center;
+  font: 600 18px/1.1 var(--titulo);
+}
+.cmt-d {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 5px;
+  min-height: 46px;
+  padding: 10px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--pc) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--pc) 22%, transparent);
+}
+.cmt-d i {
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: var(--bg);
+  font-style: normal;
+  font-size: 13px;
+}
+.cmt-d i::first-letter {
+  text-transform: uppercase;
+}
+.cmt-d i.cp2 {
+  background: color-mix(in srgb, var(--acc) 22%, transparent);
+  box-shadow: inset 0 0 0 1px var(--acc);
+}
+.cmt-x {
+  color: var(--acc);
+  font-size: 13px;
+  text-decoration: none;
+}
+.cmt-x:hover {
+  text-decoration: underline;
+}
+
+/* ── Pie: agregar otro y quitar comparación ── */
+.cmb-p {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+}
+.cmb-q {
+  padding: 10px 18px;
+  border-radius: 99px;
+  border: 1px solid var(--line);
+  color: var(--mut);
+  font-size: 14px;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.cmb-q:hover {
+  color: #ff6b5e;
+  border-color: #ff6b5e;
+}
+
+/* ── Tablet: radar y veredictos uno arriba del otro ── */
+@media (max-width: 1000px) {
+  .cmr,
+  .cmv,
+  .cmn,
+  .cmk {
+    grid-column: span 12;
+  }
+  .cmv .vr-g {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+  }
+}
+
+/* ── Celular ── */
+@media (max-width: 700px) {
+  div#cm {
+    --pd: 0px;
+  }
+  .cmb-f {
+    gap: 8px;
+  }
+  .cmf {
+    padding: 10px;
+    gap: 8px;
+    border-radius: 18px;
+  }
+  .cmf-im {
+    height: 120px;
+  }
+  .cmf-im > svg,
+  .cmf-im > .ph {
+    height: 104px;
+  }
+  .cmf-im .dc {
+    top: 2px;
+    left: 2px;
+    font-size: 11px;
+    padding: 2px 7px;
+  }
+  .cmf-t small {
+    font-size: 9px;
+  }
+  .cmf-t h3 {
+    font-size: 18px;
+  }
+  .cmf-e {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+  .cmf-fr {
+    display: none;
+  }
+  .cmf-pr {
+    font-size: 15px;
+  }
+  .cmf-pr s,
+  .cmf-pr span {
+    display: block;
+    font-size: 12px;
+  }
+  .cmf-b {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .cmf-b .btn {
+    flex-basis: 100%;
+    padding: 9px 6px;
+    font-size: 14px;
+  }
+  .cmf-b .sw {
+    flex: 1;
+    width: auto;
+    height: 34px;
+    border-radius: 99px;
+  }
+  .cmf-b .sw:hover {
+    transform: none;
+  }
+  .cmc {
+    padding: 16px;
+    border-radius: 20px;
+  }
+  .cmc > h3,
+  .cmc .sec > h3 {
+    font-size: 23px;
+  }
+  .cmv .vr-g {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cmv .vr {
+    height: 124px;
+  }
+  .cmv .vr-f b {
+    font-size: 17px;
+  }
+  .cmv .vr-f i {
+    font-size: 12px;
+  }
+  /* el radar arriba, grande, y su leyenda abajo */
+  .cmr .rd-g {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cmr svg {
+    max-width: 340px;
+  }
+  /* notas: por capa, cada perfume en su renglón con su nombre */
+  .cmt-g {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .cmt-g > span:first-child,
+  .cmt-h {
+    display: none;
+  }
+  .cmt-c {
+    margin-top: 10px;
+  }
+  .cmt-d {
+    min-height: 0;
+  }
+  .cmt-d::before {
+    content: attr(data-p);
+    flex-basis: 100%;
+    margin-bottom: 2px;
+    color: var(--pc);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+}
+@media (max-width: 380px) {
+  .cmf-t h3 {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cmn-c i::after {
+    animation: none;
+  }
+}
