@@ -19,13 +19,58 @@
   grid-template-columns: 1fr 1fr;
 }
 
-/* Frasco */
+/* Frasco: sobre el color del perfume (--pc lo pone js/vistas/producto.js) */
 #pd .im {
-  background: radial-gradient(ellipse 70% 60% at 50% 55%, #303035, var(--surf) 75%);
+  --pc: #3a3a3f;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: radial-gradient(
+      ellipse 55% 48% at 50% 58%,
+      color-mix(in srgb, var(--pc) 70%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(ellipse 90% 80% at 50% 100%, color-mix(in srgb, var(--pc) 35%, transparent), transparent 70%),
+    color-mix(in srgb, var(--pc) 22%, #0c0c0e);
   display: grid;
   place-items: center;
   min-height: 360px;
   padding: 32px;
+}
+/* una luz suave arriba, como de vitrina */
+#pd .im::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -20%;
+  left: 50%;
+  width: 70%;
+  height: 60%;
+  translate: -50% 0;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.16), transparent);
+  pointer-events: none;
+}
+/* El frasco 3D que gira (js/frascos/vitrina3d.js): aparece encima del plano */
+#pd .vt-gl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.8s;
+  touch-action: pan-y;
+  cursor: grab;
+}
+#pd .im.con-3d .vt-gl {
+  opacity: 1;
+}
+#pd .im > svg,
+#pd .im > .ph {
+  transition: opacity 0.6s;
+}
+#pd .im.con-3d > svg,
+#pd .im.con-3d > .ph {
+  opacity: 0;
 }
 #pd .im svg {
   height: 300px;
@@ -60,6 +105,213 @@
 #pd .fam {
   color: var(--mut);
   margin: 0 0 14px;
+}
+
+/* ── La parte de los datos: entra escalonada y con el brillo del perfume ── */
+#pd .tx {
+  position: relative;
+  isolation: isolate;
+}
+#pd .tx::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -10%;
+  right: -10%;
+  width: 70%;
+  height: 55%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--pc, var(--acc)) 26%, transparent), transparent);
+  pointer-events: none;
+}
+#pd .tx > * {
+  animation: up 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+#pd .tx > :nth-child(2) {
+  animation-delay: 0.05s;
+}
+#pd .tx > :nth-child(3) {
+  animation-delay: 0.1s;
+}
+#pd .tx > :nth-child(4) {
+  animation-delay: 0.16s;
+}
+#pd .tx > :nth-child(5) {
+  animation-delay: 0.22s;
+}
+#pd .tx > :nth-child(6) {
+  animation-delay: 0.28s;
+}
+#pd .tx > :nth-child(n + 7) {
+  animation-delay: 0.34s;
+}
+/* marca con una rayita del color del perfume */
+#pd .mk {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+#pd .mk::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--acc), color-mix(in srgb, var(--pc, var(--acc)) 80%, #fff));
+}
+
+/* Notas: un renglón por capa, con ícono y pastillas */
+.nts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 18px;
+}
+.nt-f {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--fg) 4%, transparent);
+  border: 1px solid transparent;
+  transition:
+    border-color 0.25s,
+    transform 0.25s,
+    background 0.25s;
+}
+.nt-f:hover {
+  transform: translateX(4px);
+  border-color: color-mix(in srgb, var(--acc) 40%, transparent);
+  background: color-mix(in srgb, var(--acc) 8%, transparent);
+}
+.nt-i {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--pc, var(--acc)) 30%, var(--bg));
+}
+.nt-i svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.nt-f small {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--acc) !important;
+  font-size: 11px;
+}
+.nt-f p {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.nt-f p i {
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: var(--bg);
+  font-style: normal;
+  font-size: 14px;
+}
+.nt-f p i::first-letter {
+  text-transform: uppercase;
+}
+/* "Ahorras $…" */
+#pp .ah {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--acc) 16%, transparent);
+  color: var(--acc);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+/* "Guardar en mi lista": con el brillo del perfume y una luz que lo cruza */
+#pd .btn.gd {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 14px 34px -16px color-mix(in srgb, var(--pc, #fff) 80%, #fff);
+}
+#pd .btn.gd::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.75) 50%, transparent 65%);
+  transform: translateX(-110%);
+  animation: gd-brillo 3.6s 1.2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes gd-brillo {
+  40%,
+  100% {
+    transform: translateX(110%);
+  }
+}
+.sz button {
+  transition:
+    transform 0.25s cubic-bezier(0.3, 0.9, 0.3, 1.3),
+    border-color 0.2s;
+}
+.sz button:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Barra para girar el frasco 3D (‹ ━━●━━ ›, la pone js/frascos/vitrina3d.js) ── */
+#pd .vt-giro {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 18px;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(78%, 360px);
+  padding: 8px 14px;
+  border-radius: 99px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 22px;
+  line-height: 1;
+  opacity: 0;
+  animation: fi 0.6s 0.8s forwards;
+}
+#pd .vt-giro input {
+  --avance: 8%;
+  flex: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--acc) var(--avance), rgba(255, 255, 255, 0.22) var(--avance));
+  cursor: pointer;
+}
+#pd .vt-giro input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 4px solid var(--acc);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+#pd .vt-giro input::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 4px solid var(--acc);
 }
 
 /* Notas: Salida / Corazón / Fondo */

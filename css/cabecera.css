@@ -21,6 +21,7 @@ header {
   position: sticky;
   top: env(safe-area-inset-top, 0px);
   z-index: 9;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
   background: color-mix(in srgb, var(--bg) 82%, transparent);
   -webkit-backdrop-filter: saturate(180%) blur(18px);
   backdrop-filter: saturate(180%) blur(18px);
@@ -92,6 +93,96 @@ nav a[aria-current="page"] {
 #bag b[data-n="0"] {
   background: var(--surf);
   color: var(--mut);
+}
+
+/* ── Al bajar, el menú se esconde; al subir, regresa (lo controla js/app.js) ── */
+html.menu-oculto header {
+  transform: translateY(calc(-100% - 2px));
+}
+/* la línea de avance: cuánto se lleva de la página */
+header .avance {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--acc), #b57bff);
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  header {
+    transition: none;
+  }
+}
+
+/* ── La lámpara del menú (compu) ──
+   Una rayita brillante en la orilla de arriba con un cono de luz que alumbra la
+   sección actual. Al pasar el mouse se desliza hasta ese enlace y al salir
+   regresa (la mueve js/app.js con --x y --w). */
+#menu {
+  position: relative;
+  align-self: stretch;
+  align-items: center;
+}
+#menu a {
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s;
+}
+#menu .luz {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--w, 0px);
+  height: 100%;
+  transform: translateX(var(--x, 0px));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.5s cubic-bezier(0.3, 1.25, 0.4, 1),
+    width 0.5s cubic-bezier(0.3, 1.25, 0.4, 1),
+    opacity 0.3s;
+}
+#menu .luz.on {
+  opacity: 1;
+}
+/* la rayita de la lámpara */
+#menu .luz::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: calc(100% + 18px);
+  height: 3px;
+  translate: -50% 0;
+  border-radius: 0 0 4px 4px;
+  background: #fff;
+  box-shadow:
+    0 0 10px 1px rgba(255, 255, 255, 0.8),
+    0 0 24px 4px color-mix(in srgb, var(--acc) 55%, transparent);
+}
+/* el cono de luz que baja */
+#menu .luz::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: calc(100% + 34px);
+  height: calc(100% - 3px);
+  translate: -50% 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04) 70%, transparent);
+  clip-path: polygon(22% 0, 78% 0, 100% 100%, 0 100%);
+}
+/* el enlace alumbrado se ve blanco */
+#menu a.alumbrado {
+  color: var(--fg);
+}
+@media (prefers-reduced-motion: reduce) {
+  #menu .luz {
+    transition: opacity 0.2s;
+  }
 }
 
 /* Botón ☰ (solo en celular): tres rayitas que se vuelven × al abrir */
@@ -183,6 +274,17 @@ header.abierto #mnb i:nth-child(3) {
   }
   #menu a[aria-current="page"] {
     color: var(--acc);
+    /* en el panel de celular, la lámpara alumbra de lado la sección actual */
+    background: linear-gradient(90deg, color-mix(in srgb, var(--acc) 16%, transparent), transparent 70%);
+    box-shadow: inset 3px 0 0 var(--acc);
+    padding-left: 14px;
+  }
+  #menu .luz {
+    display: none;
+  }
+  #menu {
+    align-self: auto;
+    align-items: stretch; /* en el panel, cada enlace a lo ancho */
   }
   /* los enlaces entran uno tras otro */
   header.abierto #menu a {

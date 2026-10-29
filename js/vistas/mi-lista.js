@@ -12,7 +12,7 @@
        los botones para mandar la lista.
    También actualiza el número junto a "Mi lista" en la cabecera (#bn).
 
-   Usa:     $, Lista, Regalo, Config, Formato, Catalogo, Pagina, Barra
+   Usa:     $, $$, Lista, Regalo, Config, Formato, Catalogo, Pagina, Barra
    Expone:  VistaLista
    ============================================================================= */
 
@@ -63,7 +63,9 @@ const VistaLista = (() => {
     opciones = opciones.sort((a, b) => desc(b) - desc(a)).slice(0, SUGERENCIAS);
     if (!opciones.length) return "";
     return (
-      `<section class="sg"><h4>${titulo}</h4><div class="sg-l">` +
+      `<section class="sg"><div class="sg-h"><h4>${titulo}</h4>` +
+      `<span class="sg-fl"><button data-accion="sugerencias-mover" data-dir="-1" aria-label="Anteriores" disabled>‹</button>` +
+      `<button data-accion="sugerencias-mover" data-dir="1" aria-label="Siguientes">›</button></span></div><div class="sg-l">` +
       opciones
         .map((p) => {
           const tam = Catalogo.primerTamano(p);
@@ -78,6 +80,27 @@ const VistaLista = (() => {
         .join("") +
       `</div></section>`
     );
+  }
+
+  /** Las flechas ‹ › de "Te puede gustar" se apagan al llegar a una orilla. */
+  function vigilarSugerencias() {
+    const l = $("#ci .sg-l");
+    if (!l) return;
+    const [atras, adelante] = $$("#ci .sg-fl button");
+    const revisar = () => {
+      atras.disabled = l.scrollLeft < 4;
+      adelante.disabled = l.scrollLeft + l.clientWidth > l.scrollWidth - 4;
+    };
+    l.addEventListener("scroll", revisar, { passive: true });
+    // con Mi lista cerrada la fila no mide nada: se revisa otra vez cuando aparece o cambia de tamaño
+    if (window.ResizeObserver) new ResizeObserver(revisar).observe(l);
+    else requestAnimationFrame(revisar);
+  }
+
+  /** Mueve "Te puede gustar" casi una pantalla hacia un lado (flechas ‹ ›). */
+  function moverSugerencias(boton) {
+    const l = boton.closest(".sg").querySelector(".sg-l");
+    l.scrollBy({ left: +boton.dataset.dir * (l.clientWidth - 60), behavior: "smooth" });
   }
 
   /** Lista vacía: dibujo, botón para ir a elegir y sugerencias para empezar. */
@@ -109,11 +132,30 @@ const VistaLista = (() => {
         : "Lo preparamos listo para regalar.";
   }
 
+  /**
+   * Barra fija de abajo (total + WhatsApp): sale cuando hay algo en la lista y
+   * se esconde mientras los botones grandes de envío están a la vista.
+   */
+  let vigiaBotones = null;
+  function pintarBarraFija(hayPiezas, totalTexto) {
+    const barra = $("#cfx");
+    if (!barra) return;
+    barra.hidden = !hayPiezas;
+    $("#ct2").textContent = totalTexto;
+    if (!vigiaBotones && window.IntersectionObserver) {
+      vigiaBotones = new IntersectionObserver((es) => barra.classList.toggle("fuera", es[0].isIntersecting), {
+        root: $("#cd"),
+      });
+      vigiaBotones.observe($("#sw"));
+    }
+  }
+
   /** Los botones de envío: se apagan si la lista está vacía. */
   function pintarBotonesDeEnvio(hayPiezas) {
     const mensaje = Lista.mensaje();
     const enlaces = {
       sw: `https://wa.me/${Config.whatsapp}?text=${encodeURIComponent(mensaje)}`,
+      sw2: `https://wa.me/${Config.whatsapp}?text=${encodeURIComponent(mensaje)}`,
       si: Config.esMovil
         ? `https://ig.me/m/${Config.instagram}`
         : `https://www.instagram.com/${encodeURIComponent(Config.instagram)}/`,
@@ -178,6 +220,7 @@ const VistaLista = (() => {
       ? L.map((l, i) => linea(l, i, nuevas.includes(claves[i]))).join("") + sugerencias("Te puede gustar")
       : vacia();
 
+    vigilarSugerencias();
     $("#cf").hidden = !n; // con la lista vacía no hay resumen ni botones de envío
     pintarResumen(total, ahorro, extraRegalo);
     const aMano = $("#mn");
@@ -185,8 +228,9 @@ const VistaLista = (() => {
 
     pintarRegalo(n > 0);
     pintarBotonesDeEnvio(n > 0);
+    pintarBarraFija(n > 0, M(total + extraRegalo));
     Barra.pintar(); // "Finalizar compra" y el texto de la barrita
   }
 
-  return { pintar };
+  return { pintar, moverSugerencias };
 })();

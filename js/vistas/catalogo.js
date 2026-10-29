@@ -73,9 +73,9 @@ const VistaCatalogo = (() => {
     const subtitulo = p.esKit ? p.incluye || Formato.PARA[p.genero] || "" : p.familia;
     const desde = Object.keys(p.precios).length > 1 ? "Desde " : "";
     return (
-      `<article class="card" data-id="${E(p.id)}" style="--i:${Math.min(n, 6)}">` +
+      `<article class="card${p.esKit ? " kit" : ""}" data-id="${E(p.id)}" style="--i:${Math.min(n, 6)};--pc:${E(p.color)}">` +
       `<a class="main" href="${Pagina.enlacePerfume(p)}">` +
-      `<div class="bt">${Formato.frasco(p)}${Formato.etiqueta(p, tam)}</div>` +
+      `<div class="bt">${Formato.frasco(p)}${Formato.etiqueta(p, tam)}${p.esKit ? `<i class="kt">Kit</i>` : ""}</div>` +
       `<small>${E(p.marca)}</small><b>${E(p.nombre)}</b><span>${E(subtitulo)}</span>` +
       `<em>${desde}${Formato.precio(p, tam)} <u>${Formato.tamano(tam)}</u></em>` +
       `</a>` +

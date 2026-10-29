@@ -126,7 +126,7 @@ const Lista = (() => {
 
     let texto = "Hola valère, me interesan estos perfumes:\n" + renglones.join("\n");
     if (regalo) {
-      texto += `\n🎁 Envolver para regalo: sí${Config.regaloCosto ? ` — ${M(Config.regaloCosto)}` : ""}`;
+      texto += `\nEnvolver para regalo: sí${Config.regaloCosto ? ` — ${M(Config.regaloCosto)}` : ""}`;
       if (Regalo.nota()) texto += `\nMensaje para la tarjeta: "${Regalo.nota()}"`;
     }
     return texto + `\nTotal estimado: ${M(total)}`;

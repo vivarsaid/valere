@@ -32,7 +32,9 @@ $arriba = [regex]::Replace($arriba, '(href|src)="((?:css|js)/[^"?]+\.(?:css|js))
   param($m)
   $ruta = Join-Path $raiz ($m.Groups[2].Value -replace '/', '\')
   if (-not (Test-Path $ruta)) { return $m.Value }
-  $bytes = [IO.File]::ReadAllBytes($ruta)
+  # Sin los retornos de carro de Windows: asi la huella es la misma que la del archivo que guarda GitHub
+  $texto = [IO.File]::ReadAllText($ruta, [Text.Encoding]::UTF8) -replace "`r", ""
+  $bytes = [Text.Encoding]::UTF8.GetBytes($texto)
   $huella = ([BitConverter]::ToString($sha.ComputeHash($bytes)) -replace '-', '').Substring(0, 8).ToLower()
   return $m.Groups[1].Value + '="' + $m.Groups[2].Value + '?v=' + $huella + '"'
 })

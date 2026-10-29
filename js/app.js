@@ -51,12 +51,48 @@ const App = (() => {
     b.setAttribute("aria-label", abrir ? "Cerrar menú" : "Abrir menú");
   }
 
+  /**
+   * La lámpara del menú (compu): se acomoda sobre la sección actual y se
+   * desliza al enlace que tenga el mouse o el foco. Ver css/cabecera.css.
+   */
+  function lamparaDelMenu() {
+    const nav = $("#menu");
+    const luz = nav && $(".luz", nav);
+    if (!luz) return;
+    const enlaces = $$("a", nav);
+    const actual = $('a[aria-current="page"]', nav);
+    const alumbrar = (a) => {
+      enlaces.forEach((x) => x.classList.toggle("alumbrado", x === a));
+      if (!a) return luz.classList.remove("on");
+      luz.style.setProperty("--x", a.offsetLeft + "px");
+      luz.style.setProperty("--w", a.offsetWidth + "px");
+      luz.classList.add("on");
+    };
+    const regresar = () => alumbrar(actual);
+    enlaces.forEach((a) => {
+      a.addEventListener("mouseenter", () => alumbrar(a));
+      a.addEventListener("focus", () => alumbrar(a));
+    });
+    nav.addEventListener("mouseleave", regresar);
+    nav.addEventListener("focusout", (e) => {
+      if (!nav.contains(e.relatedTarget)) regresar();
+    });
+    // al cargar la letra o cambiar el tamaño, los enlaces se mueven: se vuelve a acomodar
+    addEventListener("resize", regresar);
+    if (document.fonts) document.fonts.ready.then(regresar);
+    // la primera vez aparece sin deslizarse
+    luz.style.transition = "none";
+    regresar();
+    requestAnimationFrame(() => requestAnimationFrame(() => (luz.style.transition = "")));
+  }
+
   /* ── Qué hace cada botón (data-accion) ───────────────────────────────────── */
   const ACCIONES = {
     // Mi lista
     "abrir-lista": () => Ventanas.abrir($("#cd")),
     agregar: (el) => agregarALista(el.dataset.id, null, el),
     "cambiar-cantidad": (el) => cambiarCantidad(+el.dataset.linea, +el.dataset.cambio),
+    "sugerencias-mover": (el) => VistaLista.moverSugerencias(el),
     "copiar-lista": () => Avisos.copiarYAvisar(Lista.mensaje(), "Lista copiada"),
     "compartir-lista": () => Avisos.compartir(Lista.mensaje()),
     // Instagram y Facebook: se copia la lista y el enlace abre el chat
@@ -90,6 +126,7 @@ const App = (() => {
     "alternar-comparar": (el) => Comparador.alternar(el.dataset.id),
     "comparar-con": (el) => Comparador.con(el.dataset.id),
     "limpiar-comparacion": () => Comparador.limpiar(),
+    "voltear-veredicto": (el) => el.classList.toggle("vuelta"),
     "agregar-a-comparacion": () => Comparador.agregarOtro(),
     "quitar-de-comparacion": (el) => Comparador.quitar(+el.dataset.columna),
     "abrir-selector": (el) => Comparador.abrirSelector(+el.dataset.columna),
@@ -103,6 +140,7 @@ const App = (() => {
     "examen-continuar": () => Examen.continuar(),
     "examen-presupuesto": (el) => Examen.presupuesto(+el.dataset.valor),
     "examen-reiniciar": () => Examen.reiniciar(),
+    "examen-atras": () => Examen.atras(),
 
     // Menú de celular (☰)
     menu: () => menu(!$("header").classList.contains("abierto")),
@@ -146,7 +184,7 @@ const App = (() => {
     document.addEventListener(
       "click",
       (e) => {
-        const a = e.target.closest && e.target.closest("#sw,#si,#sf,#fw,#fi,#ff,[data-red]");
+        const a = e.target.closest && e.target.closest("#sw,#sw2,#si,#sf,#fw,#fi,#ff,[data-red]");
         if (!a) return;
         const ahora = Date.now();
         if (ahora - ultimoChat < 1500) {
@@ -168,6 +206,75 @@ const App = (() => {
         scrollTo({ top: 0, behavior: "smooth" });
       }
     });
+
+    try {
+      lamparaDelMenu();
+    } catch (e) {}
+
+    const html = document.documentElement;
+    // El menú se esconde al bajar y regresa al subir (html.menu-oculto, ver css/cabecera.css).
+    // La línea de arriba (.avance) marca cuánto se lleva de la página.
+    const cabecera = $("header");
+    const avance = $("header .avance");
+    let yAntes = scrollY;
+    let cuadroMenu = 0;
+    addEventListener(
+      "scroll",
+      () => {
+        if (cuadroMenu) return;
+        cuadroMenu = requestAnimationFrame(() => {
+          cuadroMenu = 0;
+          const y = scrollY;
+          const abierto = cabecera && cabecera.classList.contains("abierto");
+          if (y < 120 || abierto) html.classList.remove("menu-oculto");
+          else if (y > yAntes + 6) html.classList.add("menu-oculto");
+          else if (y < yAntes - 6) html.classList.remove("menu-oculto");
+          if (Math.abs(y - yAntes) > 6 || y < 120) yAntes = y;
+          const alto = document.documentElement.scrollHeight - innerHeight;
+          if (avance) avance.style.transform = `scaleX(${alto > 0 ? Math.min(1, y / alto) : 0})`;
+        });
+      },
+      { passive: true }
+    );
+
+    // Portada: las tres razones aparecen una tras otra al llegar a ellas.
+    const razones = $("#confianza");
+    if (razones) {
+      if (window.IntersectionObserver) {
+        const vigia = new IntersectionObserver(
+          (es) => {
+            if (!es[0].isIntersecting) return;
+            razones.classList.add("vista");
+            vigia.disconnect();
+          },
+          { rootMargin: "0px 0px -15% 0px" }
+        );
+        vigia.observe(razones);
+      } else razones.classList.add("vista");
+    }
+
+    // Tarjetas de perfumes: una luz del color del perfume sigue al mouse (--mx, --my).
+    // Se calcula una vez por cuadro, aunque el mouse se mueva más seguido.
+    let ultimoMovimiento = null;
+    let cuadroLuz = 0;
+    document.addEventListener(
+      "pointermove",
+      (e) => {
+        if (e.pointerType !== "mouse") return;
+        ultimoMovimiento = e;
+        if (cuadroLuz) return;
+        cuadroLuz = requestAnimationFrame(() => {
+          cuadroLuz = 0;
+          const m = ultimoMovimiento;
+          const tarjeta = m.target.closest && m.target.closest(".card");
+          if (!tarjeta) return;
+          const r = tarjeta.getBoundingClientRect();
+          tarjeta.style.setProperty("--mx", m.clientX - r.left + "px");
+          tarjeta.style.setProperty("--my", m.clientY - r.top + "px");
+        });
+      },
+      { passive: true }
+    );
 
     // Menú de celular: se cierra al tocar fuera de la cabecera, con Escape o al hacerse ancha la pantalla.
     document.addEventListener("click", (e) => {

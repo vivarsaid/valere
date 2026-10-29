@@ -76,8 +76,8 @@
   position: relative;
   display: grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   border: 1px solid var(--line);
   font-style: normal;
@@ -87,6 +87,25 @@
     background 0.3s,
     border-color 0.3s,
     color 0.3s;
+}
+.pasos i svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* el paso en el que vas: su ícono late suave */
+.pasos[data-paso="1"] li:nth-child(1) i,
+.pasos[data-paso="2"] li:nth-child(2) i {
+  animation: paso-late 2.4s ease-in-out infinite;
+}
+@keyframes paso-late {
+  50% {
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--acc) 22%, transparent);
+  }
 }
 /* el paso en el que vas */
 .pasos[data-paso="1"] li:nth-child(1),
@@ -104,6 +123,9 @@
 .pasos[data-paso="2"] li:nth-child(1) i {
   border-color: var(--acc);
   color: transparent;
+}
+.pasos[data-paso="2"] li:nth-child(1) i svg {
+  opacity: 0;
 }
 .pasos[data-paso="2"] li:nth-child(1) i::after {
   content: "✓";
@@ -274,8 +296,46 @@
 .sg {
   margin-top: 10px;
 }
+/* título y flechas ‹ › */
+.sg-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.sg-fl {
+  display: flex;
+  gap: 6px;
+}
+.sg-fl button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--surf);
+  font-size: 20px;
+  line-height: 1;
+  transition:
+    opacity 0.2s,
+    background 0.2s,
+    transform 0.2s;
+}
+.sg-fl button:hover {
+  background: var(--surf2);
+}
+.sg-fl button:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+/* las orillas de la fila se desvanecen, para que se note que hay más */
+.sg-l {
+  -webkit-mask: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 28px), transparent);
+  mask: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 28px), transparent);
+}
 .sg h4 {
-  margin: 0 0 10px 4px;
+  margin: 0 0 0 4px;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -289,6 +349,7 @@
   padding: 2px 16px 6px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-padding-inline: 16px; /* el primero se acomoda en la orilla, sin moverse solo */
   scrollbar-width: none;
 }
 .sg-l::-webkit-scrollbar {
@@ -546,6 +607,59 @@
   color: var(--fg);
   font: inherit;
   font-size: 14px;
+}
+
+/* ── Barra fija abajo: total + WhatsApp (se esconde al llegar a los botones grandes) ── */
+.cfx {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: auto;
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: rgba(10, 10, 12, 0.96);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -14px 30px rgba(0, 0, 0, 0.5);
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.3s;
+}
+.cfx[hidden] {
+  display: none;
+}
+.cfx.fuera {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+.cfx small {
+  display: block;
+  color: var(--mut);
+  font-size: 12px;
+}
+.cfx b {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.cfx .ws {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: #25d366;
+  color: #04210f;
+  font-size: 16px;
+  font-weight: 600;
+}
+.cfx .ws svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
 }
 
 /* ── Envolver para regalo ── */

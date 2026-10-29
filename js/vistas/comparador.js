@@ -11,7 +11,11 @@
      · El comparador (#cm .cb): solo en comparar.html.
      · El selector "Cambiar perfume" (#pk): lista de todos los perfumes.
 
-   Usa:     $, $$, Almacen, Catalogo, Formato, Texto, Pagina, Avisos, Ventanas, Barra
+   Arriba de las notas: el radar de aromas y los veredictos (un ganador por
+   categoría, la tarjeta se voltea al tocarla). Cada lado de la página se
+   lleva una banda vertical con su color (columnas de color).
+
+   Usa:     $, $$, Almacen, Catalogo, Formato, Texto, Pagina, Avisos, Ventanas, Barra, Examen, Taller3D
    Expone:  Comparador
    ============================================================================= */
 
@@ -20,10 +24,6 @@ const Comparador = (() => {
   const MAXIMO = 3;
   const E = Formato.escapar;
   let seleccion = []; // ids de los perfumes que se comparan
-  // true = la persona no eligió nada y Comparar puso dos de ejemplo.
-  // Los de ejemplo no se guardan (si no, la barrita "X vs Y" saldría en todas
-  // las páginas sin que nadie los eligiera).
-  let deEjemplo = false;
   let columnaCambiando = -1; // qué columna se está cambiando en el selector
   let tCerrarSelector = 0;
 
@@ -62,7 +62,7 @@ const Comparador = (() => {
   /** Limpia la selección, la guarda y actualiza los botones y la barrita. */
   function marcar() {
     seleccion = seleccion.filter((id, k) => Catalogo.buscar(id) && seleccion.indexOf(id) === k).slice(0, MAXIMO);
-    if (!deEjemplo) Almacen.guardar(CLAVE, seleccion);
+    Almacen.guardar(CLAVE, seleccion);
 
     $$('[data-accion="alternar-comparar"]').forEach((b) => {
       const elegido = seleccion.includes(b.dataset.id);
@@ -73,17 +73,210 @@ const Comparador = (() => {
     Barra.pintar();
   }
 
+  /* ── Colores: uno por perfume, siempre distintos entre sí ──────────────────
+     Se usa el tono del perfume; si es casi gris (como Club de Nuit) o se parece
+     mucho al de otro, se toma uno de la paleta. Así nunca se confunden. */
+  const PALETA = ["#d4ad6e", "#4aa8c8", "#d26b7f", "#8fc97a", "#b48cf0"];
+  function coloresDe(ps) {
+    const tono = (hsl) => +hsl.match(/hsl\((\d+)/)[1];
+    const satur = (hsl) => +hsl.match(/hsl\(\d+ (\d+)%/)[1];
+    const tonoHex = (hex) => tono(Taller3D.colorVivo(hex));
+    const cerca = (a, b) => Math.min(Math.abs(a - b), 360 - Math.abs(a - b)) < 40;
+    const usados = [];
+    return ps.map((p) => {
+      let c = Taller3D.colorVivo(p.color);
+      let t = tono(c);
+      if (satur(c) < 25 || usados.some((u) => cerca(u, t))) {
+        c = PALETA.find((x) => !usados.some((u) => cerca(u, tonoHex(x)))) || PALETA[usados.length % PALETA.length];
+        t = tonoHex(c);
+      }
+      usados.push(t);
+      return c;
+    });
+  }
+
+  /* ── Aromas: cuánto tiene cada perfume de cada familia (para el radar y los veredictos) ── */
+
+  /** { cit: { n: 2, notas: ["limón", "bergamota"] }, … } según las palabras de cada familia */
+  function aromasDe(p) {
+    const res = {};
+    const todas = [p.familia, ...p.notas.salida, ...p.notas.corazon, ...p.notas.fondo];
+    for (const [k, , palabras] of Examen.aromas()) {
+      const notas = todas.filter((t) => {
+        const x = Texto.normalizar(t);
+        return palabras.some((w) => x.includes(w));
+      });
+      res[k] = { n: Math.min(3, notas.length), notas };
+    }
+    return res;
+  }
+
+  /** Radar de aromas: una telaraña de 5 puntas con un polígono por perfume. */
+  function radar(ps, colores) {
+    const fam = Examen.aromas();
+    const C = 130; // centro
+    const R = 92; // radio
+    const punta = (k, f) => {
+      const a = -Math.PI / 2 + (k * 2 * Math.PI) / fam.length;
+      return [C + Math.cos(a) * R * f, C + Math.sin(a) * R * f];
+    };
+    const pts = (f) =>
+      fam
+        .map((_, k) =>
+          punta(k, typeof f === "function" ? f(k) : f)
+            .map((v) => v.toFixed(1))
+            .join(",")
+        )
+        .join(" ");
+    const red =
+      [1, 2 / 3, 1 / 3].map((f) => `<polygon points="${pts(f)}"/>`).join("") +
+      fam
+        .map(
+          (_, k) => `<line x1="${C}" y1="${C}" x2="${punta(k, 1)[0].toFixed(1)}" y2="${punta(k, 1)[1].toFixed(1)}"/>`
+        )
+        .join("");
+    const etiquetas = fam
+      .map(([k, nombre], i) => {
+        const [x, y] = punta(i, 1.24);
+        const ancla = x < C - 10 ? "end" : x > C + 10 ? "start" : "middle";
+        return `<text x="${x.toFixed(1)}" y="${(y + 4).toFixed(1)}" text-anchor="${ancla}">${E(nombre.split(" y ")[0])}</text>`;
+      })
+      .join("");
+    const formas = ps
+      .map((p, i) => {
+        const a = aromasDe(p);
+        const c = colores[i];
+        return (
+          `<polygon class="rd-p" style="--c:${c};animation-delay:${i * 0.18}s" ` +
+          `points="${pts((k) => Math.max(0.08, a[fam[k][0]].n / 3))}"/>`
+        );
+      })
+      .join("");
+    const leyenda = ps
+      .map((p, i) => {
+        const a = aromasDe(p);
+        const fuertes = Examen.aromas()
+          .filter(([k]) => a[k].n)
+          .sort((x, y) => a[y[0]].n - a[x[0]].n)
+          .slice(0, 2)
+          .map(([, nombre]) => nombre.split(" y ")[0].toLowerCase());
+        return (
+          `<li style="--c:${colores[i]}"><i></i><b>${E(p.nombre)}</b>` +
+          `<span>${fuertes.length ? "Más " + fuertes.join(" y ") : "Sin notas suficientes"}</span></li>`
+        );
+      })
+      .join("");
+    return (
+      `<section class="sec rdr"><h3 class="cen">Radar de aromas</h3>` +
+      `<div class="rd-g"><svg viewBox="-70 -10 400 290" role="img" aria-label="Radar de aromas">` +
+      `<g class="rd-red">${red}</g>${formas}<g class="rd-t">${etiquetas}</g></svg>` +
+      `<ul class="rd-l">${leyenda}</ul></div></section>`
+    );
+  }
+
+  /** Veredictos: un ganador por categoría; al tocar la tarjeta se voltea y muestra a todos. */
+  function veredictos(ps, colores) {
+    const M = Formato.dinero;
+    const datos = ps.map((p) => ({ p, a: aromasDe(p) }));
+    const tarjetas = [];
+    const ganadorDe = (valor, mejorEsMenor) => {
+      const vals = datos.map(valor);
+      const validos = vals.filter((v) => v != null);
+      if (!validos.length) return null;
+      const mejor = mejorEsMenor ? Math.min(...validos) : Math.max(...validos);
+      if (!mejorEsMenor && mejor <= 0) return null;
+      const quienes = datos.filter((_, i) => vals[i] === mejor);
+      return { quienes, vals };
+    };
+    const agregar = (titulo, icono, g, motivo, detalle) => {
+      if (!g) return;
+      const empate = g.quienes.length > 1;
+      const p = g.quienes[0].p;
+      tarjetas.push(
+        `<button class="vr${empate ? " emp" : ""}" data-accion="voltear-veredicto" style="--c:${colores[ps.indexOf(p)]}" aria-label="${E(titulo)}: ver detalle">` +
+          `<span class="vr-f"><small>${icono}${E(titulo)}</small><b>${empate ? "Empate" : E(p.nombre)}</b>` +
+          `<i>${empate ? g.quienes.map((d) => E(d.p.nombre)).join(" y ") : E(motivo(g.quienes[0]))}</i><em>Toca para ver el detalle</em></span>` +
+          `<span class="vr-d"><small>${E(titulo)}</small>` +
+          datos.map((d, i) => `<span><b>${E(d.p.nombre)}</b>${E(detalle(d, g.vals[i]))}</span>`).join("") +
+          `</span></button>`
+      );
+    };
+    const FAM = { cit: "Más fresco", dul: "Más dulce", mad: "Más amaderado", flo: "Más floral", esp: "Más especiado" };
+    for (const [k] of Examen.aromas()) {
+      agregar(
+        FAM[k],
+        Examen.icono(k),
+        ganadorDe((d) => d.a[k].n),
+        (d) => d.a[k].notas.slice(0, 2).join(" · "),
+        (d, v) => (v ? d.a[k].notas.join(", ") : "—")
+      );
+    }
+    const porMl = (d) => {
+      if (d.p.esKit) return null;
+      const tam = Catalogo.primerTamano(d.p);
+      return d.p.precios[tam] / tam;
+    };
+    agregar(
+      "Mejor precio por ml",
+      '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C8 8.5 6 12 6 15a6 6 0 0 0 12 0c0-3-2-6.5-6-12z"/></svg>',
+      ganadorDe(porMl, true),
+      (d) => M(Math.round(porMl(d))) + " por ml",
+      (d, v) => (v == null ? "Kit" : M(Math.round(v)) + " por ml")
+    );
+    const desc = (d) => Catalogo.descuento(d.p, Catalogo.primerTamano(d.p));
+    agregar(
+      "Mayor descuento",
+      Examen.icono("precio"),
+      ganadorDe(desc),
+      (d) => "−" + desc(d) + "%",
+      (d, v) => (v ? "−" + v + "%" : "Sin descuento")
+    );
+    if (!tarjetas.length) return "";
+    return `<section class="sec vrs"><h3 class="cen">Veredictos</h3><div class="vr-g">${tarjetas.join("")}</div></section>`;
+  }
+
+  /** Una frase corta según la familia del perfume (para la ficha). */
+  function fraseDe(p) {
+    const f = Texto.normalizar(p.familia + " " + p.nombre);
+    if (p.esKit) return "Un set listo para regalar.";
+    if (/gourmand|vainilla|dulce/.test(f)) return "Dulce y envolvente.";
+    if (/oriental|especiad|ambar|intens/.test(f)) return "Cálido e intenso.";
+    if (/amaderad/.test(f)) return "Profundo y elegante.";
+    if (/floral/.test(f)) return "Delicado y femenino.";
+    if (/citric|fresc|acuatic|verde/.test(f)) return "Fresco y ligero.";
+    if (/aromatic|fougere/.test(f)) return "Limpio y clásico.";
+    return "Un aroma para descubrir.";
+  }
+
   /* ── El comparador ───────────────────────────────────────────────────────── */
+
+  /**
+   * Con menos de 2 perfumes no hay tabla: se ven dos lugares ("＋ Elegir
+   * perfume") para escogerlos. Así nunca se compara nada que no se eligió.
+   */
+  function pintarVacio(ps) {
+    const lugar = (k) => {
+      const p = ps[k];
+      return p
+        ? `<div class="cv-l lleno" style="--pc:${E(p.color)}"><div class="ct">${Formato.frasco(p)}</div>` +
+            `<small>${E(p.marca)}</small><b>${E(p.nombre)}</b>` +
+            `<button class="btn l cv-c" data-accion="abrir-selector" data-columna="${k}">Cambiar</button></div>`
+        : `<button class="cv-l" data-accion="abrir-selector" data-columna="${k}" aria-haspopup="dialog">` +
+            `<span class="cv-mas" aria-hidden="true">+</span><b>Elegir perfume</b><small>${k ? "el segundo" : "el primero"}</small></button>`;
+    };
+    $("#cm .cb").innerHTML =
+      `<div class="cv"><div class="cv-g">${lugar(0)}<span class="cv-vs" aria-hidden="true">vs</span>${lugar(1)}</div>` +
+      `<p class="lead">Elige dos perfumes y te mostramos lado a lado sus notas, su estilo y su precio. También puedes tocar «Comparar» en cualquier tarjeta de Descubrir.</p>` +
+      `<p class="cv-ir"><a class="btn l" href="descubrir.html">Ir a Descubrir</a></p></div>`;
+  }
 
   function pintar() {
     const ps = perfumes();
     const n = ps.length;
+    if (n < 2) return pintarVacio(ps);
+    const colores = coloresDe(ps); // uno por columna: bandas, radar y veredictos
     const M = Formato.dinero;
     const notas = (p, capa) => p.notas[capa];
-
-    /** Una fila con una columna por perfume. */
-    const columnas = (contenido) =>
-      `<div class="cg" style="--n:${n}">${ps.map((p, k) => `<div class="col">${contenido(p, k)}</div>`).join("")}</div>`;
 
     /** Cuántos perfumes tienen cada nota (para resaltar las repetidas). */
     function conteo(capa) {
@@ -101,103 +294,125 @@ const Comparador = (() => {
       return { porPerfume, veces, comunes };
     }
 
-    const seccionNotas = ([capa, titulo]) => {
-      const { veces } = conteo(capa);
-      const filas = (p) =>
-        notas(p, capa)
-          .map((t) => `<p${veces[Texto.normalizar(t)] > 1 ? ' class="sh2"' : ""}>${E(t)}</p>`)
-          .join("") || `<p class="mu">—</p>`;
-      return `<section class="sec"><h3>${titulo}</h3>` + columnas((p) => icono(capa) + filas(p)) + `</section>`;
-    };
-
-    /** Al final: las notas que comparten, centradas. */
-    function seccionEnComun() {
-      const filas = CAPAS.map(([capa, , corto]) => {
-        const { porPerfume, comunes } = conteo(capa);
-        if (!comunes.length) return "";
-        const lista = comunes
-          .map((t) => {
-            const quienes = ps.filter((p, j) => porPerfume[j].has(Texto.normalizar(t)));
-            const nota = quienes.length < n ? ` <i>(${quienes.map((p) => E(p.nombre)).join(", ")})</i>` : "";
-            return E(Texto.mayuscula(t)) + nota;
-          })
-          .join(" · ");
-        return `<div class="cr"><small>${corto}</small><span>${lista}</span></div>`;
-      }).join("");
-      return (
-        `<section class="sec"><h3 class="cen">Notas en común</h3>` +
-        `<div class="mid">${filas || `<span class="mu">Estos perfumes no comparten notas.</span>`}</div></section>`
-      );
-    }
-
     const cm = $("#cm");
     const esVentana = cm.tagName === "DIALOG";
     const barraVentana = esVentana
       ? `<div class="cb-bar"><span></span><b>Comparar perfumes</b><button class="cx" data-accion="cerrar" aria-label="Cerrar">×</button></div>`
       : "";
+    const SWAP = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h12l-3-3M17 17H5l3 3"/></svg>';
+    const porMl = (p) => (p.esKit ? 0 : p.precios[Catalogo.primerTamano(p)] / Catalogo.primerTamano(p));
 
-    // nombres fijos arriba
-    const encabezado =
-      `<div class="cb-top">${barraVentana}` +
-      columnas(
-        (p, k) =>
-          `<div class="nm"><h4>${E(p.nombre)}</h4>` +
-          `<button class="sw" data-accion="abrir-selector" data-columna="${k}" aria-haspopup="dialog"><span class="lg">Cambiar perfume</span><span class="sh">Cambiar</span></button></div>`
-      ) +
+    /* 1. Fichas: una por perfume, con su color, frasco, estilo, precio y botones */
+    const fichas =
+      `<div class="cmb-f" style="--n:${n}">` +
+      ps
+        .map((p, k) => {
+          const tam = Catalogo.primerTamano(p);
+          return (
+            `<article class="cmf" style="--pc:${colores[k]};--i:${k}">` +
+            `<div class="cmf-im">${Formato.frasco(p)}${Formato.etiqueta(p, tam)}</div>` +
+            `<div class="cmf-t"><small>${E(p.marca)}</small><h3>${E(p.nombre)}</h3>` +
+            `<span class="cmf-e">${E(p.familia || "Perfume")}</span>` +
+            `<p class="cmf-fr">${E(fraseDe(p))}</p>` +
+            `<p class="cmf-pr">${Formato.precio(p, tam)} <span>${Formato.tamano(tam)}</span></p></div>` +
+            `<div class="cmf-b"><button class="btn" data-accion="agregar" data-id="${E(p.id)}">+ Mi lista</button>` +
+            `<button class="sw" data-accion="abrir-selector" data-columna="${k}" aria-haspopup="dialog" aria-label="Cambiar ${E(p.nombre)}" title="Cambiar perfume">${SWAP}</button>` +
+            (n > 2
+              ? `<button class="sw rmx" data-accion="quitar-de-comparacion" data-columna="${k}" aria-label="Quitar ${E(p.nombre)}" title="Quitar">×</button>`
+              : "") +
+            `</div></article>`
+          );
+        })
+        .join("") +
       `</div>`;
 
-    const frascos = columnas((p, k) => {
-      const tam = Catalogo.primerTamano(p);
-      return (
-        `<div class="ct">${Formato.frasco(p)}${Formato.etiqueta(p, tam)}</div>` +
-        `<button class="btn" data-accion="agregar" data-id="${E(p.id)}"><span class="lg">Guardar en mi lista</span><span class="sh">+ Mi lista</span></button>` +
-        (n > 2 ? `<button class="rm" data-accion="quitar-de-comparacion" data-columna="${k}">Quitar</button>` : "") +
-        `<p class="pz">${Formato.precio(p, tam)}</p>`
-      );
-    });
-
-    const estilo =
-      `<section class="sec"><h3>Estilo</h3>` +
-      columnas(
-        (p) =>
-          icono("estilo") +
-          `<div class="big">${E(p.familia)}</div><p class="mu">${E(Formato.PARA[p.genero] || "Perfume")} · ${E(p.marca)}</p>`
+    /* 2. Números clave: precio por ml, descuento y tamaño, con barras */
+    const maxMl = Math.max(...ps.map(porMl), 1);
+    const maxDesc = Math.max(...ps.map((p) => Catalogo.descuento(p, Catalogo.primerTamano(p))), 1);
+    const fila = (titulo, valor, ancho, mejor) =>
+      `<div class="cmn-f"><span class="cmn-t">${titulo}</span><div class="cmn-v">` +
+      ps
+        .map((p, k) => {
+          const v = valor(p);
+          return (
+            `<div class="cmn-c${mejor(p) ? " gana" : ""}" style="--pc:${colores[k]};--w:${ancho(p)}%">` +
+            `<span class="cmn-n">${E(p.nombre)}</span><b>${v}</b><i></i></div>`
+          );
+        })
+        .join("") +
+      `</div></div>`;
+    const mlMin = Math.min(...ps.filter((p) => !p.esKit).map(porMl));
+    const numeros =
+      `<section class="cmc cmn"><h3>En números</h3>` +
+      fila(
+        "Precio por ml",
+        (p) => (p.esKit ? "Kit" : M(Math.round(porMl(p)))),
+        (p) => (p.esKit ? 0 : Math.max(6, (porMl(p) / maxMl) * 100)),
+        (p) => !p.esKit && porMl(p) === mlMin
       ) +
-      `</section>`;
+      fila(
+        "Descuento",
+        (p) => {
+          const d = Catalogo.descuento(p, Catalogo.primerTamano(p));
+          return d ? "−" + d + "%" : "—";
+        },
+        (p) => Math.max(4, (Catalogo.descuento(p, Catalogo.primerTamano(p)) / maxDesc) * 100),
+        (p) => Catalogo.descuento(p, Catalogo.primerTamano(p)) === maxDesc
+      ) +
+      `<p class="cmn-a">La barra más corta en precio por ml es la que más rinde tu dinero.</p></section>`;
 
-    const precios =
-      `<section class="sec"><h3>Tamaños y precios</h3>` +
-      columnas(
-        (p) =>
-          icono("precio") +
-          Object.keys(p.precios)
-            .map((t) => {
-              const antes = Catalogo.precioAntes(p, t);
-              return (
-                `<div class="big">${Formato.tamano(t)}</div><p>${Formato.precio(p, t)} ${Formato.etiqueta(p, t)}</p>` +
-                (antes ? `<p class="sa">Ahorras ${M(antes - p.precios[t])}</p>` : "")
-              );
+    /* 3. Notas: tabla compacta, las compartidas en bronce; sin datos, invitación al chat */
+    const chat = Config.whatsapp
+      ? `https://wa.me/${Config.whatsapp}?text=${encodeURIComponent("Hola valère, ¿me cuentan las notas de este perfume?")}`
+      : "contacto.html";
+    const tablaNotas =
+      `<section class="cmc cmt"><h3>Notas</h3><p class="cmc-a">Las que comparten aparecen en bronce.</p>` +
+      `<div class="cmt-g" style="--n:${n}"><span></span>` +
+      ps.map((p, k) => `<span class="cmt-h" style="--pc:${colores[k]}"><i></i>${E(p.nombre)}</span>`).join("") +
+      CAPAS.map(([capa, titulo]) => {
+        const { veces } = conteo(capa);
+        return (
+          `<span class="cmt-c">${Texto.mayuscula(titulo.replace("Notas de ", ""))}</span>` +
+          ps
+            .map((p, k) => {
+              const lista = notas(p, capa);
+              const celda = lista.length
+                ? lista.map((t) => `<i class="${veces[Texto.normalizar(t)] > 1 ? "cp2" : ""}">${E(t)}</i>`).join("")
+                : `<a class="cmt-x" href="${E(chat)}" target="_blank" rel="noopener">Te contamos sus notas por chat ›</a>`;
+              return `<div class="cmt-d" style="--pc:${colores[k]}" data-p="${E(p.nombre)}">${celda}</div>`;
             })
             .join("")
-      ) +
+        );
+      }).join("") +
+      `</div></section>`;
+
+    const comunes = CAPAS.flatMap(([capa]) => conteo(capa).comunes);
+    const enComun =
+      `<section class="cmc cmk"><h3>Tienen en común</h3>` +
+      (comunes.length
+        ? `<p>${comunes.map((t) => `<i>${E(Texto.mayuscula(t))}</i>`).join("")}</p>`
+        : `<p class="mu">Estos perfumes no comparten notas: son muy distintos entre sí.</p>`) +
       `</section>`;
 
-    const agregarOtro =
-      n < MAXIMO && Catalogo.todos().length > n
-        ? `<p class="ad"><button class="btn o" data-accion="agregar-a-comparacion">+ Agregar otro perfume</button></p>`
-        : "";
+    const pie =
+      `<div class="cmb-p">` +
+      (n < MAXIMO && Catalogo.todos().length > n
+        ? `<button class="btn l" data-accion="agregar-a-comparacion">+ Agregar otro perfume</button>`
+        : "") +
+      `<button class="cmb-q" data-accion="limpiar-comparacion">× Quitar comparación</button></div>`;
 
+    // El tablero: fichas arriba; radar + veredictos; números; notas y en común (css/comparador.css)
     cm.querySelector(".cb").innerHTML =
-      encabezado +
-      frascos +
-      (deEjemplo
-        ? `<p class="lead ej">Estos dos son de ejemplo. Toca «Cambiar perfume» para elegir los que quieras comparar.</p>`
-        : `<p class="lead">Las notas que se repiten aparecen resaltadas; al final las juntamos en el centro.</p>`) +
-      estilo +
-      CAPAS.map(seccionNotas).join("") +
-      precios +
-      seccionEnComun() +
-      agregarOtro;
+      barraVentana +
+      fichas +
+      `<div class="cmb">` +
+      `<div class="cmc cmr">${radar(ps, colores)}</div>` +
+      `<div class="cmc cmv">${veredictos(ps, colores)}</div>` +
+      numeros +
+      enComun +
+      tablaNotas +
+      `</div>` +
+      pie;
   }
 
   const repintar = () => {
@@ -213,8 +428,6 @@ const Comparador = (() => {
       return Pagina.ir("comparar.html");
     }
     if (Catalogo.todos().length < 2) return Avisos.corto("Agrega al menos 2 perfumes para comparar");
-    if (seleccion.length < 2) deEjemplo = true;
-    while (seleccion.length < 2) seleccion.push(primeroSinElegir().id);
     repintar();
     if (cm.tagName === "DIALOG") Ventanas.abrir(cm);
   }
@@ -266,8 +479,7 @@ const Comparador = (() => {
   }
 
   function elegir(id) {
-    deEjemplo = false;
-    const k = columnaCambiando;
+    const k = Math.min(columnaCambiando, seleccion.length); // un lugar vacío se llena al final
     seleccion[k] = id;
     cerrarSelector();
     repintar();
@@ -304,7 +516,6 @@ const Comparador = (() => {
 
     /** Botón "Comparar" de una tarjeta: agrega o quita (si ya hay 3, sale el más viejo). */
     alternar(id) {
-      deEjemplo = false;
       const k = seleccion.indexOf(id);
       if (k >= 0) seleccion.splice(k, 1);
       else {
@@ -315,7 +526,6 @@ const Comparador = (() => {
     },
     /** "Comparar con otro" en el detalle: agrega este perfume y abre el comparador. */
     con(id) {
-      deEjemplo = false;
       if (!seleccion.includes(id)) {
         if (seleccion.length >= MAXIMO) seleccion.shift();
         seleccion.push(id);
@@ -324,21 +534,20 @@ const Comparador = (() => {
       abrir();
     },
     quitar(columna) {
-      deEjemplo = false;
       seleccion.splice(columna, 1);
       repintar();
     },
     agregarOtro() {
-      deEjemplo = false;
       const p = primeroSinElegir();
       if (p && seleccion.length < MAXIMO) {
         seleccion.push(p.id);
         repintar();
       }
     },
+    /** "Quitar comparación": vacía la selección (en comparar.html quedan los lugares vacíos). */
     limpiar() {
-      deEjemplo = false;
       seleccion = [];
+      if ($("#cm .cb")) pintar();
       marcar();
     },
   };
