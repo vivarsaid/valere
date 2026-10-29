@@ -81,9 +81,11 @@ const Comparador = (() => {
     const M = Formato.dinero;
     const notas = (p, capa) => p.notas[capa];
 
-    /** Una fila con una columna por perfume. */
-    const columnas = (contenido) =>
-      `<div class="cg" style="--n:${n}">${ps.map((p, k) => `<div class="col">${contenido(p, k)}</div>`).join("")}</div>`;
+    /** Una fila con una columna por perfume (cada una con el color de su perfume en --pc). */
+    const columnas = (contenido, clase = "") =>
+      `<div class="cg${clase ? " " + clase : ""}" style="--n:${n}">` +
+      ps.map((p, k) => `<div class="col" style="--pc:${E(p.color)}">${contenido(p, k)}</div>`).join("") +
+      `</div>`;
 
     /** Cuántos perfumes tienen cada nota (para resaltar las repetidas). */
     function conteo(capa) {
@@ -107,7 +109,12 @@ const Comparador = (() => {
         notas(p, capa)
           .map((t) => `<p${veces[Texto.normalizar(t)] > 1 ? ' class="sh2"' : ""}>${E(t)}</p>`)
           .join("") || `<p class="mu">—</p>`;
-      return `<section class="sec"><h3>${titulo}</h3>` + columnas((p) => icono(capa) + filas(p)) + `</section>`;
+      // las notas van como pastillas; las que se repiten, en bronce
+      return (
+        `<section class="sec notas"><h3>${titulo}</h3>` +
+        columnas((p) => icono(capa) + `<div class="nt">${filas(p)}</div>`) +
+        `</section>`
+      );
     };
 
     /** Al final: las notas que comparten, centradas. */
@@ -154,7 +161,7 @@ const Comparador = (() => {
         (n > 2 ? `<button class="rm" data-accion="quitar-de-comparacion" data-columna="${k}">Quitar</button>` : "") +
         `<p class="pz">${Formato.precio(p, tam)}</p>`
       );
-    });
+    }, "fr"); // fr: la fila de los frascos (lleva el "vs" entre columnas)
 
     const estilo =
       `<section class="sec"><h3>Estilo</h3>` +

@@ -5,7 +5,10 @@
    "Guardar en mi lista" y "Comparar con otro".
    Si #pd fuera un <dialog>, funcionaría como ventana flotante.
 
-   Usa:     $, $$, Catalogo, Formato, Pagina, Ventanas
+   El recuadro del frasco toma el color del perfume y, en la página, el frasco
+   gira en 3D (js/frascos/vitrina3d.js).
+
+   Usa:     $, $$, Catalogo, Formato, Pagina, Ventanas, Vitrina3D
    Expone:  VistaProducto
    ============================================================================= */
 
@@ -58,7 +61,7 @@ const VistaProducto = (() => {
     el.classList.remove("vacio");
     el.innerHTML =
       (ventana ? `<button class="x" data-accion="cerrar" aria-label="Cerrar">×</button>` : "") +
-      `<div class="im">${Formato.frasco(p)}</div>` +
+      `<div class="im" style="--pc:${E(p.color)}">${Formato.frasco(p)}</div>` +
       `<div class="tx">` +
       `<small>${E(p.marca)}</small><${H}>${E(p.nombre)}</${H}>` +
       `<p class="fam">${E(Formato.GENERO[p.genero] || "Perfume")} · ${E(p.familia)}</p>` +
@@ -71,7 +74,10 @@ const VistaProducto = (() => {
       `</div>`;
 
     if (ventana) Ventanas.abrir(el);
-    else document.title = `${p.nombre} · ${p.marca} · valère`;
+    else {
+      document.title = `${p.nombre} · ${p.marca} · valère`;
+      Vitrina3D.montar($(".im", el), p); // el frasco gira en 3D (si el aparato puede)
+    }
   }
 
   /** Cuando el link pide un perfume que no existe. */

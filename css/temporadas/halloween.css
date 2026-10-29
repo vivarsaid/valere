@@ -308,9 +308,11 @@ html.hw #pd .im > * {
   position: relative;
   z-index: 1;
 }
+html.hw .card .bt > .kt,
 html.hw .card .bt > .dk,
 html.hw .cg .ct > .dk,
-html.hw #pd .im > .dk {
+html.hw #pd .im > .dk,
+html.hw #pd .im > .vt-gl {
   position: absolute;
 }
 html.hw .card:hover .bt::before,
@@ -334,9 +336,10 @@ html.hw .card:hover {
 }
 
 /* ── Mi lista: cada perfume trae su ambiente ── */
+/* (el panel se sigue deslizando: el overflow lo pone css/mi-lista.css; aquí no se toca,
+   porque un "overflow: hidden" aquí dejaba fuera las sugerencias y los botones de envío) */
 html.hw #cd {
   position: fixed;
-  overflow: hidden;
 }
 html.hw .hwl {
   display: block;
@@ -357,6 +360,11 @@ html.hw #cd > *:not(.hwl) {
 html.hw #cd > .x {
   position: absolute;
   z-index: 2;
+}
+/* la barra fija de abajo sigue pegada abajo */
+html.hw #cd > .cfx {
+  position: sticky;
+  z-index: 3;
 }
 html.hw .hwl .dk {
   pointer-events: auto;

@@ -18,11 +18,15 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- Ícono de la pestaña y del acceso directo del celular -->
+<link rel="icon" href="images/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="images/logo-180.png">
 
-<!-- Letra del logo (solo se descargan las letras de "valère") -->
+<!-- Letras: Bodoni Moda (títulos), Cormorant Garamond (descripciones) y Pinyon Script (logo y palabras sueltas).
+     Se cargan sin frenar la página (media="print" → "all" al terminar). -->
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&text=val%C3%A8re&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&text=val%C3%A8re&display=swap"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600&amp;family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&amp;family=Pinyon+Script&amp;display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600&amp;family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&amp;family=Pinyon+Script&amp;display=swap"></noscript>
 <!-- El catálogo empieza a descargarse desde ya -->
 <link rel="preload" href="data/perfumes.json" as="fetch" crossorigin>
 
@@ -65,6 +69,8 @@
 <script src="js/interfaz/ventanas.js" defer></script>
 <script src="js/frascos/fotos.js" defer></script>
 <script src="js/frascos/motor3d.js" defer></script>
+<script src="js/frascos/taller3d.js" defer></script>
+<script src="js/frascos/vitrina3d.js" defer></script>
 <script src="js/vistas/catalogo.js" defer></script>
 <script src="js/vistas/producto.js" defer></script>
 <script src="js/vistas/mi-lista.js" defer></script>

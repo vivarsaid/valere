@@ -18,34 +18,38 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- Ícono de la pestaña y del acceso directo del celular -->
+<link rel="icon" href="images/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="images/logo-180.png">
 
-<!-- Letra del logo (solo se descargan las letras de "valère") -->
+<!-- Letras: Bodoni Moda (títulos), Cormorant Garamond (descripciones) y Pinyon Script (logo y palabras sueltas).
+     Se cargan sin frenar la página (media="print" → "all" al terminar). -->
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&text=val%C3%A8re&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&text=val%C3%A8re&display=swap"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600&amp;family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&amp;family=Pinyon+Script&amp;display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600&amp;family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&amp;family=Pinyon+Script&amp;display=swap"></noscript>
 <!-- El catálogo empieza a descargarse desde ya -->
 <link rel="preload" href="data/perfumes.json" as="fetch" crossorigin>
 
 <!-- Estilos (el orden importa: los de abajo pueden ajustar a los de arriba) -->
-<link rel="stylesheet" href="css/base.css?v=b9db7fd6">
-<link rel="stylesheet" href="css/componentes.css?v=b7ca9479">
+<link rel="stylesheet" href="css/base.css?v=cd6b600a">
+<link rel="stylesheet" href="css/componentes.css?v=919434f8">
 <link rel="stylesheet" href="css/cabecera.css?v=e0f1319f">
-<link rel="stylesheet" href="css/pie.css?v=4b401413">
+<link rel="stylesheet" href="css/pie.css?v=6de146e8">
 <link rel="stylesheet" href="css/dialogos.css?v=36561658">
 <link rel="stylesheet" href="css/avisos.css?v=2e7ac4af">
 <link rel="stylesheet" href="css/bienvenida.css?v=7bf912e9">
-<link rel="stylesheet" href="css/portada.css?v=bdbe6551">
-<link rel="stylesheet" href="css/carrusel.css?v=252471f4">
-<link rel="stylesheet" href="css/catalogo.css?v=c7093b9f">
-<link rel="stylesheet" href="css/producto.css?v=f9d149f3">
-<link rel="stylesheet" href="css/mi-lista.css?v=6ff43e79">
-<link rel="stylesheet" href="css/comparador.css?v=e2868e26">
-<link rel="stylesheet" href="css/examen.css?v=e9722150">
-<link rel="stylesheet" href="css/paginas.css?v=84824361">
+<link rel="stylesheet" href="css/portada.css?v=15b78189">
+<link rel="stylesheet" href="css/carrusel.css?v=1224749e">
+<link rel="stylesheet" href="css/catalogo.css?v=92d72e57">
+<link rel="stylesheet" href="css/producto.css?v=28bd72c6">
+<link rel="stylesheet" href="css/mi-lista.css?v=39aafe91">
+<link rel="stylesheet" href="css/comparador.css?v=5c4b33a6">
+<link rel="stylesheet" href="css/examen.css?v=528f9295">
+<link rel="stylesheet" href="css/paginas.css?v=a4da50a7">
 <link rel="stylesheet" href="css/pantallas-especiales.css?v=95daa00a">
 <link rel="stylesheet" href="css/modo-ligero.css?v=b3cc1854">
 <link rel="stylesheet" href="css/anticopia.css?v=5e136053">
-<link rel="stylesheet" href="css/temporadas/halloween.css?v=84782c85">
+<link rel="stylesheet" href="css/temporadas/halloween.css?v=aae5978d">
 
 <!-- Antes de pintar: ajustes, tema de temporada, modo ligero y bienvenida -->
 <script src="js/config.js?v=59635eb3"></script>
@@ -65,17 +69,19 @@
 <script src="js/interfaz/ventanas.js?v=3644ae72" defer></script>
 <script src="js/frascos/fotos.js?v=4e67c68f" defer></script>
 <script src="js/frascos/motor3d.js?v=681cdc8c" defer></script>
-<script src="js/vistas/catalogo.js?v=940dbc6a" defer></script>
-<script src="js/vistas/producto.js?v=b7b3fbe5" defer></script>
-<script src="js/vistas/mi-lista.js?v=b99f3739" defer></script>
-<script src="js/vistas/comparador.js?v=6a387400" defer></script>
+<script src="js/frascos/taller3d.js?v=97ed2836" defer></script>
+<script src="js/frascos/vitrina3d.js?v=3bee8cdf" defer></script>
+<script src="js/vistas/catalogo.js?v=ba85a2b1" defer></script>
+<script src="js/vistas/producto.js?v=2d7d24c4" defer></script>
+<script src="js/vistas/mi-lista.js?v=aa180950" defer></script>
+<script src="js/vistas/comparador.js?v=40291e9c" defer></script>
 <script src="js/vistas/barra.js?v=0c31b815" defer></script>
-<script src="js/vistas/carrusel.js?v=4aa6a90b" defer></script>
+<script src="js/vistas/carrusel.js?v=705b532f" defer></script>
 <script src="js/vistas/nosotros.js?v=fd88bb89" defer></script>
-<script src="js/vistas/examen.js?v=b76fd96f" defer></script>
+<script src="js/vistas/examen.js?v=746ac0cb" defer></script>
 <script src="js/vistas/bienvenida.js?v=0e669858" defer></script>
 <script src="js/temporadas/halloween.js?v=9c62d627" defer></script>
-<script src="js/app.js?v=3b89f07f" defer></script>
+<script src="js/app.js?v=72234879" defer></script>
 </head>
 <body data-pagina="terminos">
 <!-- Dibujos que se reusan: el frasco (#bo) y el logo (#lg) -->
@@ -223,6 +229,8 @@
     <textarea id="mn" readonly hidden rows="5" aria-label="Tu lista, lista para copiar"></textarea>
     <small>WhatsApp se abre con tu lista ya escrita. En Instagram y Facebook, tu lista se copia y se abre el chat: solo pégala y envíala. El total es estimado; ahí confirmamos disponibilidad, envío y pago.</small>
     <small class="lgl">Al enviar tu lista aceptas los <a href="terminos.html">Términos y condiciones</a> y el <a href="privacidad.html">Aviso de privacidad</a>.</small></div>
+  <!-- Barra fija abajo: total y WhatsApp siempre a la mano (se esconde al llegar a los botones de arriba) -->
+  <div class="cfx" id="cfx" hidden><div><small>Total estimado</small><b id="ct2"></b></div><a class="btn ws" id="sw2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 0 0-8.66 15l-1.3 4.76 4.88-1.28A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-2.9.76.78-2.83-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.14c-.25-.12-1.46-.72-1.69-.8-.23-.08-.39-.12-.56.12-.16.25-.64.8-.78.97-.15.16-.29.18-.54.06a6.7 6.7 0 0 1-3.3-2.89c-.25-.43.25-.4.71-1.33.08-.16.04-.3-.02-.43l-.76-1.83c-.2-.48-.4-.41-.56-.42h-.47a.9.9 0 0 0-.66.31 2.77 2.77 0 0 0-.86 2.06 4.8 4.8 0 0 0 1 2.56 11 11 0 0 0 4.22 3.72c1.57.68 2.19.74 2.98.62.48-.07 1.46-.6 1.67-1.18.2-.58.2-1.07.15-1.18-.06-.1-.22-.16-.47-.28z"/></svg>Enviar</a></div>
 </dialog>
 
 <!-- Barrita flotante: comparar y finalizar compra (la dibuja js/vistas/barra.js) -->

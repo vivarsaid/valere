@@ -103,6 +103,7 @@ const App = (() => {
     "examen-continuar": () => Examen.continuar(),
     "examen-presupuesto": (el) => Examen.presupuesto(+el.dataset.valor),
     "examen-reiniciar": () => Examen.reiniciar(),
+    "examen-atras": () => Examen.atras(),
 
     // Menú de celular (☰)
     menu: () => menu(!$("header").classList.contains("abierto")),
@@ -146,7 +147,7 @@ const App = (() => {
     document.addEventListener(
       "click",
       (e) => {
-        const a = e.target.closest && e.target.closest("#sw,#si,#sf,#fw,#fi,#ff,[data-red]");
+        const a = e.target.closest && e.target.closest("#sw,#sw2,#si,#sf,#fw,#fi,#ff,[data-red]");
         if (!a) return;
         const ahora = Date.now();
         if (ahora - ultimoChat < 1500) {

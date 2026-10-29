@@ -12,6 +12,47 @@
    redibuja 60 veces por segundo es lo que más traba en celulares.
    ============================================================================= */
 
+/* main agrupa sus capas: así el resplandor (z-index -1) queda detrás del contenido
+   pero encima del fondo negro de la página (si no, el fondo lo tapa) */
+body[data-pagina="inicio"] main {
+  position: relative;
+  z-index: 0;
+}
+
+/* ── Resplandor de la portada: el color del perfume del centro, regado por la página ──
+   Dos capas (<i>): la que tiene .on se ve; al cambiar de perfume se cruzan. */
+.car-brillo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1300px;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.car-brillo i {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      ellipse 70% 40% at 50% 56%,
+      color-mix(in srgb, var(--c, #333) 55%, transparent),
+      transparent 74%
+    ),
+    radial-gradient(ellipse 110% 55% at 50% 30%, color-mix(in srgb, var(--c, #333) 30%, transparent), transparent 80%);
+  opacity: 0;
+  transition: opacity 0.9s ease;
+  will-change: opacity;
+}
+.car-brillo i.on {
+  opacity: 1;
+}
+@media (max-width: 700px) {
+  .car-brillo {
+    height: 1150px;
+  }
+}
+
 /* --car-h también lo usa el tema de temporada para acomodar sus figuras encima */
 .hero {
   --car-h: clamp(460px, 50vw, 600px);

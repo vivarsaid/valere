@@ -16,7 +16,9 @@
   --cap: #d8d8dc; /* tapa del frasco dibujado */
   color-scheme: dark;
   --sys: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --script: "Pinyon Script", "Snell Roundhand", "Apple Chancery", cursive; /* letra del logo */
+  --script: "Pinyon Script", "Snell Roundhand", "Apple Chancery", cursive; /* logo y palabras sueltas */
+  --titulo: "Bodoni Moda", "Bodoni 72", Didot, "Times New Roman", serif; /* títulos grandes (como Perandory) */
+  --elegante: "Cormorant Garamond", Garamond, Georgia, serif; /* subtítulos y descripciones (como The Seasons) */
 }
 
 * {
@@ -83,6 +85,28 @@ svg.b {
 
 section {
   padding-block: 72px 0;
+}
+/* Títulos y descripciones con las letras elegantes (ver :root) */
+.pg-t,
+.hero h1,
+.sub-h,
+.hs-q,
+.hs-f h2,
+.ex-t b,
+div#pd h1,
+.car-datos h2,
+#qz h3 {
+  font-family: var(--titulo);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.sub2,
+.hs-lead,
+.hero p,
+.lead {
+  font-family: var(--elegante);
+  font-style: italic;
+  font-weight: 500;
 }
 h2 {
   margin: 0;

@@ -10,7 +10,7 @@
   margin: 0;
   font-size: clamp(32px, 5vw, 52px);
   line-height: 1.08;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
   font-weight: 600;
 }
 .pg-h {
@@ -266,20 +266,18 @@
   font-size: clamp(36px, 6.4vw, 68px);
   text-wrap: balance;
 }
-/* "Nuestra historia", arriba del título */
+/* Palabra suelta en cursiva arriba del título ("encuentra el tuyo", "Nuestra historia") */
 .hs-k {
-  margin: 0 0 14px;
+  margin: 0 0 6px;
   color: var(--acc);
-  font-size: 13px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font: 400 clamp(30px, 4vw, 40px) / 1.1 var(--script);
 }
 .hs-lead {
   margin: 24px 0 0;
-  max-width: 36em;
+  max-width: 34em;
   color: var(--mut);
-  font-size: clamp(18px, 2.2vw, 22px);
-  line-height: 1.45;
+  font-size: clamp(21px, 2.6vw, 26px);
+  line-height: 1.4;
 }
 /* Capítulos 01 · 02 · 03 */
 .hs-c {
@@ -318,6 +316,11 @@
   syntax: "<color>";
   inherits: false;
   initial-value: transparent;
+}
+/* main agrupa sus capas: así el fondo de color (z-index -1) se ve sobre el negro de la página */
+body[data-pagina="nosotros"] main {
+  position: relative;
+  z-index: 0;
 }
 .hs-fondo {
   position: fixed;

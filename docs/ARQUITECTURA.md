@@ -76,17 +76,19 @@ En **todas** las páginas están la cabecera, el pie (con los enlaces legales), 
 | 13 | `js/interfaz/ventanas.js` | `Ventanas` | Abrir/cerrar ventanas, botón Atrás, doble toque |
 | 14 | `js/frascos/fotos.js` | `Frascos` | Decide si el frasco va en 3D, con foto o dibujado, y lo pinta |
 | 15 | `js/frascos/motor3d.js` | `Motor3D` | Motor 3D propio con WebGL (apagado con `VISTA_3D: false`) |
-| 16 | `js/vistas/catalogo.js` | `VistaCatalogo` | Tarjetas, filtros, orden, búsqueda y la invitación al examen dentro de la cuadrícula |
-| 17 | `js/vistas/producto.js` | `VistaProducto` | Detalle del perfume |
-| 18 | `js/vistas/mi-lista.js` | `VistaLista` | Dibuja Mi lista: pasos, tarjetas, «Te puede gustar» y resumen |
-| 19 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador y selector (si no eligieron nada, pone dos de ejemplo que no se guardan) |
-| 20 | `js/vistas/barra.js` | `Barra` | Barrita flotante: comparar y «Finalizar compra» (abre Mi lista) |
-| 21 | `js/vistas/carrusel.js` | `Carrusel` | Carrusel 3D de la portada (Three.js, se descarga después; ver abajo) |
-| 22 | `js/vistas/nosotros.js` | `VistaNosotros` | Nosotros: números del catálogo, color al bajar por los capítulos y pirámide olfativa |
-| 23 | `js/vistas/examen.js` | `Examen` | Examen de gustos y recomendación |
-| 24 | `js/vistas/bienvenida.js` | `Bienvenida` | Acomoda el acento de la animación y la quita al terminar |
-| 25 | `js/temporadas/halloween.js` | `Halloween` | Figuras, ambientes y efectos de temporada |
-| 26 | `js/app.js` | `App` | **Conecta todo** y arranca (ver abajo) |
+| 16 | `js/frascos/taller3d.js` | `Taller3D` | Arma los frascos 3D con Three.js (lo usan el carrusel y el detalle) |
+| 17 | `js/frascos/vitrina3d.js` | `Vitrina3D` | El frasco 3D que gira en el detalle del perfume |
+| 18 | `js/vistas/catalogo.js` | `VistaCatalogo` | Tarjetas, filtros, orden, búsqueda y la invitación al examen dentro de la cuadrícula |
+| 19 | `js/vistas/producto.js` | `VistaProducto` | Detalle del perfume |
+| 20 | `js/vistas/mi-lista.js` | `VistaLista` | Dibuja Mi lista: pasos, tarjetas, «Te puede gustar» y resumen |
+| 21 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador y selector (si no eligieron nada, pone dos de ejemplo que no se guardan) |
+| 22 | `js/vistas/barra.js` | `Barra` | Barrita flotante: comparar y «Finalizar compra» (abre Mi lista) |
+| 23 | `js/vistas/carrusel.js` | `Carrusel` | Carrusel 3D de la portada (Three.js, se descarga después; ver abajo) |
+| 24 | `js/vistas/nosotros.js` | `VistaNosotros` | Nosotros: números del catálogo, color al bajar por los capítulos y pirámide olfativa |
+| 25 | `js/vistas/examen.js` | `Examen` | Examen de gustos y recomendación |
+| 26 | `js/vistas/bienvenida.js` | `Bienvenida` | Acomoda el acento de la animación y la quita al terminar |
+| 27 | `js/temporadas/halloween.js` | `Halloween` | Figuras, ambientes y efectos de temporada |
+| 28 | `js/app.js` | `App` | **Conecta todo** y arranca (ver abajo) |
 
 ### El carrusel 3D de la portada
 
@@ -158,10 +160,10 @@ Cada archivo es un tema. **El orden importa**: los de abajo pueden ajustar a los
 | `portada.css` | Portada |
 | `carrusel.css` | Carrusel 3D de la portada |
 | `catalogo.css` | Buscador, filtros (para quién y precio), orden y tarjetas |
-| `producto.css` | Detalle del perfume |
+| `producto.css` | Detalle del perfume (frasco sobre su color y en 3D) |
 | `mi-lista.css` | Mi lista (pasos, tarjetas, sugerencias, resumen), regalo y su aviso |
 | `comparador.css` | Barrita (comparar y finalizar compra), comparador y selector |
-| `examen.css` | Examen de gustos |
+| `examen.css` | Examen de gustos (mosaicos con ícono, barra de avance y resultado) |
 | `paginas.css` | Títulos de página, Contacto, Nosotros y páginas legales |
 | `pantallas-especiales.css` | Plegables, navegadores viejos, menos transparencia/movimiento |
 | `modo-ligero.css` | Menos efectos en equipos modestos |
@@ -227,6 +229,10 @@ Campos de `modelos`: `foto` (nombre del .webp), `c` color del frasco, `v` 1 = vi
 **Cambiar lo que dicen el Aviso de privacidad o los Términos** → `plantillas/paginas/privacidad.html` o `terminos.html`, cambia la fecha de «Última actualización» y genera las páginas.
 
 **Cambiar un color de todo el sitio** → `css/base.css`, en `:root`, y luego *Generar páginas*.
+
+**Cambiar las letras** → en `css/base.css` (`:root`): `--titulo` (títulos, Bodoni Moda), `--elegante` (descripciones, Cormorant Garamond) y `--script` (logo y palabras sueltas, Pinyon Script). Si cambias de letra, cambia también el link de Google Fonts en `plantillas/comun-arriba.html`. Son gemelas gratis de Perandory, The Seasons y Burgues Script; si se compran las originales, se ponen aquí.
+
+**Cambiar el ícono de la pestaña** → `images/logo.svg` (y `images/logo-180.png` para iPhone).
 
 **Cambiar el menú, el pie o algo que está en todas las páginas**
 1. Edita `plantillas/comun-arriba.html` o `plantillas/comun-abajo.html`.

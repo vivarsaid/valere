@@ -223,11 +223,11 @@
 
 /* Texto bajo un título */
 .sub2 {
-  margin: 10px 0 0;
-  max-width: 34em;
+  margin: 12px 0 0;
+  max-width: 32em;
   color: var(--mut);
-  font-size: 17px;
-  line-height: 1.4;
+  font-size: clamp(20px, 2.3vw, 24px);
+  line-height: 1.35;
 }
 
 /* Enlace subrayado bronce */

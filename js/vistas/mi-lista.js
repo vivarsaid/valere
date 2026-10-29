@@ -109,11 +109,30 @@ const VistaLista = (() => {
         : "Lo preparamos listo para regalar.";
   }
 
+  /**
+   * Barra fija de abajo (total + WhatsApp): sale cuando hay algo en la lista y
+   * se esconde mientras los botones grandes de envío están a la vista.
+   */
+  let vigiaBotones = null;
+  function pintarBarraFija(hayPiezas, totalTexto) {
+    const barra = $("#cfx");
+    if (!barra) return;
+    barra.hidden = !hayPiezas;
+    $("#ct2").textContent = totalTexto;
+    if (!vigiaBotones && window.IntersectionObserver) {
+      vigiaBotones = new IntersectionObserver((es) => barra.classList.toggle("fuera", es[0].isIntersecting), {
+        root: $("#cd"),
+      });
+      vigiaBotones.observe($("#sw"));
+    }
+  }
+
   /** Los botones de envío: se apagan si la lista está vacía. */
   function pintarBotonesDeEnvio(hayPiezas) {
     const mensaje = Lista.mensaje();
     const enlaces = {
       sw: `https://wa.me/${Config.whatsapp}?text=${encodeURIComponent(mensaje)}`,
+      sw2: `https://wa.me/${Config.whatsapp}?text=${encodeURIComponent(mensaje)}`,
       si: Config.esMovil
         ? `https://ig.me/m/${Config.instagram}`
         : `https://www.instagram.com/${encodeURIComponent(Config.instagram)}/`,
@@ -185,6 +204,7 @@ const VistaLista = (() => {
 
     pintarRegalo(n > 0);
     pintarBotonesDeEnvio(n > 0);
+    pintarBarraFija(n > 0, M(total + extraRegalo));
     Barra.pintar(); // "Finalizar compra" y el texto de la barrita
   }
 

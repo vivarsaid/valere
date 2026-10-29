@@ -19,13 +19,58 @@
   grid-template-columns: 1fr 1fr;
 }
 
-/* Frasco */
+/* Frasco: sobre el color del perfume (--pc lo pone js/vistas/producto.js) */
 #pd .im {
-  background: radial-gradient(ellipse 70% 60% at 50% 55%, #303035, var(--surf) 75%);
+  --pc: #3a3a3f;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: radial-gradient(
+      ellipse 55% 48% at 50% 58%,
+      color-mix(in srgb, var(--pc) 70%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(ellipse 90% 80% at 50% 100%, color-mix(in srgb, var(--pc) 35%, transparent), transparent 70%),
+    color-mix(in srgb, var(--pc) 22%, #0c0c0e);
   display: grid;
   place-items: center;
   min-height: 360px;
   padding: 32px;
+}
+/* una luz suave arriba, como de vitrina */
+#pd .im::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -20%;
+  left: 50%;
+  width: 70%;
+  height: 60%;
+  translate: -50% 0;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.16), transparent);
+  pointer-events: none;
+}
+/* El frasco 3D que gira (js/frascos/vitrina3d.js): aparece encima del plano */
+#pd .vt-gl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.8s;
+  touch-action: pan-y;
+  cursor: grab;
+}
+#pd .im.con-3d .vt-gl {
+  opacity: 1;
+}
+#pd .im > svg,
+#pd .im > .ph {
+  transition: opacity 0.6s;
+}
+#pd .im.con-3d > svg,
+#pd .im.con-3d > .ph {
+  opacity: 0;
 }
 #pd .im svg {
   height: 300px;
