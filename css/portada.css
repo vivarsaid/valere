@@ -21,8 +21,8 @@
 .hero p {
   margin: 18px auto 0;
   max-width: 30em;
-  font-size: clamp(21px, 2.8vw, 28px);
-  line-height: 1.3;
+  font-size: clamp(17px, 2vw, 20px);
+  line-height: 1.55;
   color: var(--mut);
   text-wrap: balance;
 }

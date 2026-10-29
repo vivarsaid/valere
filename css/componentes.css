@@ -226,8 +226,8 @@
   margin: 12px 0 0;
   max-width: 32em;
   color: var(--mut);
-  font-size: clamp(20px, 2.3vw, 24px);
-  line-height: 1.35;
+  font-size: clamp(17px, 1.9vw, 19px);
+  line-height: 1.55;
 }
 
 /* Enlace subrayado bronce */

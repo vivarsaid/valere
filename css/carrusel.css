@@ -55,28 +55,52 @@ body[data-pagina="inicio"] main {
 
 /* --car-h también lo usa el tema de temporada para acomodar sus figuras encima */
 .hero {
-  --car-h: clamp(460px, 50vw, 600px);
+  --car-h: clamp(520px, 50vw, 660px);
+}
+/* El carrusel ocupa todo el ancho de la pantalla, sin recuadro: su color
+   (--car-bg, lo pone js/vistas/carrusel.js) se desvanece arriba y abajo para
+   fundirse con la página. */
+body[data-pagina="inicio"] main {
+  overflow-x: clip; /* el ancho completo no debe crear scroll de lado */
 }
 .car {
   --tag-y: 42%;
   --tx2: rgba(255, 255, 255, 0.74);
+  --car-bg: #1c1c1e;
   position: relative;
-  margin-top: 48px;
+  width: 100vw;
+  margin-top: 40px;
+  margin-left: calc(50% - 50vw);
   padding: 0; /* es <section>, pero sin el espacio de las secciones */
   height: var(--car-h);
-  border-radius: 28px;
   overflow: hidden;
   isolation: isolate;
-  background-color: #1c1c1e;
+  background: linear-gradient(180deg, transparent, var(--car-bg) 22%, var(--car-bg) 78%, transparent);
   color: #fff;
   text-align: center;
   contain: layout paint;
+}
+/* y una luz del mismo color en el centro, para que no se vea plano */
+.car::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 10% 0;
+  background: radial-gradient(
+    ellipse 50% 55% at 50% 45%,
+    color-mix(in srgb, var(--car-bg) 55%, #fff 12%),
+    transparent 72%
+  );
+  pointer-events: none;
 }
 
 /* ── Escenario ── */
 .car-esc {
   position: absolute;
   inset: 0;
+  /* lo que va detrás (luz, texto que gira, frascos) se desvanece arriba y abajo: sin orillas rectas */
+  -webkit-mask: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent);
+  mask: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent);
   touch-action: pan-y; /* de arriba a abajo baja la página; de lado mueve el carrusel */
   cursor: grab;
   user-select: none;
@@ -88,10 +112,10 @@ body[data-pagina="inicio"] main {
 .car-luz {
   position: absolute;
   left: 50%;
-  top: var(--tag-y);
-  width: min(110%, 900px);
-  aspect-ratio: 1;
-  translate: -50% -50%;
+  top: 0;
+  width: min(110%, 1000px);
+  height: 100%;
+  translate: -50% 0;
   background: radial-gradient(closest-side, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0));
   pointer-events: none;
 }
@@ -205,8 +229,9 @@ body[data-pagina="inicio"] main {
 /* ── Abajo: número, datos y flechas ── */
 .car-info {
   position: absolute;
-  left: 0;
-  right: 0;
+  /* número y flechas alineados con el contenido de la página, no con la orilla */
+  left: max(16px, calc(50% - 540px));
+  right: max(16px, calc(50% - 540px));
   bottom: 0;
   z-index: 2;
   display: grid;
@@ -348,7 +373,6 @@ body[data-pagina="inicio"] #cb {
   }
   .car {
     margin-top: 36px;
-    border-radius: 24px;
   }
   .car-info {
     grid-template-columns: auto 1fr auto;

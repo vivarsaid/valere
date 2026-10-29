@@ -45,6 +45,24 @@ const Taller3D = (() => {
   }
   const rgbAHex = (rgb) => "#" + rgb.map((v) => v.toString(16).padStart(2, "0")).join("");
 
+  /** El tono del perfume, pero luminoso (un perfume casi negro no daría luz ni se vería en un gráfico). */
+  function colorVivo(hex) {
+    const [r, g, b] = hexARgb(hex).map((v) => v / 255);
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const l = (max + min) / 2;
+    const d = max - min;
+    let h = 0;
+    let s = 0;
+    if (d) {
+      s = d / (1 - Math.abs(2 * l - 1));
+      h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+      h = (h * 60 + 360) % 360;
+    }
+    const L = Math.min(0.62, Math.max(0.42, l));
+    return `hsl(${Math.round(h)} ${Math.round(Math.min(s, 0.75) * 100)}% ${Math.round(L * 100)}%)`;
+  }
+
   /** Un número fijo para cada perfume (para que siempre le toque la misma forma). */
   function numeroDe(texto) {
     let h = 0;
@@ -358,5 +376,5 @@ const Taller3D = (() => {
     return { armar };
   }
 
-  return { cargarThree, aspecto, nuevo, hexARgb, rgbAHex, numeroDe };
+  return { cargarThree, aspecto, nuevo, hexARgb, rgbAHex, numeroDe, colorVivo };
 })();

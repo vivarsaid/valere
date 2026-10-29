@@ -126,6 +126,7 @@ const App = (() => {
     "alternar-comparar": (el) => Comparador.alternar(el.dataset.id),
     "comparar-con": (el) => Comparador.con(el.dataset.id),
     "limpiar-comparacion": () => Comparador.limpiar(),
+    "voltear-veredicto": (el) => el.classList.toggle("vuelta"),
     "agregar-a-comparacion": () => Comparador.agregarOtro(),
     "quitar-de-comparacion": (el) => Comparador.quitar(+el.dataset.columna),
     "abrir-selector": (el) => Comparador.abrirSelector(+el.dataset.columna),

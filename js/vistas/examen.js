@@ -145,6 +145,9 @@ const Examen = (() => {
   };
 
   return {
+    /** Las familias de aromas [clave, nombre, palabras] y sus íconos (las usa también el comparador). */
+    aromas: () => AROMAS,
+    icono: (k) => ICONOS[k] || "",
     abrir() {
       r = nuevo();
       pintar();

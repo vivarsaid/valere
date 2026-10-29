@@ -114,7 +114,7 @@ const Carrusel = (() => {
     el.ver.href = Pagina.enlacePerfume(p);
     el.ver.setAttribute("aria-label", `Ver ${p.nombre} de ${p.marca}`);
 
-    regarBrillo(colorDeBrillo(p.color));
+    regarBrillo(Taller3D.colorVivo(p.color));
 
     // Mientras no hay 3D, se ve el frasco plano del perfume del centro.
     if (!gl) {
@@ -128,23 +128,6 @@ const Carrusel = (() => {
    * la nueva toma el color y aparece mientras la otra se apaga. Solo cambia la
    * transparencia, que es lo más barato de animar.
    */
-  /** El tono del perfume, pero luminoso (un perfume casi negro no daría luz). */
-  function colorDeBrillo(hex) {
-    const [r, g, b] = hexARgb(hex).map((v) => v / 255);
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    const l = (max + min) / 2;
-    const d = max - min;
-    let h = 0;
-    let s = 0;
-    if (d) {
-      s = d / (1 - Math.abs(2 * l - 1));
-      h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
-      h = (h * 60 + 360) % 360;
-    }
-    return `hsl(${Math.round(h)} ${Math.round(Math.min(s, 0.75) * 100)}% ${Math.round(limitar(l, 0.42, 0.62) * 100)}%)`;
-  }
-
   let capaBrillo = 0;
   function regarBrillo(color) {
     const capas = el.brillo;
@@ -323,7 +306,7 @@ const Carrusel = (() => {
     const rgb = a.map((v, k) => Math.round(v + (b[k] - v) * f));
     const css = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
     if (css !== fondoActual) {
-      caja.style.backgroundColor = css;
+      caja.style.setProperty("--car-bg", css); // el CSS lo desvanece arriba y abajo
       fondoActual = css;
     }
 

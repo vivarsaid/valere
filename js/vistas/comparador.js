@@ -11,7 +11,11 @@
      · El comparador (#cm .cb): solo en comparar.html.
      · El selector "Cambiar perfume" (#pk): lista de todos los perfumes.
 
-   Usa:     $, $$, Almacen, Catalogo, Formato, Texto, Pagina, Avisos, Ventanas, Barra
+   Arriba de las notas: el radar de aromas y los veredictos (un ganador por
+   categoría, la tarjeta se voltea al tocarla). Cada lado de la página se
+   difumina con el color de su perfume.
+
+   Usa:     $, $$, Almacen, Catalogo, Formato, Texto, Pagina, Avisos, Ventanas, Barra, Examen, Taller3D
    Expone:  Comparador
    ============================================================================= */
 
@@ -69,6 +73,146 @@ const Comparador = (() => {
     Barra.pintar();
   }
 
+  /* ── Aromas: cuánto tiene cada perfume de cada familia (para el radar y los veredictos) ── */
+
+  /** { cit: { n: 2, notas: ["limón", "bergamota"] }, … } según las palabras de cada familia */
+  function aromasDe(p) {
+    const res = {};
+    const todas = [p.familia, ...p.notas.salida, ...p.notas.corazon, ...p.notas.fondo];
+    for (const [k, , palabras] of Examen.aromas()) {
+      const notas = todas.filter((t) => {
+        const x = Texto.normalizar(t);
+        return palabras.some((w) => x.includes(w));
+      });
+      res[k] = { n: Math.min(3, notas.length), notas };
+    }
+    return res;
+  }
+
+  /** Radar de aromas: una telaraña de 5 puntas con un polígono por perfume. */
+  function radar(ps) {
+    const fam = Examen.aromas();
+    const C = 130; // centro
+    const R = 92; // radio
+    const punta = (k, f) => {
+      const a = -Math.PI / 2 + (k * 2 * Math.PI) / fam.length;
+      return [C + Math.cos(a) * R * f, C + Math.sin(a) * R * f];
+    };
+    const pts = (f) =>
+      fam
+        .map((_, k) =>
+          punta(k, typeof f === "function" ? f(k) : f)
+            .map((v) => v.toFixed(1))
+            .join(",")
+        )
+        .join(" ");
+    const red =
+      [1, 2 / 3, 1 / 3].map((f) => `<polygon points="${pts(f)}"/>`).join("") +
+      fam
+        .map(
+          (_, k) => `<line x1="${C}" y1="${C}" x2="${punta(k, 1)[0].toFixed(1)}" y2="${punta(k, 1)[1].toFixed(1)}"/>`
+        )
+        .join("");
+    const etiquetas = fam
+      .map(([k, nombre], i) => {
+        const [x, y] = punta(i, 1.24);
+        const ancla = x < C - 10 ? "end" : x > C + 10 ? "start" : "middle";
+        return `<text x="${x.toFixed(1)}" y="${(y + 4).toFixed(1)}" text-anchor="${ancla}">${Examen.icono(k)} ${E(nombre.split(" y ")[0])}</text>`;
+      })
+      .join("");
+    const formas = ps
+      .map((p, i) => {
+        const a = aromasDe(p);
+        const c = Taller3D.colorVivo(p.color);
+        return (
+          `<polygon class="rd-p" style="--c:${c};animation-delay:${i * 0.18}s" ` +
+          `points="${pts((k) => Math.max(0.08, a[fam[k][0]].n / 3))}"/>`
+        );
+      })
+      .join("");
+    const leyenda = ps
+      .map((p) => {
+        const a = aromasDe(p);
+        const fuertes = Examen.aromas()
+          .filter(([k]) => a[k].n)
+          .sort((x, y) => a[y[0]].n - a[x[0]].n)
+          .slice(0, 2)
+          .map(([, nombre]) => nombre.split(" y ")[0].toLowerCase());
+        return (
+          `<li style="--c:${Taller3D.colorVivo(p.color)}"><i></i><b>${E(p.nombre)}</b>` +
+          `<span>${fuertes.length ? "Más " + fuertes.join(" y ") : "Sin notas suficientes"}</span></li>`
+        );
+      })
+      .join("");
+    return (
+      `<section class="sec rdr"><h3 class="cen">Radar de aromas</h3>` +
+      `<div class="rd-g"><svg viewBox="-70 -10 400 290" role="img" aria-label="Radar de aromas">` +
+      `<g class="rd-red">${red}</g>${formas}<g class="rd-t">${etiquetas}</g></svg>` +
+      `<ul class="rd-l">${leyenda}</ul></div></section>`
+    );
+  }
+
+  /** Veredictos: un ganador por categoría; al tocar la tarjeta se voltea y muestra a todos. */
+  function veredictos(ps) {
+    const M = Formato.dinero;
+    const datos = ps.map((p) => ({ p, a: aromasDe(p) }));
+    const tarjetas = [];
+    const ganadorDe = (valor, mejorEsMenor) => {
+      const vals = datos.map(valor);
+      const validos = vals.filter((v) => v != null);
+      if (!validos.length) return null;
+      const mejor = mejorEsMenor ? Math.min(...validos) : Math.max(...validos);
+      if (!mejorEsMenor && mejor <= 0) return null;
+      const quienes = datos.filter((_, i) => vals[i] === mejor);
+      return { quienes, vals };
+    };
+    const agregar = (titulo, icono, g, motivo, detalle) => {
+      if (!g) return;
+      const empate = g.quienes.length > 1;
+      const p = g.quienes[0].p;
+      tarjetas.push(
+        `<button class="vr${empate ? " emp" : ""}" data-accion="voltear-veredicto" style="--c:${Taller3D.colorVivo(p.color)}" aria-label="${E(titulo)}: ver detalle">` +
+          `<span class="vr-f"><small>${icono} ${E(titulo)}</small><b>${empate ? "Empate" : E(p.nombre)}</b>` +
+          `<i>${empate ? g.quienes.map((d) => E(d.p.nombre)).join(" y ") : E(motivo(g.quienes[0]))}</i><em>Toca para ver el detalle</em></span>` +
+          `<span class="vr-d"><small>${E(titulo)}</small>` +
+          datos.map((d, i) => `<span><b>${E(d.p.nombre)}</b>${E(detalle(d, g.vals[i]))}</span>`).join("") +
+          `</span></button>`
+      );
+    };
+    const FAM = { cit: "Más fresco", dul: "Más dulce", mad: "Más amaderado", flo: "Más floral", esp: "Más especiado" };
+    for (const [k] of Examen.aromas()) {
+      agregar(
+        FAM[k],
+        Examen.icono(k),
+        ganadorDe((d) => d.a[k].n),
+        (d) => d.a[k].notas.slice(0, 2).join(" · "),
+        (d, v) => (v ? d.a[k].notas.join(", ") : "—")
+      );
+    }
+    const porMl = (d) => {
+      if (d.p.esKit) return null;
+      const tam = Catalogo.primerTamano(d.p);
+      return d.p.precios[tam] / tam;
+    };
+    agregar(
+      "Mejor precio por ml",
+      "💧",
+      ganadorDe(porMl, true),
+      (d) => M(Math.round(porMl(d))) + " por ml",
+      (d, v) => (v == null ? "Kit" : M(Math.round(v)) + " por ml")
+    );
+    const desc = (d) => Catalogo.descuento(d.p, Catalogo.primerTamano(d.p));
+    agregar(
+      "Mayor descuento",
+      "🏷️",
+      ganadorDe(desc),
+      (d) => "−" + desc(d) + "%",
+      (d, v) => (v ? "−" + v + "%" : "Sin descuento")
+    );
+    if (!tarjetas.length) return "";
+    return `<section class="sec vrs"><h3 class="cen">Veredictos</h3><div class="vr-g">${tarjetas.join("")}</div></section>`;
+  }
+
   /* ── El comparador ───────────────────────────────────────────────────────── */
 
   /**
@@ -94,6 +238,14 @@ const Comparador = (() => {
   function pintar() {
     const ps = perfumes();
     const n = ps.length;
+    // cada lado de la página se difumina con el color de su perfume (ver css/comparador.css)
+    const cm0 = $("#cm");
+    cm0.style.setProperty("--n", n);
+    [0, 1, 2].forEach((i) =>
+      cm0.style.setProperty("--c" + (i + 1), ps[i] ? Taller3D.colorVivo(ps[i].color) : "transparent")
+    );
+    cm0.classList.toggle("con-color", n >= 2);
+    cm0.classList.toggle("tres", n === 3);
     if (n < 2) return pintarVacio(ps);
     const M = Formato.dinero;
     const notas = (p, capa) => p.notas[capa];
@@ -216,6 +368,8 @@ const Comparador = (() => {
       frascos +
       `<p class="lead">Las notas que se repiten aparecen resaltadas; al final las juntamos en el centro.</p>` +
       `<p class="cm-q"><button data-accion="limpiar-comparacion">× Quitar comparación</button></p>` +
+      radar(ps) +
+      veredictos(ps) +
       estilo +
       CAPAS.map(seccionNotas).join("") +
       precios +

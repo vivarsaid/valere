@@ -15,10 +15,10 @@
   --acc: #d4ad6e; /* acento bronce (precios, enlaces) */
   --cap: #d8d8dc; /* tapa del frasco dibujado */
   color-scheme: dark;
-  --sys: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --sys: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; /* texto */
   --script: "Pinyon Script", "Snell Roundhand", "Apple Chancery", cursive; /* logo y palabras sueltas */
-  --titulo: "Bodoni Moda", "Bodoni 72", Didot, "Times New Roman", serif; /* títulos grandes (como Perandory) */
-  --elegante: "Cormorant Garamond", Garamond, Georgia, serif; /* subtítulos y descripciones (como The Seasons) */
+  --titulo: "Cormorant Garamond", Garamond, Georgia, serif; /* títulos y nombres (estilo "lujo clásico") */
+  --elegante: "Cormorant Garamond", Garamond, Georgia, serif; /* detalles en cursiva ("vs", números) */
 }
 
 * {
@@ -32,7 +32,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font: 400 17px/1.47 var(--sys);
+  font: 400 16px/1.55 var(--sys);
   -webkit-font-smoothing: antialiased;
 }
 button {
@@ -100,13 +100,25 @@ div#pd h1,
   font-weight: 600;
   letter-spacing: -0.01em;
 }
+/* Descripciones: Montserrat ligera, con un poco de aire entre letras */
 .sub2,
 .hs-lead,
 .hero p,
 .lead {
-  font-family: var(--elegante);
-  font-style: italic;
-  font-weight: 500;
+  font-family: var(--sys);
+  font-style: normal;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+}
+/* Nombres de perfume en las tarjetas, con la letra de los títulos */
+.card b,
+.lt b,
+.sg-c b,
+.qr b,
+.nm h4 {
+  font-family: var(--titulo);
+  font-weight: 600;
+  letter-spacing: 0;
 }
 h2 {
   margin: 0;

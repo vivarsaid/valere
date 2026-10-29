@@ -81,7 +81,7 @@ En **todas** las páginas están la cabecera, el pie (con los enlaces legales), 
 | 18 | `js/vistas/catalogo.js` | `VistaCatalogo` | Tarjetas, filtros, orden, búsqueda y la invitación al examen dentro de la cuadrícula |
 | 19 | `js/vistas/producto.js` | `VistaProducto` | Detalle del perfume |
 | 20 | `js/vistas/mi-lista.js` | `VistaLista` | Dibuja Mi lista: pasos, tarjetas, «Te puede gustar» y resumen |
-| 21 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador y selector (si no eligieron nada, pone dos de ejemplo que no se guardan) |
+| 21 | `js/vistas/comparador.js` | `Comparador` | Botones "Comparar", comparador (radar de aromas, veredictos y notas; cada lado difuminado con el color de su perfume) y selector. Sin 2 perfumes elegidos muestra dos lugares vacíos |
 | 22 | `js/vistas/barra.js` | `Barra` | Barrita flotante: comparar y «Finalizar compra» (abre Mi lista) |
 | 23 | `js/vistas/carrusel.js` | `Carrusel` | Carrusel 3D de la portada (Three.js, se descarga después; ver abajo) |
 | 24 | `js/vistas/nosotros.js` | `VistaNosotros` | Nosotros: números del catálogo, color al bajar por los capítulos y pirámide olfativa |
@@ -139,6 +139,7 @@ App.iniciar()
 | `alternar-comparar`, `comparar-con` | Tarjetas, detalle | Agregar o quitar de la comparación |
 | `abrir-selector`, `elegir-perfume`, `cerrar-selector` | Comparador | "Cambiar perfume" |
 | `agregar-a-comparacion`, `quitar-de-comparacion`, `limpiar-comparacion` | Comparador, barrita | Tercer perfume, quitar, vaciar |
+| `voltear-veredicto` | Comparar | Voltea una tarjeta de veredicto para ver el dato de cada perfume |
 | `abrir-examen`, `examen-*` | Descubrir (botón junto al título y tarjeta en la cuadrícula) | Examen de gustos |
 | `cerrar`, `saltar-bienvenida` | Ventanas, portada | Cerrar ventana, saltar animación |
 
@@ -230,7 +231,7 @@ Campos de `modelos`: `foto` (nombre del .webp), `c` color del frasco, `v` 1 = vi
 
 **Cambiar un color de todo el sitio** → `css/base.css`, en `:root`, y luego *Generar páginas*.
 
-**Cambiar las letras** → en `css/base.css` (`:root`): `--titulo` (títulos, Bodoni Moda), `--elegante` (descripciones, Cormorant Garamond) y `--script` (logo y palabras sueltas, Pinyon Script). Si cambias de letra, cambia también el link de Google Fonts en `plantillas/comun-arriba.html`. Son gemelas gratis de Perandory, The Seasons y Burgues Script; si se compran las originales, se ponen aquí.
+**Cambiar las letras** → en `css/base.css` (`:root`): `--titulo` (títulos y nombres de perfume, Cormorant Garamond), `--sys` (texto y descripciones, Montserrat) y `--script` (logo y palabras sueltas, Pinyon Script). Si cambias de letra, cambia también el link de Google Fonts en `plantillas/comun-arriba.html`.
 
 **Cambiar el ícono de la pestaña** → `images/logo.svg` (y `images/logo-180.png` para iPhone).
 

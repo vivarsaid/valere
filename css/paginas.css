@@ -276,8 +276,8 @@
   margin: 24px 0 0;
   max-width: 34em;
   color: var(--mut);
-  font-size: clamp(21px, 2.6vw, 26px);
-  line-height: 1.4;
+  font-size: clamp(18px, 2.1vw, 21px);
+  line-height: 1.55;
 }
 /* Capítulos 01 · 02 · 03 */
 .hs-c {

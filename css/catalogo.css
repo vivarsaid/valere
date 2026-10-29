@@ -317,7 +317,7 @@ a.main {
   color: var(--mut);
 }
 .card b {
-  font-size: 19px;
+  font-size: 23px;
   line-height: 1.2;
   font-weight: 600;
   margin-top: 2px;
@@ -533,7 +533,7 @@ html.lite .ex::after {
     height: 130px;
   }
   .card b {
-    font-size: 16px;
+    font-size: 19px;
   }
   .card .bt .ph {
     height: 130px;
